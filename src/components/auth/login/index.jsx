@@ -47,7 +47,15 @@ const Login = () => {
     <div>
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
 
-      <main className="w-full h-screen flex self-center place-content-center place-items-center bg-gray-900">
+      <main className="w-full h-screen flex flex-col self-center place-content-center place-items-center bg-gray-900">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-bold text-green-400">
+            Perfect time for some quantitative exercises!
+          </h1>
+          <p className="mt-4 text-lg text-gray-300">
+            Work out your quantitative thinking with Quantercise.
+          </p>
+        </div>
         <div className="w-96 text-gray-300 space-y-5 p-6 shadow-xl border border-gray-700 rounded-xl bg-gray-800">
           <div className="text-center">
             <div className="mt-2">
