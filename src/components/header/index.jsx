@@ -31,7 +31,7 @@ const Header = () => {
                 className="text-sm text-gray-300 hover:text-white transition duration-300 font-bold"
                 to={"/practice-problems"}
               >
-                Pratice
+                Practice
               </Link>
               <button
                 onClick={() => {

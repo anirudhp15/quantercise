@@ -20,7 +20,9 @@ function RouteComponent() {
   return (
     <AuthProvider>
       <Header />
-      <div className="w-full h-screen flex flex-col">{routesElement}</div>
+      <div className="w-full h-screen bg-gray-800 flex flex-col">
+        {routesElement}
+      </div>
     </AuthProvider>
   );
 }
