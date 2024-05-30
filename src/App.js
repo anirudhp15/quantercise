@@ -6,6 +6,7 @@ import Header from "./components/header";
 import Home from "./components/home";
 import PracticeProblems from "./components/sections/PracticeProblems";
 import { AuthProvider } from "./contexts/authContext";
+import Footer from "./components/footer/Footer";
 
 function RouteComponent() {
   const routesArray = [
@@ -20,9 +21,10 @@ function RouteComponent() {
   return (
     <AuthProvider>
       <Header />
-      <div className="w-full h-screen bg-gray-800 flex flex-col">
+      <div className="flex-grow w-full bg-gray-800 flex flex-col">
         {routesElement}
       </div>
+      <Footer /> {/* Add Footer here */}
     </AuthProvider>
   );
 }
@@ -30,7 +32,9 @@ function RouteComponent() {
 function App() {
   return (
     <Router>
-      <RouteComponent />
+      <div className="flex flex-col min-h-screen">
+        <RouteComponent />
+      </div>
     </Router>
   );
 }
