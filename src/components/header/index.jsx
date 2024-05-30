@@ -11,7 +11,7 @@ const Header = () => {
       <div className="flex items-center justify-between w-full max-w-screen-xl px-6">
         <div className="flex items-center space-x-4">
           <Link
-            className="text-xl text-green-400 font-bold hover:text-green-300 transition duration-300"
+            className="text-xl text-green-400 font-bold hover:text-green-200 transition duration-300"
             to="/"
           >
             Quantercise
