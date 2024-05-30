@@ -39,7 +39,7 @@ const Header = () => {
                     navigate("/login");
                   });
                 }}
-                className="text-sm text-gray-300 hover:text-white transition duration-300 font-bold"
+                className="text-sm text-green-400 hover:text-white transition border-2 rounded-lg py-1 px-2 border-green-400 hover:border-white transform hover:scale-105 duration-300 font-bold"
               >
                 Logout
               </button>
