@@ -25,10 +25,10 @@ const Header = () => {
   }, [profileOpen]);
 
   return (
-    <nav className="flex justify-between items-center w-full fixed top-0 left-0 h-16 border-b border-gray-700 bg-gray-900 shadow-lg z-20 px-6">
+    <nav className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 bg-gray-900 border-b border-gray-700 shadow-lg">
       <div className="flex items-center space-x-4">
         <Link
-          className="text-xl text-green-400 font-bold hover:text-green-200 transition duration-300"
+          className="text-xl font-bold text-green-400 transition duration-300 hover:text-green-200"
           to="/"
         >
           Quantercise
@@ -39,29 +39,29 @@ const Header = () => {
           <div className="relative">
             <button
               onClick={toggleProfile}
-              className="flex items-center text-sm text-green-400 hover:text-white transition duration-300 font-bold border-2 border-green-400 hover:border-white transform hover:scale-105 rounded-lg px-3 py-1"
+              className="flex items-center px-3 py-1 text-sm font-bold text-green-400 transition duration-300 transform border-2 border-green-400 rounded-lg hover:text-white hover:border-white hover:scale-105"
             >
               <FaUser className="mr-2" />
               Settings
             </button>
             {profileOpen && (
-              <div className="absolute right-0 mt-2 w-full bg-gray-800 rounded-lg shadow-lg z-10">
+              <div className="absolute right-0 z-10 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg">
                 <Link
-                  className="block px-4 py-2 border-b font-semibold border-gray-600 text-center w-full text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition duration-300 rounded-t-lg"
+                  className="block w-full px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 rounded-t-lg hover:bg-gray-700 hover:text-white"
                   to="/home"
                   onClick={toggleProfile}
                 >
                   Home
                 </Link>
                 <Link
-                  className="block px-4 py-2 border-b font-semibold border-gray-600 text-center text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition duration-300"
+                  className="block px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 hover:bg-gray-700 hover:text-white"
                   to="/practice-problems"
                   onClick={toggleProfile}
                 >
                   Practice
                 </Link>
                 <Link
-                  className="block px-4 py-2 font-semibold border-b border-gray-600 text-center text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition duration-300"
+                  className="block px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 hover:bg-gray-700 hover:text-white"
                   to="/profile"
                   onClick={toggleProfile}
                 >
@@ -73,7 +73,7 @@ const Header = () => {
                       navigate("/login");
                     });
                   }}
-                  className="block w-full text-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-700 border-2 font-bold border-opacity-0 hover:text-red-500 hover:border-opacity-100 hover:border-red-600 transition-all duration-300 rounded-b-lg"
+                  className="block w-full px-4 py-2 text-sm font-bold text-center text-gray-600 transition-all duration-300 border-2 border-opacity-0 rounded-b-lg hover:bg-gray-700 hover:text-red-500 hover:border-opacity-100 hover:border-red-600"
                 >
                   Logout
                 </button>
@@ -83,13 +83,13 @@ const Header = () => {
         ) : (
           <>
             <Link
-              className="text-sm text-gray-300 hover:text-white transition duration-300 font-bold"
+              className="text-sm font-bold text-gray-300 transition duration-300 hover:text-white"
               to="/login"
             >
               Login
             </Link>
             <Link
-              className="text-sm text-gray-300 hover:text-white transition duration-300 font-bold ml-4"
+              className="ml-4 text-sm font-bold text-gray-300 transition duration-300 hover:text-white"
               to="/register"
             >
               Register
