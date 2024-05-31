@@ -5,6 +5,17 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        "sky-100": "#ebf8ff",
+        "sky-200": "#bee3f8",
+        "sky-300": "#90cdf4",
+        "sky-400": "#38bdf8",
+        "sky-500": "#0ea5e9",
+        "sky-600": "#0284c7",
+        "sky-700": "#0369a1",
+        "cyan-400": "#0ed7b5",
+        "cyan-500": "#06b6d4",
+      },
       fontFamily: {
         script: ["Dancing Script", "cursive"],
       },
