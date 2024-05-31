@@ -17,24 +17,23 @@ const Home = () => {
     ]);
   }, []);
 
-  // Check if currentUser is defined before trying to access its properties
   if (!currentUser) {
-    return <div>Loading...</div>; // Or some other placeholder content
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-300 p-6 mt-16">
+    <div className="min-h-screen bg-gray-900 text-gray-300 p-4 sm:p-6 mt-16 animate-fadeIn">
       <div className="max-w-screen-lg mx-auto">
-        <h1 className="text-3xl font-bold text-green-400 py-4">
+        <h1 className="text-3xl sm:text-5xl font-bold text-green-400 py-4 fade-in">
           Welcome back, {currentUser.displayName || currentUser.email}!
         </h1>
-        <p className="mt-2 text-lg">
+        <p className="mt-2 text-lg fade-in">
           Ready to ace your quant finance interviews? Let's get started!
         </p>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold text-green-400">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-green-400">
               Practice Problems
             </h2>
             <p className="mt-2">
@@ -43,14 +42,14 @@ const Home = () => {
             </p>
             <Link
               to="/practice-problems"
-              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
             >
               Start Practicing
             </Link>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold text-green-400">
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-green-400">
               Progress Tracker
             </h2>
             <p className="mt-2">
@@ -59,26 +58,20 @@ const Home = () => {
             </p>
             <Link
               to="/progress"
-              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
             >
               View Progress
             </Link>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold text-green-400">Resources</h2>
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-green-400">
+              Resources
+            </h2>
             <p className="mt-2">
               Check out these resources to help you prepare for your interviews.
             </p>
             <ul className="mt-2 list-disc list-inside">
-              <li>
-                <a
-                  href="https://example.com/article"
-                  className="text-green-400 hover:text-green-300"
-                >
-                  Quant Finance Article
-                </a>
-              </li>
               <li>
                 <a
                   href="https://example.com/video"
@@ -92,14 +85,20 @@ const Home = () => {
                   href="https://example.com/book"
                   className="text-green-400 hover:text-green-300"
                 >
-                  Recommended Book
+                  Recommended Books
                 </a>
               </li>
             </ul>
+            <Link
+              to="/resources"
+              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
+            >
+              View All Resources
+            </Link>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold text-green-400">
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-green-400">
               Upcoming Events
             </h2>
             <p className="mt-2">Don't miss these upcoming events.</p>
@@ -112,14 +111,14 @@ const Home = () => {
             </ul>
             <Link
               to="/events"
-              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
             >
               View All Events
             </Link>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg md:col-span-2">
-            <h2 className="text-xl font-semibold text-green-400">
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg sm:col-span-2 shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-green-400">
               Performance Analytics
             </h2>
             <p className="mt-2">
@@ -127,7 +126,7 @@ const Home = () => {
             </p>
             <Link
               to="/analytics"
-              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+              className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
             >
               View Analytics
             </Link>

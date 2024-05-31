@@ -5,8 +5,10 @@ import Register from "./components/auth/register";
 import Header from "./components/header";
 import Home from "./components/home";
 import PracticeProblems from "./components/sections/PracticeProblems";
+import Profile from "./components/header/Profile";
 import { AuthProvider } from "./contexts/authContext";
 import Footer from "./components/footer/Footer";
+import EditProfile from "./components/header/EditProfile";
 
 function RouteComponent() {
   const routesArray = [
@@ -15,6 +17,9 @@ function RouteComponent() {
     { path: "/register", element: <Register /> },
     { path: "/home", element: <Home /> },
     { path: "/practice-problems", element: <PracticeProblems /> },
+    { path: "/profile", element: <Profile /> }, // Add the Profile route
+    { path: "/edit-profile", element: <EditProfile /> }, // Add EditProfile route
+
     // Add more routes as needed
   ];
   let routesElement = useRoutes(routesArray);

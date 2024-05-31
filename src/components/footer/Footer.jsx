@@ -30,7 +30,7 @@ const Footer = () => {
               to="/practice-problems"
               className="text-sm text-gray-300 hover:text-white transition duration-300"
             >
-              Practice Problems
+              Practice
             </Link>
             <Link
               to="/resources"
