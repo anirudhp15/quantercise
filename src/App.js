@@ -12,35 +12,35 @@ import EditProfile from "./components/header/EditProfile";
 
 function RouteComponent() {
   const routesArray = [
-    { path: "*", element: <Login /> },
+    { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/home", element: <Home /> },
     { path: "/practice-problems", element: <PracticeProblems /> },
-    { path: "/profile", element: <Profile /> }, // Add the Profile route
-    { path: "/edit-profile", element: <EditProfile /> }, // Add EditProfile route
-
-    // Add more routes as needed
+    { path: "/profile", element: <Profile /> },
+    { path: "/edit-profile", element: <EditProfile /> },
+    { path: "*", element: <Login /> }, // Fallback route for unknown paths
   ];
+
   let routesElement = useRoutes(routesArray);
   return (
-    <AuthProvider>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow w-full bg-gray-800 flex flex-col">
+      <div className="flex flex-col flex-grow w-full bg-gray-800">
         {routesElement}
       </div>
-      <Footer /> {/* Add Footer here */}
-    </AuthProvider>
+      <Footer />
+    </div>
   );
 }
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
+    <AuthProvider>
+      <Router basename="/quantercise">
         <RouteComponent />
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
