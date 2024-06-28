@@ -7,7 +7,7 @@ const AuthButtons = () => {
     <div className="flex items-center space-x-0 auth-buttons">
       <Link
         to="/register"
-        className="flex items-center px-3 py-1 text-sm font-bold text-green-500 transition duration-300 transform bg-gray-300 border-2 border-green-400 rounded-l-lg hover:text-white hover:bg-green-400 hover:border-green-400 hover:scale-105 register-button"
+        className="flex items-center px-3 py-1 text-sm font-bold text-green-400 transition duration-300 transform bg-transparent border-2 border-green-400 rounded-l-lg hover:text-white hover:bg-green-400 hover:border-green-400 hover:scale-105 register-button"
       >
         Register
       </Link>

@@ -11,6 +11,7 @@ import Footer from "./components/footer/Footer";
 import EditProfile from "./components/header/EditProfile";
 import PerformanceAnalytics from "./components/sections/PerformanceAnalytics";
 import ProgressTracker from "./components/sections/ProgressTracker";
+import "./index.css";
 
 function RouteComponent() {
   const routesArray = [
