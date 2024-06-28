@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/authContext";
 import { doCreateUserWithEmailAndPassword } from "../../../firebase/auth";
+import { gsap } from "gsap";
+import { CSSPlugin } from "gsap/CSSPlugin";
+
+gsap.registerPlugin(CSSPlugin);
 
 const Register = () => {
   const navigate = useNavigate();
@@ -11,8 +15,23 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const registerRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const { userLoggedIn } = useAuth();
+
+  useEffect(() => {
+    gsap.fromTo(
+      registerRef.current,
+      { opacity: 0, y: -50 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+    );
+    gsap.fromTo(
+      buttonRef.current,
+      { scale: 0.8, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }
+    );
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -34,18 +53,21 @@ const Register = () => {
     <>
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
 
-      <main className="w-full h-screen flex self-center place-content-center place-items-center bg-gray-900">
-        <div className="w-96 text-gray-300 space-y-5 p-6 shadow-xl border border-gray-700 rounded-xl bg-gray-800">
-          <div className="text-center mb-6">
+      <main className="flex self-center w-full h-screen bg-gray-900 place-content-center place-items-center">
+        <div
+          ref={registerRef}
+          className="p-6 space-y-5 text-gray-300 bg-gray-800 border border-gray-700 shadow-xl w-96 rounded-xl"
+        >
+          <div className="mb-6 text-center">
             <div className="mt-2">
-              <h3 className="text-gray-100 text-xl font-semibold sm:text-2xl">
+              <h3 className="text-xl font-semibold text-gray-100 sm:text-2xl">
                 Create a New Account
               </h3>
             </div>
           </div>
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-gray-300 font-bold">Email</label>
+              <label className="text-sm font-bold text-gray-300">Email</label>
               <input
                 type="email"
                 autoComplete="email"
@@ -54,12 +76,12 @@ const Register = () => {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
-                className="w-full mt-2 px-3 py-2 text-gray-200 bg-transparent outline-none border border-gray-700 focus:border-green-600 shadow-sm rounded-lg transition duration-300"
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:bg-gray-900 focus:border-green-600"
               />
             </div>
 
             <div>
-              <label className="text-sm text-gray-300 font-bold">
+              <label className="text-sm font-bold text-gray-300">
                 Password
               </label>
               <input
@@ -71,12 +93,12 @@ const Register = () => {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
-                className="w-full mt-2 px-3 py-2 text-gray-200 bg-transparent outline-none border border-gray-700 focus:border-green-600 shadow-sm rounded-lg transition duration-300"
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:bg-gray-900 focus:border-green-600"
               />
             </div>
 
             <div>
-              <label className="text-sm text-gray-300 font-bold">
+              <label className="text-sm font-bold text-gray-300">
                 Confirm Password
               </label>
               <input
@@ -88,15 +110,16 @@ const Register = () => {
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
                 }}
-                className="w-full mt-2 px-3 py-2 text-gray-200 bg-transparent outline-none border border-gray-700 focus:border-green-600 shadow-sm rounded-lg transition duration-300"
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:bg-gray-900 focus:border-green-600"
               />
             </div>
 
             {errorMessage && (
-              <span className="text-red-600 font-bold">{errorMessage}</span>
+              <span className="font-bold text-red-600">{errorMessage}</span>
             )}
 
             <button
+              ref={buttonRef}
               type="submit"
               disabled={isRegistering}
               className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
@@ -111,7 +134,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 to={"/login"}
-                className="text-center text-sm hover:underline font-bold text-green-400"
+                className="text-sm font-bold text-center text-green-400 hover:underline"
               >
                 Continue
               </Link>

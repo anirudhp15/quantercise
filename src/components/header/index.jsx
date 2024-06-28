@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import AuthButtons from "./AuthButtons";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import { doSignOut } from "../../firebase/auth";
 import { FaUser } from "react-icons/fa"; // FontAwesome icon for user
+import { motion } from "framer-motion"; // Importing framer-motion
 import "../../index.css";
 
 const Header = () => {
@@ -25,7 +27,12 @@ const Header = () => {
   }, [profileOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 bg-gray-900 border-b border-gray-700 shadow-lg">
+    <motion.nav
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 bg-gray-900 border-b border-gray-700 shadow-lg"
+    >
       <div className="flex items-center space-x-4">
         <Link
           className="text-xl font-bold text-green-400 transition duration-300 hover:text-green-200"
@@ -45,7 +52,12 @@ const Header = () => {
               Settings
             </button>
             {profileOpen && (
-              <div className="absolute right-0 z-10 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="absolute right-0 z-10 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg"
+              >
                 <Link
                   className="block w-full px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 rounded-t-lg hover:bg-gray-700 hover:text-white"
                   to="/home"
@@ -59,6 +71,20 @@ const Header = () => {
                   onClick={toggleProfile}
                 >
                   Practice
+                </Link>
+                <Link
+                  className="block px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 hover:bg-gray-700 hover:text-white"
+                  to="/progress"
+                  onClick={toggleProfile}
+                >
+                  Progress
+                </Link>
+                <Link
+                  className="block px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 hover:bg-gray-700 hover:text-white"
+                  to="/analytics"
+                  onClick={toggleProfile}
+                >
+                  Analytics
                 </Link>
                 <Link
                   className="block px-4 py-2 text-sm font-semibold text-center text-gray-300 transition duration-300 border-b border-gray-600 hover:bg-gray-700 hover:text-white"
@@ -77,27 +103,14 @@ const Header = () => {
                 >
                   Logout
                 </button>
-              </div>
+              </motion.div>
             )}
           </div>
         ) : (
-          <>
-            <Link
-              className="text-sm font-bold text-gray-300 transition duration-300 hover:text-white"
-              to="/login"
-            >
-              Login
-            </Link>
-            <Link
-              className="ml-4 text-sm font-bold text-gray-300 transition duration-300 hover:text-white"
-              to="/register"
-            >
-              Register
-            </Link>
-          </>
+          <AuthButtons />
         )}
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

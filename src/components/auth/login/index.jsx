@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Navigate, Link } from "react-router-dom";
 import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../../firebase/auth";
 import { useAuth } from "../../../contexts/authContext";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
 
 const Login = () => {
   const { userLoggedIn } = useAuth();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const loginRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      loginRef.current,
+      { opacity: 0, y: -50 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+    );
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +30,6 @@ const Login = () => {
       setIsSigningIn(true);
       try {
         await doSignInWithEmailAndPassword(email, password);
-        // doSendEmailVerification()
       } catch (error) {
         setErrorMessage(error.message);
       } finally {
@@ -44,43 +53,57 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-900 sm:px-6 lg:px-8">
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
 
-      <main className="w-full h-screen flex flex-col self-center place-content-center place-items-center bg-gray-900">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold text-green-400">
-            Perfect time for some quantitative exercises!
-          </h1>
+      <main
+        ref={loginRef}
+        className="w-full max-w-md p-8 space-y-8 bg-gray-800 border border-gray-700 shadow-xl rounded-xl"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="text-center"
+        >
+          <h1 className="text-4xl font-bold text-green-400">Quantercise</h1>
           <p className="mt-4 text-lg text-gray-300">
-            Work out your quantitative thinking with Quantercise.
+            Work out your quantitative thinking.
           </p>
-        </div>
-        <div className="w-96 text-gray-300 space-y-5 p-6 shadow-xl border border-gray-700 rounded-xl bg-gray-800">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="space-y-6"
+        >
           <div className="text-center">
-            <div className="mt-2">
-              <h3 className="text-gray-100 text-xl font-semibold sm:text-2xl">
-                Welcome Back!
-              </h3>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-100 sm:text-2xl">
+              Welcome Back!
+            </h3>
           </div>
           <form onSubmit={onSubmit} className="space-y-5">
-            <div>
-              <label className="text-sm text-gray-300 font-bold">Email</label>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+            >
+              <label className="text-sm font-bold text-gray-300">Email</label>
               <input
                 type="email"
                 autoComplete="email"
                 required
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                className="w-full mt-2 px-3 py-2 text-gray-200 bg-transparent outline-none border border-gray-700 focus:border-green-600 shadow-sm rounded-lg transition duration-300"
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-900"
               />
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-300 font-bold">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+            >
+              <label className="text-sm font-bold text-gray-300">
                 Password
               </label>
               <input
@@ -88,18 +111,26 @@ const Login = () => {
                 autoComplete="current-password"
                 required
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                className="w-full mt-2 px-3 py-2 text-gray-200 bg-transparent outline-none border border-gray-700 focus:border-green-600 shadow-sm rounded-lg transition duration-300"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-900"
               />
-            </div>
-
+            </motion.div>
             {errorMessage && (
-              <span className="text-red-600 font-bold">{errorMessage}</span>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                className="font-bold text-red-600"
+              >
+                {errorMessage}
+              </motion.span>
             )}
-
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
               type="submit"
               disabled={isSigningIn}
               className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
@@ -109,28 +140,42 @@ const Login = () => {
               }`}
             >
               {isSigningIn ? "Signing In..." : "Sign In"}
-            </button>
+            </motion.button>
           </form>
-          <p className="text-center text-sm">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+            className="text-sm text-center text-gray-300"
+          >
             Don't have an account?{" "}
             <Link
               to={"/register"}
-              className="hover:underline font-bold text-green-400"
+              className="font-bold text-green-400 hover:underline"
             >
               Sign up
             </Link>
-          </p>
-          <div className="flex flex-row text-center w-full">
-            <div className="border-b-2 border-gray-700 mb-2.5 mr-2 w-full"></div>
-            <div className="text-sm font-bold w-fit">OR</div>
-            <div className="border-b-2 border-gray-700 mb-2.5 ml-2 w-full"></div>
-          </div>
-          <button
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
+            className="flex items-center justify-center"
+          >
+            <div className="w-full border-b border-gray-700"></div>
+            <div className="absolute px-4 text-sm font-bold text-gray-400 bg-gray-800">
+              OR
+            </div>
+          </motion.div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
             disabled={isSigningIn}
-            onClick={(e) => {
-              onGoogleSignIn(e);
-            }}
-            className={`w-full flex items-center justify-center gap-x-3 py-2.5 border border-gray-700 rounded-lg text-sm font-medium  ${
+            onClick={(e) => onGoogleSignIn(e)}
+            className={`w-full flex items-center justify-center gap-x-3 py-2.5 border border-gray-700 rounded-lg text-sm font-medium text-gray-400 ${
               isSigningIn
                 ? "cursor-not-allowed bg-gray-700"
                 : "hover:bg-gray-700 transition duration-300 active:bg-gray-700"
@@ -167,8 +212,8 @@ const Login = () => {
               </defs>
             </svg>
             {isSigningIn ? "Signing In..." : "Continue with Google"}
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </main>
     </div>
   );

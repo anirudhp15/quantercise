@@ -1,77 +1,112 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/authContext";
 import { Link } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa"; // FontAwesome icon for profile picture placeholder
+import { FaUserCircle } from "react-icons/fa";
+import { motion } from "framer-motion";
 import "../../index.css";
 
 const Profile = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, fetchUserActivities } = useAuth();
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    if (currentUser) {
+      const unsubscribe = fetchUserActivities(currentUser.uid, setActivities);
+      return () => unsubscribe();
+    }
+  }, [currentUser, fetchUserActivities]);
 
   if (!currentUser) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-green-400">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-300 p-6 mt-16">
+    <div className="min-h-screen p-6 mt-16 text-gray-300 bg-gray-900">
       <div className="max-w-screen-lg mx-auto">
-        <h1 className="text-4xl font-bold text-green-400 py-4">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="py-4 text-4xl font-bold text-center text-green-400"
+        >
           Account Details
-        </h1>
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-6">
-            {/* Profile Picture */}
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="p-8 bg-gray-800 rounded-lg shadow-lg"
+        >
+          <div className="flex flex-col items-center space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
             <div className="relative">
               {currentUser.photoURL ? (
                 <img
                   src={currentUser.photoURL}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-green-400"
+                  className="object-cover w-32 h-32 border-4 border-green-400 rounded-full"
                 />
               ) : (
-                <FaUserCircle className="w-24 h-24 text-gray-600" />
+                <FaUserCircle className="w-32 h-32 text-gray-600" />
               )}
             </div>
-
-            {/* Account Details */}
-            <div>
-              <p className="text-lg">
+            <div className="text-center sm:text-left">
+              <p className="text-xl">
                 <strong>Email:</strong> {currentUser.email}
               </p>
-              <p className="text-lg mt-4">
+              <p className="mt-4 text-xl">
                 <strong>Name:</strong> {currentUser.displayName || "N/A"}
               </p>
-              <p className="text-lg mt-4">
+              <p className="mt-4 text-xl">
                 <strong>Member Since:</strong>{" "}
-                {currentUser.metadata.creationTime}
+                {new Date(
+                  currentUser.metadata.creationTime
+                ).toLocaleDateString()}
               </p>
               <Link
                 to="/edit-profile"
-                className="inline-block mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+                className="inline-block px-6 py-2 mt-6 font-bold text-white transition duration-300 bg-green-600 rounded-full hover:bg-green-700"
               >
                 Edit Profile
               </Link>
             </div>
           </div>
-
-          {/* Recent Activity */}
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-green-400 mb-4">
+            <h2 className="mb-4 text-2xl font-semibold text-green-400">
               Recent Activity
             </h2>
             <ul className="space-y-4">
-              {/* Placeholder for recent activity */}
-              <li className="bg-gray-700 p-4 rounded-lg shadow">
-                <p>Completed a practice problem on Black-Scholes Model</p>
-                <span className="text-sm text-gray-400">2024/06/01</span>
-              </li>
-              <li className="bg-gray-700 p-4 rounded-lg shadow">
-                <p>Attended Quant Finance Webinar</p>
-                <span className="text-sm text-gray-400">2024/06/15</span>
-              </li>
-              {/* Add more activity as needed */}
+              {activities.length > 0 ? (
+                activities.map((activity) => (
+                  <motion.li
+                    key={activity.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="p-4 transition duration-300 bg-gray-700 rounded-lg shadow hover:shadow-lg hover:bg-gray-600"
+                  >
+                    <p className="text-lg">{activity.description}</p>
+                    <span className="text-sm text-gray-400">
+                      {new Date(activity.date).toLocaleDateString()}
+                    </span>
+                  </motion.li>
+                ))
+              ) : (
+                <motion.li
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="p-4 transition duration-300 bg-gray-700 rounded-lg shadow hover:shadow-lg hover:bg-gray-600"
+                >
+                  <p>No recent activity found.</p>
+                </motion.li>
+              )}
             </ul>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -54,3 +54,36 @@ body, html {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.arrow-animation {
+  transition: all 0.2s ease-in-out;
+}
+
+.group:hover .arrow-animation {
+  transform: rotate(-45deg) scale(1.1);
+}
+
+/* Custom hover effects for AuthButtons */
+.auth-buttons:hover .login-button:hover + .register-button {
+  background-color: #86efac; /* Tailwind color green-400 */
+  color: #86efac;
+
+}
+
+.auth-buttons:hover .register-button:hover + .login-button {
+  background-color: white;
+  color: #4ade80; /* Tailwind color green-400 */
+}
+
+.custom-switch {
+  background-color: #4a4a4a !important; /* Default dark gray color */
+}
+.custom-switch .ant-switch-checked {
+  background-color: green !important;
+}
+.custom-switch-red .ant-switch-checked {
+  background-color: red !important;
+}
+.custom-switch-green .ant-switch-checked {
+  background-color: green !important;
+}
+

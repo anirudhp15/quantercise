@@ -3,12 +3,14 @@ import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import Header from "./components/header";
-import Home from "./components/home";
+import Home from "./components/home/index2";
 import PracticeProblems from "./components/sections/PracticeProblems";
 import Profile from "./components/header/Profile";
 import { AuthProvider } from "./contexts/authContext";
 import Footer from "./components/footer/Footer";
 import EditProfile from "./components/header/EditProfile";
+import PerformanceAnalytics from "./components/sections/PerformanceAnalytics";
+import ProgressTracker from "./components/sections/ProgressTracker";
 
 function RouteComponent() {
   const routesArray = [
@@ -19,7 +21,9 @@ function RouteComponent() {
     { path: "/practice-problems", element: <PracticeProblems /> },
     { path: "/profile", element: <Profile /> },
     { path: "/edit-profile", element: <EditProfile /> },
-    { path: "*", element: <Login /> }, // Fallback route for unknown paths
+    { path: "/progress", element: <ProgressTracker /> },
+    { path: "/analytics", element: <PerformanceAnalytics /> },
+    { path: "*", element: <Login /> },
   ];
 
   let routesElement = useRoutes(routesArray);
