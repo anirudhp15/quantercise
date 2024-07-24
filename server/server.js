@@ -5,7 +5,6 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const path = require("path");
 const bodyParser = require("body-parser");
-const axios = require("axios");
 
 const app = express();
 
@@ -17,11 +16,6 @@ if (!process.env.SERVICE_ACCOUNT_PATH) {
 
 if (!process.env.STRIPE_API_KEY) {
   console.error("Missing STRIPE_API_KEY in .env file");
-  process.exit(1);
-}
-
-if (!process.env.RESEND_API_KEY) {
-  console.error("Missing RESEND_API_KEY in .env file");
   process.exit(1);
 }
 
@@ -56,8 +50,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_API_URL = "https://api.resend.com/v1/emails";
 
 // Email notification endpoint
 app.post("/notify", async (req, res) => {
@@ -74,41 +66,15 @@ app.post("/notify", async (req, res) => {
     const emailSnapshot = await emailDoc.get();
 
     if (emailSnapshot.exists) {
+      await emailDoc.update({
+        counter: admin.firestore.FieldValue.increment(1),
+      });
       return res.status(200).json({
         success: true,
         message: "We already got you! We'll let you know when we're live.",
       });
     } else {
-      await emailDoc.set({ email });
-
-      // Send a confirmation email using Resend API
-      const data = {
-        from: "quantercise@gmail.com",
-        to: email,
-        subject: "Thank you for subscribing to Quantercise!",
-        text: "Thank you for subscribing to Quantercise! You'll be notified when we go live.",
-      };
-
-      try {
-        const response = await axios.post(RESEND_API_URL, data, {
-          headers: {
-            Authorization: `Bearer ${RESEND_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("Email sent: ", response.data);
-      } catch (error) {
-        console.error(
-          "Error sending email:",
-          error.response ? error.response.data : error
-        );
-        return res.status(500).json({
-          success: false,
-          message:
-            "Failed to send confirmation email, but your email was saved.",
-        });
-      }
-
+      await emailDoc.set({ email, counter: 1 });
       return res.status(200).json({
         success: true,
         message: "Thanks, we'll let you know when we're live.",
