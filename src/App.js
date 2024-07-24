@@ -23,7 +23,7 @@ import SuccessPage from "./components/auth/SuccessPage";
 
 function RouteComponent() {
   const routesArray = [
-    { path: "/", element: <Home /> },
+    { path: "/", element: <LandingPage /> },
     { path: "/landing", element: <LandingPage /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
