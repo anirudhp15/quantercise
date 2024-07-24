@@ -94,7 +94,7 @@ const Topics = () => {
 
       if (screenWidth < 768) {
         // Mobile screens
-        multiplier = 1;
+        multiplier = 0.25;
       } else if (screenWidth >= 1280) {
         // XL screens
         multiplier = 2;
