@@ -68,6 +68,24 @@ const PerformanceAnalytics = () => {
     { name: "Incorrect", value: incorrectProblems.length },
   ];
 
+  // const efficiencyData = problems.map((problem) => ({
+  //   timeSpent: problem.timeSpent,
+  //   correct: problem.correct ? 1 : 0,
+  // }));
+
+  const difficultyLevels = ["Easy", "Medium", "Hard"];
+  const difficultyData = difficultyLevels.map((level) => ({
+    name: level,
+    completed: completedProblems.filter(
+      (problem) => problem.difficulty === level
+    ).length,
+    correct: correctProblems.filter((problem) => problem.difficulty === level)
+      .length,
+    incorrect: incorrectProblems.filter(
+      (problem) => problem.difficulty === level
+    ).length,
+  }));
+
   const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
   return (
@@ -136,6 +154,31 @@ const PerformanceAnalytics = () => {
               <Bar dataKey="completed" fill="#00C49F" />
               <Bar dataKey="correct" fill="#FFBB28" />
               <Bar dataKey="incorrect" fill="#FF8042" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-8">
+          <h2 className="p-4 text-2xl text-center text-green-400">
+            Difficulty Analysis
+          </h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={difficultyData}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="completed" stackId="a" fill="#00C49F" />
+              <Bar dataKey="correct" stackId="a" fill="#FFBB28" />
+              <Bar dataKey="incorrect" stackId="a" fill="#FF8042" />
             </BarChart>
           </ResponsiveContainer>
         </div>

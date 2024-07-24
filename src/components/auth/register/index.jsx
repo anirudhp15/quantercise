@@ -18,7 +18,7 @@ const Register = () => {
   const registerRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, setCurrentUser } = useAuth();
 
   useEffect(() => {
     gsap.fromTo(
@@ -37,8 +37,17 @@ const Register = () => {
     e.preventDefault();
     if (!isRegistering) {
       setIsRegistering(true);
+      if (password !== confirmPassword) {
+        setErrorMessage("Passwords do not match");
+        setIsRegistering(false);
+        return;
+      }
       try {
-        await doCreateUserWithEmailAndPassword(email, password);
+        const userCredential = await doCreateUserWithEmailAndPassword(
+          email,
+          password
+        );
+        setCurrentUser(userCredential.user);
         // navigate to home page after successful registration
         navigate("/home");
       } catch (error) {
@@ -53,7 +62,7 @@ const Register = () => {
     <>
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
 
-      <main className="flex self-center w-full h-screen bg-gray-900 place-content-center place-items-center">
+      <main className="flex self-center w-full my-auto bg-gray-900 place-content-center place-items-center">
         <div
           ref={registerRef}
           className="p-6 space-y-5 text-gray-300 bg-gray-800 border border-gray-700 shadow-xl w-96 rounded-xl"
@@ -125,7 +134,7 @@ const Register = () => {
               className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
                 isRegistering
                   ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 hover:shadow-xl transition duration-300"
+                  : "bg-green-400 hover:bg-green-500 hover:shadow-xl transition duration-300"
               }`}
             >
               {isRegistering ? "Signing Up..." : "Sign Up"}

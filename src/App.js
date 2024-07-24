@@ -1,5 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, useRoutes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  useRoutes,
+  useLocation,
+} from "react-router-dom";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import Header from "./components/header";
@@ -11,11 +15,16 @@ import Footer from "./components/footer/Footer";
 import EditProfile from "./components/header/EditProfile";
 import PerformanceAnalytics from "./components/sections/PerformanceAnalytics";
 import ProgressTracker from "./components/sections/ProgressTracker";
+import LandingPage from "./components/landing/LandingPage";
+import Pricing from "./components/landing/Pricing";
+import StripeCheckout from "./components/landing/StripeCheckout";
 import "./index.css";
+import SuccessPage from "./components/auth/SuccessPage";
 
 function RouteComponent() {
   const routesArray = [
     { path: "/", element: <Home /> },
+    { path: "/landing", element: <LandingPage /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/home", element: <Home /> },
@@ -24,17 +33,25 @@ function RouteComponent() {
     { path: "/edit-profile", element: <EditProfile /> },
     { path: "/progress", element: <ProgressTracker /> },
     { path: "/analytics", element: <PerformanceAnalytics /> },
+    { path: "/pricing", element: <Pricing /> },
+    { path: "/checkout", element: <StripeCheckout /> },
+    { path: "/success", element: <SuccessPage /> },
     { path: "*", element: <Login /> },
   ];
 
   let routesElement = useRoutes(routesArray);
+  const location = useLocation(); // Get current location
+
+  // Condition to check if the current path is not the landing page
+  const showFooter = location.pathname !== "/landing";
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col flex-grow w-full bg-gray-800">
+      <div className="flex flex-col flex-grow w-full bg-gray-900">
         {routesElement}
       </div>
-      <Footer />
+      {showFooter && <Footer />}
     </div>
   );
 }

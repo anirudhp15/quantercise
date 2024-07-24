@@ -53,12 +53,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-900 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gray-900 sm:px-6 lg:px-8">
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
 
       <main
         ref={loginRef}
         className="w-full max-w-md p-8 space-y-8 bg-gray-800 border border-gray-700 shadow-xl rounded-xl"
+        style={{ marginTop: "5rem" }}
       >
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -130,13 +131,13 @@ const Login = () => {
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.1, ease: "easeInOut" }}
               type="submit"
               disabled={isSigningIn}
               className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
                 isSigningIn
                   ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 hover:shadow-xl transition duration-300"
+                  : "bg-green-400 hover:bg-green-500 hover:shadow-xl transition duration-300 shadow-md"
               }`}
             >
               {isSigningIn ? "Signing In..." : "Sign In"}
@@ -153,7 +154,7 @@ const Login = () => {
               to={"/register"}
               className="font-bold text-green-400 hover:underline"
             >
-              Sign up
+              Register!
             </Link>
           </motion.p>
           <motion.div

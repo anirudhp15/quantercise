@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# local files
+.env
+database.rules.json
+quantercise-firebase-adminsdk-yzs7h-3b6737a8ee.json

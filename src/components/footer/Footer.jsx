@@ -1,16 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaYoutube,
+  FaInstagram,
+  FaXTwitter,
+} from "react-icons/fa6";
+import { useAuth } from "../../contexts/authContext"; // Import useAuth
 
 const Footer = () => {
+  const { isPro } = useAuth(); // Destructure isPro from useAuth context
+
   return (
-    <footer className="py-8 mt-16 text-gray-300 bg-gray-900 border-t border-gray-700">
+    <footer className="relative z-20 py-6 text-gray-300 border-t border-gray-700 shadow-lg bg-gray-950">
       <div className="max-w-screen-xl px-4 mx-auto">
         <div className="flex flex-col items-center justify-between md:flex-row">
           <div className="flex flex-col items-center space-y-4 md:items-start md:space-y-0 md:space-x-8">
             <Link
-              to="/"
-              className="text-xl font-bold text-green-400 transition duration-300 hover:text-green-200"
+              to="/landing"
+              className={`text-xl font-bold transition duration-300 ${
+                isPro
+                  ? "text-blue-400 hover:text-blue-200"
+                  : "text-green-400 hover:text-green-200"
+              }`}
             >
               Quantercise
             </Link>
@@ -76,6 +89,22 @@ const Footer = () => {
               className="text-gray-300 transition duration-300 hover:text-white"
             >
               <FaYoutube size={24} />
+            </a>
+            <a
+              href="https://www.instagram.com/anirudhp15/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 transition duration-300 hover:text-white"
+            >
+              <FaInstagram size={24} />
+            </a>
+            <a
+              href="https://x.com/quantercise"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 transition duration-300 hover:text-white"
+            >
+              <FaXTwitter size={24} />
             </a>
           </div>
         </div>

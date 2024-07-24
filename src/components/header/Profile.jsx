@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import "../../index.css";
 
 const Profile = () => {
-  const { currentUser, fetchUserActivities } = useAuth();
+  const { currentUser, isPro, fetchUserActivities } = useAuth();
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
@@ -31,7 +31,9 @@ const Profile = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="py-4 text-4xl font-bold text-center text-green-400"
+          className={`py-4 text-4xl font-bold ${
+            isPro ? "text-blue-400" : "text-green-400"
+          }`}
         >
           Account Details
         </motion.h1>
@@ -66,16 +68,32 @@ const Profile = () => {
                   currentUser.metadata.creationTime
                 ).toLocaleDateString()}
               </p>
+              <p
+                className={`mt-4 text-xl ${
+                  isPro ? "text-blue-400" : "text-green-400"
+                }`}
+              >
+                <strong className="text-gray-300">Member Status:</strong>{" "}
+                {isPro ? "Pro Member" : "Free Member"}
+              </p>
               <Link
                 to="/edit-profile"
-                className="inline-block px-6 py-2 mt-6 font-bold text-white transition duration-300 bg-green-600 rounded-full hover:bg-green-700"
+                className={`inline-block px-4 py-2 mt-4 font-bold text-white transition duration-300 rounded-xl hover:shadow-lg ${
+                  isPro
+                    ? "bg-blue-500 hover:bg-blue-600"
+                    : "bg-green-400 hover:bg-green-500"
+                }`}
               >
                 Edit Profile
               </Link>
             </div>
           </div>
           <div className="mt-8">
-            <h2 className="mb-4 text-2xl font-semibold text-green-400">
+            <h2
+              className={`text-2xl font-normal mb-4 ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
+            >
               Recent Activity
             </h2>
             <ul className="space-y-4">

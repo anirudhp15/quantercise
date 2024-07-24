@@ -9,9 +9,16 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
 } from "recharts";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
+
+const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
 const ProgressTracker = () => {
   const [problems, setProblems] = useState([]);
@@ -58,6 +65,11 @@ const ProgressTracker = () => {
       incorrect: incorrectProblems.filter(
         (problem) => problem.category === "Critical Mathematical Foundations"
       ).length,
+      timeSpent: completedProblems
+        .filter(
+          (problem) => problem.category === "Critical Mathematical Foundations"
+        )
+        .reduce((total, problem) => total + problem.timeSpent, 0),
     },
     {
       category: "Programming and Algorithmic Thinking",
@@ -70,6 +82,12 @@ const ProgressTracker = () => {
       incorrect: incorrectProblems.filter(
         (problem) => problem.category === "Programming and Algorithmic Thinking"
       ).length,
+      timeSpent: completedProblems
+        .filter(
+          (problem) =>
+            problem.category === "Programming and Algorithmic Thinking"
+        )
+        .reduce((total, problem) => total + problem.timeSpent, 0),
     },
     {
       category: "Financial Concepts and Modeling",
@@ -82,6 +100,11 @@ const ProgressTracker = () => {
       incorrect: incorrectProblems.filter(
         (problem) => problem.category === "Financial Concepts and Modeling"
       ).length,
+      timeSpent: completedProblems
+        .filter(
+          (problem) => problem.category === "Financial Concepts and Modeling"
+        )
+        .reduce((total, problem) => total + problem.timeSpent, 0),
     },
     {
       category: "Brain Teasers and Logical Puzzles",
@@ -94,6 +117,31 @@ const ProgressTracker = () => {
       incorrect: incorrectProblems.filter(
         (problem) => problem.category === "Brain Teasers and Logical Puzzles"
       ).length,
+      timeSpent: completedProblems
+        .filter(
+          (problem) => problem.category === "Brain Teasers and Logical Puzzles"
+        )
+        .reduce((total, problem) => total + problem.timeSpent, 0),
+    },
+  ];
+
+  // const progressOverTime = problems.map((problem) => ({
+  //   date: new Date(problem.date).toLocaleDateString(),
+  //   correct: problem.correct ? 1 : 0,
+  // }));
+
+  const milestoneData = [
+    {
+      milestone: "10 Problems Solved",
+      achieved: completedProblems.length >= 10,
+    },
+    {
+      milestone: "20 Correct Answers",
+      achieved: correctProblems.length >= 20,
+    },
+    {
+      milestone: "50 Problems Attempted",
+      achieved: problems.length >= 50,
     },
   ];
 
@@ -142,6 +190,32 @@ const ProgressTracker = () => {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="p-4 bg-gray-800 rounded-lg shadow-lg"
               >
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      isAnimationActive={false}
+                      data={[
+                        { name: "Completed", value: category.completed },
+                        { name: "Correct", value: category.correct },
+                        { name: "Incorrect", value: category.incorrect },
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      label
+                    >
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
                 <h3 className="text-xl font-bold text-green-400">
                   {category.category}
                 </h3>
@@ -156,6 +230,65 @@ const ProgressTracker = () => {
                 <p>
                   <span className="font-bold">Incorrect: </span>
                   {category.incorrect}
+                </p>
+                <p>
+                  <span className="font-bold">Time Spent: </span>
+                  {Math.round(category.timeSpent / 60)} mins
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-8">
+          <h2 className="p-4 text-2xl text-center text-green-400">
+            Time Spent Analysis
+          </h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={categoryData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Time Spent" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        {/* <div className="mt-8">
+          <h2 className="p-4 text-2xl text-center text-green-400">
+            Improvement Over Time
+          </h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={progressOverTime}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="correct" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div> */}
+        <div className="mt-8">
+          <h2 className="p-4 text-2xl text-center text-green-400">
+            Milestones & Achievements
+          </h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {milestoneData.map((milestone) => (
+              <motion.div
+                key={milestone.milestone}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className={`p-4 rounded-lg shadow-lg ${
+                  milestone.achieved ? "bg-green-800" : "bg-gray-800"
+                }`}
+              >
+                <h3 className="text-xl font-bold text-green-400">
+                  {milestone.milestone}
+                </h3>
+                <p className="mt-2">
+                  {milestone.achieved ? "Achieved" : "Not Achieved"}
                 </p>
               </motion.div>
             ))}
