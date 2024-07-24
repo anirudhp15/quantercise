@@ -43,7 +43,8 @@ function RouteComponent() {
   const location = useLocation(); // Get current location
 
   // Condition to check if the current path is not the landing page
-  const showFooter = location.pathname !== "/landing";
+  const showFooter =
+    location.pathname !== "/" && location.pathname !== "/landing";
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -57,7 +58,10 @@ function RouteComponent() {
 }
 
 function App() {
-  const basename = process.env.NODE_ENV === "production" ? "/quantercise" : "/";
+  const basename =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_BASENAME_PROD
+      : process.env.REACT_APP_BASENAME_DEV;
 
   return (
     <AuthProvider>

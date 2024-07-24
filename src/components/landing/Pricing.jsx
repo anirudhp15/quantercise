@@ -37,7 +37,7 @@ const Pricing = () => {
         </p>
       </div>
       <div className="flex justify-center">
-        <div className="relative z-10 max-w-screen-lg p-8 mt-8 transition-all duration-200 border-2 border-gray-500 sm:w-3/4 lg:w-full bg-gray-950 rounded-3xl hover:border-gray-300">
+        <div className="relative z-10 w-auto p-4 mt-8 transition-all duration-200 border-2 border-gray-500 md:p-10 bg-gray-950 rounded-3xl hover:border-gray-300">
           <p className="py-2 text-lg font-light text-center sm:text-xl md:text-2xl">
             Get notified when{" "}
             <span className="relative font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
