@@ -89,10 +89,24 @@ const Topics = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      document.querySelectorAll(".marquee").forEach((marquee, index) => {
+      const screenWidth = window.innerWidth;
+      let multiplier;
+
+      if (screenWidth < 768) {
+        // Mobile screens
+        multiplier = 1;
+      } else if (screenWidth >= 1280) {
+        // XL screens
+        multiplier = 2;
+      } else {
+        // Other screens
+        multiplier = 1.5;
+      }
+
+      document.querySelectorAll(".marquee").forEach((marquee) => {
         const direction = marquee.classList.contains("marquee-left") ? -1 : 1;
         marquee.style.transform = `translateX(${
-          scrollPosition * direction * 2
+          scrollPosition * direction * multiplier
         }px)`;
       });
     };

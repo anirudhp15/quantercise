@@ -28,21 +28,21 @@ const Intro = () => {
   return (
     <div
       id="intro"
-      className="relative w-full h-screen py-16 text-gray-300 bg-center bg-cover"
+      className="relative flex items-center justify-center w-full min-h-screen text-gray-300 bg-center bg-cover"
     >
-      <div className="fixed inset-0 top-0 w-screen h-screen bg-black opacity-50"></div>
+      <div className="fixed inset-0 w-screen h-screen bg-black opacity-50"></div>
 
       <AnimatedGrid />
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 h-full max-w-screen-xl mx-auto lg:flex lg:items-center"
+        className="relative z-10 flex flex-col items-center justify-center h-full max-w-screen-xl mx-auto lg:flex-row"
       >
-        <div className="px-12 pt-8 text-center lg:w-1/2 lg:pr-8 lg:text-left">
-          <h1 className="pt-8 text-3xl font-bold sm:pt-0 lg:pb-4 sm:text-5xl md:text-6xl">
+        <div className="px-12 text-center lg:w-1/2 lg:pr-8 lg:text-left">
+          <h1 className="pt-32 text-3xl font-bold xl:pt-16 lg:pb-4 sm:text-5xl md:text-6xl">
             Welcome to{" "}
-            <span className="block text-6xl font-bold text-transparent sm:pt-12 bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 sm:inline md:text-7xl">
+            <span className="block text-5xl font-bold text-transparent sm:pt-12 bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 sm:inline md:text-7xl">
               Quantercise
             </span>
           </h1>
@@ -56,7 +56,7 @@ const Intro = () => {
             on our cutting-edge platform:
           </p>
           <div className="flex justify-center mt-4 lg:justify-start">
-            <ul className="text-sm font-light text-left text-gray-400 list-disc list-inside sm:text-base md:text-lg">
+            <ul className="text-sm font-normal text-left text-gray-400 list-disc list-inside sm:text-base md:text-lg">
               <li>100+ interview questions used in industry</li>
               <li>Comprehensive hints</li>
               <li>Detailed follow-up explanations</li>
@@ -66,19 +66,19 @@ const Intro = () => {
           <div className="mt-8">
             <form
               onSubmit={handleSubmit}
-              className="flex flex-row items-center justify-center gap-4 lg:justify-start lg:items-start"
+              className="flex flex-col items-center gap-4 lg:flex-row lg:items-start"
             >
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-1/2 max-w-xs px-4 py-2 text-black rounded-lg"
+                className="w-full max-w-xs px-3 py-2 mt-2 text-white transition duration-200 bg-gray-900 border border-gray-600 rounded-lg shadow-sm outline-none font-extralight focus:border-green-600 focus:bg-gray-950"
                 required
               />
               <button
                 type="submit"
-                className="px-6 py-2 text-lg font-bold text-black transition-all duration-200 bg-green-400 rounded-lg shadow-lg animate-bounce hover:scale-105 group hover:bg-green-500 hover:text-white hover:shadow-xl"
+                className="w-auto px-6 py-2 mt-4 text-lg font-bold text-black transition-all duration-200 bg-green-400 rounded-lg shadow-lg whitespace-nowrap lg:mt-0 animate-bounce hover:scale-105 group hover:bg-green-500 hover:text-white hover:shadow-xl"
               >
                 Notify Me
                 <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -100,8 +100,8 @@ const Intro = () => {
               className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
             />
             <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center w-full h-full px-4 py-2 transition-opacity duration-150 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
-              <p className="text-lg font-thin text-center text-white">
-                access our extensive knowledgebase of interview questions,
+              <p className="text-sm font-thin text-center text-white md:text-lg">
+                Access our extensive knowledgebase of interview questions,
                 tagged by specific concepts and subjects to focus on in
                 probability, statistics, programming, finance, and general
                 logical reasoning. Perfect for undergraduates in STEM, graduate

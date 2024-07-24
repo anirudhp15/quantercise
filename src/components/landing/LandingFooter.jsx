@@ -58,7 +58,7 @@ const LandingFooter = () => {
               href="https://github.com/anirudhp15"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="transition duration-200 text-github hover:text-github-hover"
             >
               <FaGithub size={24} />
             </a>
@@ -66,7 +66,7 @@ const LandingFooter = () => {
               href="https://www.linkedin.com/in/anirudh-pottammal-01b186216/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="transition duration-200 text-linkedin hover:text-linkedin-hover"
             >
               <FaLinkedin size={24} />
             </a>
@@ -74,7 +74,7 @@ const LandingFooter = () => {
               href="https://www.youtube.com/channel/UCOgvBdaN7lrWmgbf_wD8zyw"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="transition duration-200 text-youtube hover:text-youtube-hover"
             >
               <FaYoutube size={24} />
             </a>
@@ -82,7 +82,7 @@ const LandingFooter = () => {
               href="https://www.instagram.com/anirudhp15/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="transition duration-200 text-instagram hover:text-instagram-hover"
             >
               <FaInstagram size={24} />
             </a>
@@ -90,7 +90,7 @@ const LandingFooter = () => {
               href="https://x.com/quantercise"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="transition duration-200 text-twitter hover:text-twitter-hover"
             >
               <FaXTwitter size={24} />
             </a>
@@ -99,7 +99,7 @@ const LandingFooter = () => {
             <MdOutgoingMail size={20} className="mt-[2px] text-gray-300" />
             <a
               href="mailto:quantercise@gmail.com"
-              className="text-sm text-gray-300 transition duration-300 hover:text-white"
+              className="text-sm text-gray-500 transition duration-200 hover:text-white"
             >
               quantercise@gmail.com
             </a>

@@ -72,9 +72,9 @@ const Header = () => {
           </RouterLink>
         </div>
 
-        {location.pathname === "/landing" && (
-          <div className="hidden md:flex md:items-center md:justify-center md:space-x-6">
-            {landingPageLinks.map((link) => (
+        <div className="hidden lg:flex lg:items-center lg:space-x-6 lg:w-full lg:justify-center">
+          {location.pathname === "/landing" &&
+            landingPageLinks.map((link) => (
               <ScrollLink
                 key={link.to}
                 className="text-sm font-semibold text-gray-300 cursor-pointer hover:text-gray-100"
@@ -85,8 +85,7 @@ const Header = () => {
                 {link.label}
               </ScrollLink>
             ))}
-          </div>
-        )}
+        </div>
 
         <div className="flex items-center">
           {userLoggedIn && location.pathname !== "/landing" ? (
@@ -153,7 +152,16 @@ const Header = () => {
               </AnimatePresence>
             </div>
           ) : (
-            <Waitlist />
+            <div className="flex items-center">
+              <div className="hidden lg:flex">
+                <Waitlist />
+              </div>
+              {location.pathname === "/landing" && (
+                <div className="flex lg:hidden">
+                  <Waitlist />
+                </div>
+              )}
+            </div>
           )}
         </div>
       </motion.nav>
