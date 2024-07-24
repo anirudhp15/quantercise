@@ -18,8 +18,8 @@ import ProgressTracker from "./components/sections/ProgressTracker";
 import LandingPage from "./components/landing/LandingPage";
 import Pricing from "./components/landing/Pricing";
 import StripeCheckout from "./components/landing/StripeCheckout";
-import "./index.css";
 import SuccessPage from "./components/auth/SuccessPage";
+import "./index.css";
 
 function RouteComponent() {
   const routesArray = [
@@ -57,9 +57,11 @@ function RouteComponent() {
 }
 
 function App() {
+  const basename = process.env.NODE_ENV === "production" ? "/quantercise" : "/";
+
   return (
     <AuthProvider>
-      <Router basename="/quantercise">
+      <Router basename={basename}>
         <RouteComponent />
       </Router>
     </AuthProvider>
