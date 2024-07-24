@@ -8,6 +8,7 @@ import AnimatedGrid from "./AnimatedGrid";
 const Intro = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,14 +16,16 @@ const Intro = () => {
       const response = await axios.post("http://localhost:4242/notify", {
         email,
       });
-      if (response.data.success) {
-        setMessage("Thank you! You'll be notified when we go live.");
-      } else {
-        setMessage("Something went wrong. Please try again.");
-      }
+      setMessage(response.data.message);
+      setShowMessage(true);
     } catch (error) {
-      setMessage("Something went wrong. Please try again.");
+      setMessage("Thank you! We'll notify you when we launch.");
+      setShowMessage(true);
     }
+
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 5000);
   };
 
   return (
@@ -84,7 +87,15 @@ const Intro = () => {
                 <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
               </button>
             </form>
-            {message && <p className="mt-4 text-lg">{message}</p>}
+            {message && (
+              <p
+                className={`mt-4 text-lg transition-opacity duration-500 ${
+                  showMessage ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                {message}
+              </p>
+            )}
           </div>
         </div>
         <motion.div

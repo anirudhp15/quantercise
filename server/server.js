@@ -62,12 +62,22 @@ const RESEND_API_URL = "https://api.resend.com/v1/emails";
 // Email notification endpoint
 app.post("/notify", async (req, res) => {
   const { email } = req.body;
+
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid email address" });
+  }
+
   try {
     const emailDoc = db.collection("emails").doc(email);
     const emailSnapshot = await emailDoc.get();
 
     if (emailSnapshot.exists) {
-      res.status(400).json({ success: false, message: "Email already exists" });
+      return res.status(200).json({
+        success: true,
+        message: "We already got you! We'll let you know when we're live.",
+      });
     } else {
       await emailDoc.set({ email });
 
@@ -79,30 +89,34 @@ app.post("/notify", async (req, res) => {
         text: "Thank you for subscribing to Quantercise! You'll be notified when we go live.",
       };
 
-      axios
-        .post(RESEND_API_URL, data, {
+      try {
+        const response = await axios.post(RESEND_API_URL, data, {
           headers: {
             Authorization: `Bearer ${RESEND_API_KEY}`,
             "Content-Type": "application/json",
           },
-        })
-        .then((response) => {
-          console.log("Email sent: ", response.data);
-          res.status(200).json({ success: true });
-        })
-        .catch((error) => {
-          console.error(
-            "Error sending email:",
-            error.response ? error.response.data : error
-          );
-          res
-            .status(500)
-            .json({ success: false, message: "Failed to send email" });
         });
+        console.log("Email sent: ", response.data);
+      } catch (error) {
+        console.error(
+          "Error sending email:",
+          error.response ? error.response.data : error
+        );
+        return res.status(500).json({
+          success: false,
+          message:
+            "Failed to send confirmation email, but your email was saved.",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Thanks, we'll let you know when we're live.",
+      });
     }
   } catch (error) {
     console.error("Error storing email:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
