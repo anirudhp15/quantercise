@@ -5,7 +5,10 @@
 
 body, html {
   overflow-x: hidden;
-  background-color: #111827;
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 /* Ensure the menu is properly aligned and responsive */
@@ -132,9 +135,6 @@ body, html {
 
 .notification.fade-in {
   opacity: 1;
-}
-body, html {
-  overflow-x: hidden;
 }
 
 .category-section {
