@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import practiceProblemsImage from "/Users/anipotts/Desktop/VS Code Projects/quantercise/src/assets/images/practice_problems.jpg";
-import progressImage from "/Users/anipotts/Desktop/VS Code Projects/quantercise/src/assets/images/progress.jpg";
+import practiceProblemsImage from "../../assets/images/practice_problems.jpg";
+import progressImage from "../../assets/images/progress.jpg";
 
 const Features = () => {
   const featureList = [

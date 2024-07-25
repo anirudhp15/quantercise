@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "axios";
-import backgroundImage from "/Users/anipotts/Desktop/VS Code Projects/quantercise/src/assets/images/practice.jpg";
+import backgroundImage from "../../assets/images/practice.jpg";
 import AnimatedGrid from "./AnimatedGrid";
 
 const Intro = () => {
