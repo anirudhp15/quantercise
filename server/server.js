@@ -44,7 +44,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
@@ -56,6 +56,7 @@ app.post("/notify", async (req, res) => {
   const { email } = req.body;
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
+    console.error("Invalid email address:", email);
     return res
       .status(400)
       .json({ success: false, message: "Invalid email address" });
@@ -69,12 +70,14 @@ app.post("/notify", async (req, res) => {
       await emailDoc.update({
         counter: admin.firestore.FieldValue.increment(1),
       });
+      console.log("Email already exists, incrementing counter:", email);
       return res.status(200).json({
         success: true,
         message: "We already got you! We'll let you know when we're live.",
       });
     } else {
       await emailDoc.set({ email, counter: 1 });
+      console.log("New email signup:", email);
       return res.status(200).json({
         success: true,
         message: "Thanks, we'll let you know when we're live.",
@@ -133,4 +136,6 @@ app.post("/verify-checkout-session", async (req, res) => {
   }
 });
 
-app.listen(4242, () => console.log("Running on port 4242"));
+// Start the server
+const PORT = process.env.PORT || 4242;
+app.listen(PORT, () => console.log(`Running on port ${PORT}`));

@@ -73,7 +73,7 @@ const Header = () => {
         </div>
 
         <div className="hidden lg:flex lg:items-center lg:space-x-6 lg:w-full lg:justify-center">
-          {location.pathname === "/landing" &&
+          {(location.pathname === "/landing" || location.pathname === "/") &&
             landingPageLinks.map((link) => (
               <ScrollLink
                 key={link.to}
@@ -156,7 +156,8 @@ const Header = () => {
               <div className="hidden lg:flex">
                 <Waitlist />
               </div>
-              {location.pathname === "/landing" && (
+              {(location.pathname === "/landing" ||
+                location.pathname === "/") && (
                 <div className="flex lg:hidden">
                   <Waitlist />
                 </div>
