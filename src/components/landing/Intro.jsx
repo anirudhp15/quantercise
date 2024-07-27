@@ -9,14 +9,16 @@ const Intro = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const API_URL = process.env.API_URL;
+
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_PROD_API_URL
+      : process.env.REACT_APP_DEV_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:4242/notify`, {
-        email,
-      });
+      const response = await axios.post(`${API_URL}/notify`, { email });
       if (response.status === 200) {
         setMessage(response.data.message);
       } else {
