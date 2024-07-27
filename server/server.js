@@ -11,7 +11,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000", // Development origin
   "http://localhost:4242", // Development origin
-  "https://quantercise.com", // Production origin
+  "https://quantercise.vercel.app", // Production origin
+  "https://quantercise.com", // Custom domain
 ];
 
 app.use(
