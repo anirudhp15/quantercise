@@ -8,7 +8,15 @@
     ],
     "routes": [
       {
-        "src": "/(.*)",
+        "src": "/notify",
+        "dest": "/server.js"
+      },
+      {
+        "src": "/create-checkout-session",
+        "dest": "/server.js"
+      },
+      {
+        "src": "/verify-checkout-session",
         "dest": "/server.js"
       }
     ]
