@@ -20,7 +20,7 @@ const Intro = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `https://quantercise.vercel.app/notify`,
+        `https://quantercise-server.vercel.app/notify`,
         {
           email,
         }
@@ -28,7 +28,7 @@ const Intro = () => {
       if (response.status === 200) {
         setMessage(response.data.message);
       } else {
-        setMessage("Server error. Please try again later.");
+        setMessage("Server error. Try again later please.");
       }
       setShowMessage(true);
     } catch (error) {

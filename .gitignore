@@ -26,3 +26,5 @@ yarn-error.log*
 .env
 database.rules.json
 quantercise-firebase-adminsdk-yzs7h-3b6737a8ee.json
+firebase.js
+vercel.json
