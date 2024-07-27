@@ -1,3 +1,4 @@
+// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -7,9 +8,9 @@ const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
 const app = express();
 
-// Set up CORS to allow requests from your frontend
 const allowedOrigins = [
   "http://localhost:3000", // Development origin
+  "http://localhost:4242", // Development origin
   "https://quantercise.com", // Production origin
 ];
 
