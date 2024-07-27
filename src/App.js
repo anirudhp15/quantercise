@@ -19,6 +19,7 @@ import LandingPage from "./components/landing/LandingPage";
 import Pricing from "./components/landing/Pricing";
 import StripeCheckout from "./components/landing/StripeCheckout";
 import SuccessPage from "./components/auth/SuccessPage";
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 
 function RouteComponent() {
@@ -67,6 +68,7 @@ function App() {
     <AuthProvider>
       <Router basename={basename}>
         <RouteComponent />
+        <Analytics />
       </Router>
     </AuthProvider>
   );
