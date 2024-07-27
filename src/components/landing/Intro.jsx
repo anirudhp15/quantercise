@@ -4,6 +4,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "axios";
 import backgroundImage from "../../assets/images/practice.jpg";
 import AnimatedGrid from "./AnimatedGrid";
+import { set } from "lodash";
 
 const Intro = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,12 @@ const Intro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/notify`, { email });
+      const response = await axios.post(
+        `https://quantercise.vercel.app/notify`,
+        {
+          email,
+        }
+      );
       if (response.status === 200) {
         setMessage(response.data.message);
       } else {
