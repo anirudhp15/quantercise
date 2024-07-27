@@ -10,7 +10,7 @@ import "../../index.css";
 const categories = [
   {
     name: "MATHEMATICAL FOUNDATIONS",
-    icon: <FaCalculator className="text-4xl text-blue-300" />,
+    icon: <FaCalculator className="text-xl text-blue-300" />,
     subtopics: [
       "Bayes' Theorem",
       "Probability Distributions",
@@ -26,7 +26,7 @@ const categories = [
   },
   {
     name: "ALGORITHMS & DATA STRUCTURES",
-    icon: <FaCode className="text-4xl text-sky-400" />,
+    icon: <FaCode className="text-2xl text-sky-400" />,
     subtopics: [
       "Arrays",
       "Trees",
@@ -47,7 +47,7 @@ const categories = [
   },
   {
     name: "FINANCIAL CONCEPTS",
-    icon: <FaChartLine className="text-4xl text-blue-500" />,
+    icon: <FaChartLine className="text-2xl text-blue-500" />,
     subtopics: [
       "Black-Scholes Model",
       "Binomial Models",
@@ -66,7 +66,7 @@ const categories = [
   },
   {
     name: "LOGICAL REASONING",
-    icon: <FaPuzzlePiece className="text-4xl text-purple-500" />,
+    icon: <FaPuzzlePiece className="text-2xl text-purple-500" />,
     subtopics: [
       "Deductive Reasoning",
       "Inductive Reasoning",
@@ -142,7 +142,7 @@ const Topics = () => {
               } mt-4`}
             >
               <span className="hidden md:block">{category.icon}</span>
-              <span className="ml-2 font-semibold text-center md:text-left">
+              <span className="relative ml-2 font-semibold text-center text-transparent md:text-left z-2 bg-clip-text bg-gradient-to-r from-blue-500 to-green-400">
                 {category.name}
               </span>
             </div>

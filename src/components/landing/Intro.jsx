@@ -9,17 +9,20 @@ const Intro = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
+  const API_URL = process.env.API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4242/notify", {
-        email,
-      });
-      setMessage(response.data.message);
+      const response = await axios.post(`/notify`, { email });
+      if (response.status === 200) {
+        setMessage(response.data.message);
+      } else {
+        setMessage("Server error. Please try again later.");
+      }
       setShowMessage(true);
     } catch (error) {
-      setMessage("Thank you! We'll notify you when we launch.");
+      setMessage("Server error. Please try again later.");
       setShowMessage(true);
     }
 

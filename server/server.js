@@ -1,55 +1,43 @@
 require("dotenv").config();
-const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const express = require("express");
 const cors = require("cors");
-const admin = require("firebase-admin");
-const path = require("path");
 const bodyParser = require("body-parser");
+const MailerLite = require("@mailerlite/mailerlite-nodejs").default;
+const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
 const app = express();
 
-// Verify environment variables
-if (!process.env.SERVICE_ACCOUNT_PATH) {
-  console.error("Missing SERVICE_ACCOUNT_PATH in .env file");
-  process.exit(1);
-}
+// Set up CORS to allow requests from your frontend
+const allowedOrigins = [
+  "http://localhost:3000", // Development origin
+  "https://quantercise.com", // Production origin
+];
 
-if (!process.env.STRIPE_API_KEY) {
-  console.error("Missing STRIPE_API_KEY in .env file");
-  process.exit(1);
-}
-
-if (!process.env.YOUR_DOMAIN) {
-  console.error("Missing YOUR_DOMAIN in .env file");
-  process.exit(1);
-}
-
-// Update the path to your service account key file
-const serviceAccountPath = path.join(
-  __dirname,
-  process.env.SERVICE_ACCOUNT_PATH
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+  })
 );
 
-let serviceAccount;
-try {
-  serviceAccount = require(serviceAccountPath);
-} catch (error) {
-  console.error("Error loading service account file:", error);
-  process.exit(1);
-}
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
-
-app.use(cors({ origin: true }));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
 
+const MAILERLITE_API_KEY = process.env.MAILERLITE_API_KEY;
+const MAILERLITE_GROUP_ID = process.env.MAILERLITE_GROUP_ID;
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
+const mailerlite = new MailerLite({
+  api_key: MAILERLITE_API_KEY,
+});
 
 // Email notification endpoint
 app.post("/notify", async (req, res) => {
@@ -63,28 +51,30 @@ app.post("/notify", async (req, res) => {
   }
 
   try {
-    const emailDoc = db.collection("emails").doc(email);
-    const emailSnapshot = await emailDoc.get();
+    const subscriberData = {
+      email: email,
+      groups: [MAILERLITE_GROUP_ID],
+      status: "active",
+    };
 
-    if (emailSnapshot.exists) {
-      await emailDoc.update({
-        counter: admin.firestore.FieldValue.increment(1),
-      });
-      console.log("Email already exists, incrementing counter:", email);
-      return res.status(200).json({
-        success: true,
-        message: "We already got you! We'll let you know when we're live.",
-      });
-    } else {
-      await emailDoc.set({ email, counter: 1 });
-      console.log("New email signup:", email);
+    const response = await mailerlite.subscribers.createOrUpdate(
+      subscriberData
+    );
+    console.log(response.data);
+
+    if (response.data) {
       return res.status(200).json({
         success: true,
         message: "Thanks, we'll let you know when we're live.",
       });
+    } else {
+      throw new Error("Failed to add email to MailerLite");
     }
   } catch (error) {
-    console.error("Error storing email:", error);
+    console.error(
+      "Error storing email:",
+      error.response ? error.response.data : error.message
+    );
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
@@ -124,8 +114,7 @@ app.post("/verify-checkout-session", async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status === "paid") {
-      const userDoc = db.collection("users").doc(userId);
-      await userDoc.update({ isPro: true });
+      // Update user to pro in your database
       res.json({ success: true });
     } else {
       res.json({ success: false });

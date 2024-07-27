@@ -9,7 +9,7 @@ html {
 .stagger-visualizer {
   display: grid;
   grid-template-columns: repeat(17, 1fr);
-  grid-template-rows: repeat(17, 1fr);
+  grid-template-rows: repeat(15, 1fr);
   position: fixed;
     top: 0;
     left: 0;
