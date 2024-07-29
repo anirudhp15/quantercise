@@ -13,9 +13,12 @@ const Intro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/notify", {
-        email,
-      });
+      const response = await axios.post(
+        "https://quantercise-api.vercel.app/notify",
+        {
+          email,
+        }
+      );
       if (response.status === 200) {
         setMessage(response.data.message);
       } else {
