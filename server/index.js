@@ -48,6 +48,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+app.get("/api", (req, res) => {
+  res.send("Hello from Express!");
+});
+
 // Email notification endpoint
 app.post("/notify", async (req, res) => {
   const { email } = req.body;
