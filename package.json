@@ -62,7 +62,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"cd server && nodemon server.js\"",
+    "start": "concurrently \"react-scripts start\" \"cd server && nodemon index.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -95,7 +95,7 @@
     "tailwindcss": "^3.4.4"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "tailwind.config.js",
+  "main": "src/App.js",
   "keywords": [],
   "author": "",
   "license": "ISC"
