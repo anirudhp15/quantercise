@@ -1,17 +1,23 @@
-// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const MailerLite = require("@mailerlite/mailerlite-nodejs").default;
+const nodemailer = require("nodemailer");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
+const path = require("path");
 
 const app = express();
+
+app.get("/api", (req, res) => {
+  res.send("Hello from Express!");
+});
 
 const allowedOrigins = [
   "http://localhost:3000", // Development origin
   "http://localhost:4242", // Development origin
   "https://quantercise.vercel.app", // Production origin
+  "https://quantercise.vercel.app", // Production API origin
+  "https://quantercise-api.vercel.app", // Production API origin
   "https://quantercise.com", // Custom domain
 ];
 
@@ -29,16 +35,17 @@ app.use(
   })
 );
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "build"))); // Use __dirname with path.join
 app.use(express.json());
 app.use(bodyParser.json());
 
-const MAILERLITE_API_KEY = process.env.MAILERLITE_API_KEY;
-const MAILERLITE_GROUP_ID = process.env.MAILERLITE_GROUP_ID;
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
-
-const mailerlite = new MailerLite({
-  api_key: MAILERLITE_API_KEY,
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  service: "gmail", // Use your email service
+  auth: {
+    user: process.env.EMAIL_USER, // Your email address
+    pass: process.env.EMAIL_PASS, // Your email password or app password
+  },
 });
 
 // Email notification endpoint
@@ -52,33 +59,25 @@ app.post("/notify", async (req, res) => {
       .json({ success: false, message: "Invalid email address" });
   }
 
-  try {
-    const subscriberData = {
-      email: email,
-      groups: [MAILERLITE_GROUP_ID],
-      status: "active",
-    };
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: "quantercise@gmail.com", // The recipient email address
+    subject: "New Email Subscriber",
+    text: `Email: ${email}`,
+  };
 
-    const response = await mailerlite.subscribers.createOrUpdate(
-      subscriberData
-    );
-    console.log(response.data);
-
-    if (response.data) {
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+      return res.status(500).json({ success: false, message: "Server error" });
+    } else {
+      console.log("Email sent: " + info.response);
       return res.status(200).json({
         success: true,
         message: "Thanks, we'll let you know when we're live.",
       });
-    } else {
-      throw new Error("Failed to add email to MailerLite");
     }
-  } catch (error) {
-    console.error(
-      "Error storing email:",
-      error.response ? error.response.data : error.message
-    );
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
+  });
 });
 
 // Stripe checkout session creation
@@ -96,8 +95,8 @@ app.post("/create-checkout-session", async (req, res) => {
         },
       ],
       mode: "subscription",
-      success_url: `${YOUR_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${YOUR_DOMAIN}/quantercise/landing`,
+      success_url: `${process.env.YOUR_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.YOUR_DOMAIN}/quantercise/landing`,
       automatic_tax: { enabled: true },
     });
 
@@ -125,6 +124,10 @@ app.post("/verify-checkout-session", async (req, res) => {
     console.error("Error fetching session:", error);
     res.status(500).json({ success: false, error: error.message });
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
 // Start the server
