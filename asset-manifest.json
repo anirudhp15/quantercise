@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.8f3203f7.css",
-    "main.js": "/static/js/main.fe1af056.js",
-    "static/media/practice.jpg": "/static/media/practice.74ba66176d262ea36222.jpg",
-    "static/media/practice_problems.jpg": "/static/media/practice_problems.a4964908aab26a490ace.jpg",
-    "static/media/progress.jpg": "/static/media/progress.101bc4611634f3e8f0e0.jpg",
-    "index.html": "/index.html",
-    "main.8f3203f7.css.map": "/static/css/main.8f3203f7.css.map",
-    "main.fe1af056.js.map": "/static/js/main.fe1af056.js.map"
+    "main.css": "http://192.168.86.28:3000/static/css/main.8f3203f7.css",
+    "main.js": "http://192.168.86.28:3000/static/js/main.f23fd19a.js",
+    "static/media/practice.jpg": "http://192.168.86.28:3000/static/media/practice.74ba66176d262ea36222.jpg",
+    "static/media/practice_problems.jpg": "http://192.168.86.28:3000/static/media/practice_problems.a4964908aab26a490ace.jpg",
+    "static/media/progress.jpg": "http://192.168.86.28:3000/static/media/progress.101bc4611634f3e8f0e0.jpg",
+    "index.html": "http://192.168.86.28:3000/index.html",
+    "main.8f3203f7.css.map": "http://192.168.86.28:3000/static/css/main.8f3203f7.css.map",
+    "main.f23fd19a.js.map": "http://192.168.86.28:3000/static/js/main.f23fd19a.js.map"
   },
   "entrypoints": [
     "static/css/main.8f3203f7.css",
-    "static/js/main.fe1af056.js"
+    "static/js/main.f23fd19a.js"
   ]
 }
