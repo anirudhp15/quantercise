@@ -1,5 +1,5 @@
 {
-  "homepage": "https://quantercise.com",
+  "homepage": "https://anirudhp15.github.io/",
   "name": "quantercise",
   "version": "0.1.0",
   "private": true,
@@ -98,6 +98,6 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "src/App.js",
   "keywords": [],
-  "author": "",
+  "author": "Ani Pottammal",
   "license": "ISC"
 }
