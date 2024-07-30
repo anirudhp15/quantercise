@@ -43,7 +43,6 @@ function RouteComponent() {
   let routesElement = useRoutes(routesArray);
   const location = useLocation(); // Get current location
 
-  // Condition to check if the current path is not the landing page
   const showFooter =
     location.pathname !== "/" && location.pathname !== "/landing";
 
