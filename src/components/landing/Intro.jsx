@@ -10,6 +10,7 @@ const Intro = () => {
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const form = useRef();
+  const emailInputRef = useRef(); // Add this line
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +38,10 @@ const Intro = () => {
     setTimeout(() => {
       setShowMessage(false);
     }, 5000);
+  };
+
+  const focusEmailInput = () => {
+    emailInputRef.current.focus();
   };
 
   return (
@@ -84,6 +89,7 @@ const Intro = () => {
               className="flex flex-col items-center gap-4 lg:flex-row lg:items-start"
             >
               <input
+                ref={emailInputRef} // Add this line
                 type="email"
                 name="user_email"
                 value={email}
