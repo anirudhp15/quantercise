@@ -16,7 +16,7 @@ const allowedOrigins = {
 
 app.use(cors(allowedOrigins));
 
-app.use(express.static(path.join(__dirname, "../build")));
+app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
 
