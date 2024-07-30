@@ -7,12 +7,17 @@ const path = require("path");
 
 const app = express();
 
-const allowedOrigins = {
-  origin: "http://localhost:3000",
-  origin: "https://quantercise.com",
-};
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://quantercise.com",
+  "https://anirudhp15.github.io/quantercise",
+];
 
-app.use(cors(allowedOrigins));
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -64,10 +69,6 @@ app.post("/verify-checkout-session", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
 // Start the server
-const PORT = process.env.PORT || 4242;
-app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+// const PORT = process.env.PORT || 4242;
+// app.listen(PORT, () => console.log(`Running on port ${PORT}`));
