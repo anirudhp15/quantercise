@@ -11,6 +11,7 @@ const app = express();
 
 const allowedOrigins = {
   origin: "http://localhost:3000",
+  origin: "https://quantercise.com",
 };
 
 app.use(cors(allowedOrigins));
