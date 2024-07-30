@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
-import axios from "axios";
+import emailjs from "emailjs-com";
 import backgroundImage from "../../assets/images/practice.jpg";
 import AnimatedGrid from "./AnimatedGrid";
 
@@ -9,26 +9,30 @@ const Intro = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
+  const form = useRef();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "https://quantercise-api.vercel.app/notify",
-        {
-          email,
+
+    emailjs
+      .sendForm(
+        "service_kctlhsd", // Replace with your EmailJS service ID
+        "template_mvzr4wq", // Replace with your EmailJS template ID
+        form.current,
+        "_1DlpBDmqjdIFafVH" // Replace with your EmailJS public key
+      )
+      .then(
+        (result) => {
+          console.log("SUCCESS!", result.text);
+          setMessage("Thanks, we'll let you know when we're live.");
+          setShowMessage(true);
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+          setMessage("Server error. Please try again later.");
+          setShowMessage(true);
         }
       );
-      if (response.status === 200) {
-        setMessage(response.data.message);
-      } else {
-        setMessage("Server error. Try again later please.");
-      }
-      setShowMessage(true);
-    } catch (error) {
-      setMessage("Server error. Please try again later.");
-      setShowMessage(true);
-    }
 
     setTimeout(() => {
       setShowMessage(false);
@@ -75,11 +79,13 @@ const Intro = () => {
           </div>
           <div className="mt-8">
             <form
+              ref={form}
               onSubmit={handleSubmit}
               className="flex flex-col items-center gap-4 lg:flex-row lg:items-start"
             >
               <input
                 type="email"
+                name="user_email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
