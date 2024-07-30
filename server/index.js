@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const path = require("path");
+const { all } = require("axios");
 
 const app = express();
 
@@ -12,30 +13,13 @@ app.get("/api", (req, res) => {
   res.send("Hello from Express!");
 });
 
-const allowedOrigins = [
-  "http://localhost:3000", // Development origin
-  "http://localhost:4242", // Development origin
-  "https://quantercise.vercel.app", // Production origin
-  "https://quantercise.vercel.app", // Production API origin
-  "https://quantercise-api.vercel.app", // Production API origin
-  "https://quantercise.com", // Custom domain
-];
+const allowedOrigins = {
+  origin: "http://localhost:3000",
+};
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-  })
-);
+app.use(cors(allowedOrigins));
 
-app.use(express.static(path.join(__dirname, "build"))); // Use __dirname with path.join
+app.use(express.static(path.join(__dirname, "../build"))); // Use __dirname with path.join
 app.use(express.json());
 app.use(bodyParser.json());
 
