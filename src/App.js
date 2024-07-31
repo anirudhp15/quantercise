@@ -61,7 +61,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router basename={basename}>
+      <Router>
         <RouteComponent />
         <Analytics />
       </Router>

@@ -4,7 +4,7 @@ module.exports = {
     tailwindcss("./tailwind.js"),
     require("autoprefixer"),
     require("@fullhuman/postcss-purgecss")({
-      content: ["./src/**/*.js", "./public/index.html"],
+      content: ["./src/**/*.{js,jsx,ts,tsx}"],
       defaultExtractor: (content) => content.match(/[A-Za-z0-9-_:/]+/g) || [],
     }),
   ],

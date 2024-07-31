@@ -5,31 +5,51 @@ import emailjs from "emailjs-com";
 import backgroundImage from "../../assets/images/practice.jpg";
 import AnimatedGrid from "./AnimatedGrid";
 
-const Intro = () => {
+const Intro = ({ triggerBounce }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const form = useRef();
-  const emailInputRef = useRef(); // Add this line
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // First call to send the sign-up email
     emailjs
       .sendForm(
         "service_kctlhsd", // Replace with your EmailJS service ID
-        "template_mvzr4wq", // Replace with your EmailJS template ID
+        "template_mvzr4wq", // Replace with your EmailJS sign-up template ID
         form.current,
         "_1DlpBDmqjdIFafVH" // Replace with your EmailJS public key
       )
       .then(
         (result) => {
-          console.log("SUCCESS!", result.text);
+          console.log("Sign-up email sent SUCCESS!", result.text);
           setMessage("Thanks, we'll let you know when we're live.");
           setShowMessage(true);
+
+          // Second call to send the welcome email
+          emailjs
+            .send(
+              "service_uh2nkmr", // Replace with your EmailJS service ID
+              "template_ol82vvi", // Replace with your EmailJS welcome template ID
+              {
+                user_email: form.current.user_email.value, // Use the user's email address
+                reply_to: "quantercise@gmail.com", // Replace with your reply-to email if needed
+              },
+              "_1DlpBDmqjdIFafVH" // Replace with your EmailJS public key
+            )
+            .then(
+              (welcomeResult) => {
+                console.log("Welcome email sent SUCCESS!", welcomeResult.text);
+              },
+              (welcomeError) => {
+                console.log("Welcome email FAILED...", welcomeError.text);
+              }
+            );
         },
         (error) => {
-          console.log("FAILED...", error.text);
+          console.log("Sign-up email FAILED...", error.text);
           setMessage("Server error. Please try again later.");
           setShowMessage(true);
         }
@@ -38,10 +58,6 @@ const Intro = () => {
     setTimeout(() => {
       setShowMessage(false);
     }, 5000);
-  };
-
-  const focusEmailInput = () => {
-    emailInputRef.current.focus();
   };
 
   return (
@@ -53,6 +69,7 @@ const Intro = () => {
 
       <AnimatedGrid />
       <motion.div
+        id="emailForm"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -67,18 +84,24 @@ const Intro = () => {
           </h1>
           <p className="hidden mt-6 text-lg font-medium text-gray-300 md:block sm:text-xl md:text-2xl">
             A cutting-edge platform designed to elevate your quantitative
-            finance skills. Sign up now to join our waitlist and be the first to
-            access exclusive features:
+            skills.{" "}
+            <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+              Join our waitlist
+            </span>{" "}
+            to be the first notified when we go live this fall:
           </p>
           <p className="block mt-6 text-lg font-medium text-gray-300 md:hidden sm:text-xl md:text-2xl">
-            Join our waitlist now and be the first to access exclusive features
-            on our cutting-edge platform:
+            Join our{" "}
+            <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+              waitlist
+            </span>{" "}
+            to be the first notified when we go live this fall:
           </p>
           <div className="flex justify-center mt-4 lg:justify-start">
             <ul className="text-sm font-normal text-left text-gray-400 list-disc list-inside sm:text-base md:text-lg">
-              <li>100+ interview questions used in industry</li>
-              <li>Comprehensive hints</li>
-              <li>Detailed follow-up explanations</li>
+              <li>150+ quant interview questions used in industry</li>
+              <li>Interactive hints and explanations</li>
+              <li>Detailed follow-up questions</li>
               <li>AI-driven feedback assistant</li>
             </ul>
           </div>
@@ -89,7 +112,6 @@ const Intro = () => {
               className="flex flex-col items-center gap-4 lg:flex-row lg:items-start"
             >
               <input
-                ref={emailInputRef} // Add this line
                 type="email"
                 name="user_email"
                 value={email}
@@ -98,13 +120,17 @@ const Intro = () => {
                 className="w-full max-w-xs px-3 py-2 mt-2 text-white transition duration-200 bg-gray-900 border border-gray-600 rounded-lg shadow-sm outline-none font-extralight focus:border-green-600 focus:bg-gray-950"
                 required
               />
-              <button
+              <motion.button
                 type="submit"
-                className="w-auto px-6 py-2 mt-4 text-lg font-bold text-black transition-all duration-200 bg-green-400 rounded-lg shadow-lg whitespace-nowrap lg:mt-0 animate-bounce hover:scale-105 group hover:bg-green-500 hover:text-white hover:shadow-xl"
+                className={`w-auto px-6 py-2 mt-4 text-lg font-bold text-black transition-all duration-200 bg-green-400 rounded-lg shadow-lg whitespace-nowrap lg:mt-0 ${
+                  triggerBounce
+                    ? "animate-bounce outline-2 outline outline-offset-4 outline-green-400"
+                    : ""
+                } hover:scale-105 group hover:bg-green-500 hover:text-white hover:shadow-xl`}
               >
                 Notify Me
                 <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </button>
+              </motion.button>
             </form>
             {message && (
               <p
