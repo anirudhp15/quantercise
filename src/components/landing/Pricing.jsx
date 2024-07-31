@@ -26,7 +26,7 @@ const Pricing = () => {
   return (
     <div
       id="pricing"
-      className="relative min-h-screen p-16 my-auto text-gray-300 bg-black lg:p-32"
+      className="relative min-h-screen p-16 my-auto text-gray-300 bg-black lg:p-32 lg:pb-48"
     >
       <div className="mx-auto text-center">
         <h2 className="relative py-8 text-4xl font-bold text-transparent z-2 md:pb-12 md:text-5xl bg-clip-text bg-gradient-to-r from-purple-400 to-blue-600">
@@ -35,13 +35,13 @@ const Pricing = () => {
         <p className="relative pb-8 text-lg font-medium text-white z-2 sm:text-xl md:text-2xl">
           Choose the plan that best fits your needs.
         </p>
-        <p className="relative pb-8 text-lg font-light text-white z-2 sm:text-xl md:text-2xl">
+        <p className="relative pb-8 text-lg font-light text-gray-400 z-2 sm:text-xl md:text-2xl">
           Get notified when{" "}
           <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             Quantercise Pro
           </span>{" "}
           goes live for unlimited access to all questions, detailed feedback,
-          unlimited hints, and exclusive resources.
+          unlimited hints, and firm-specific resources.
         </p>
       </div>
       <div className="relative z-10 flex flex-col items-center justify-center lg:flex-row lg:justify-around lg:gap-8">
@@ -71,10 +71,10 @@ const Pricing = () => {
             to="intro"
             smooth={true}
             duration={500}
-            className="inline-block px-4 py-2 mt-6 font-bold text-black transition duration-300 bg-green-400 rounded-xl hover:bg-green-500 hover:text-white hover:shadow-lg"
+            className="inline-block px-4 py-2 mt-6 font-bold text-black transition-all duration-200 bg-green-400 hover:scale-105 hover:cursor-pointer rounded-xl hover:bg-green-500 hover:text-white hover:shadow-lg group"
           >
             Get Started
-            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 transform -rotate-45 hover:translate-x-1 hover:-translate-y-1 hover:rotate-45" />
+            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
           </ScrollLink>
         </div>
 
@@ -93,7 +93,9 @@ const Pricing = () => {
             <li className="mt-2 text-gray-300">
               • Detailed feedback on every question
             </li>
-            <li className="mt-2 text-gray-300">• Unlimited hints</li>
+            <li className="mt-2 text-gray-300">
+              • Unlimited hints and common follow-up questions
+            </li>
             <li className="mt-2 text-gray-300">
               • Exclusive resources to boost your learning
             </li>
@@ -102,10 +104,10 @@ const Pricing = () => {
             to="intro"
             smooth={true}
             duration={500}
-            className="inline-block px-4 py-2 mt-6 font-bold text-black transition duration-300 bg-blue-400 rounded-xl hover:bg-blue-500 hover:text-white hover:shadow-lg"
+            className="inline-block px-4 py-2 mt-6 font-bold text-black transition-all duration-200 bg-blue-400 hover:scale-105 hover:cursor-pointer rounded-xl hover:bg-blue-500 hover:text-white hover:shadow-lg group"
           >
             Get Started
-            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 transform -rotate-45 hover:translate-x-1 hover:-translate-y-1 hover:rotate-45" />
+            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
           </ScrollLink>
         </div>
 
@@ -136,10 +138,10 @@ const Pricing = () => {
             to="intro"
             smooth={true}
             duration={500}
-            className="inline-block px-4 py-2 mt-6 font-bold text-black transition duration-300 bg-purple-400 rounded-xl hover:bg-purple-500 hover:text-white hover:shadow-lg"
+            className="inline-block px-4 py-2 mt-6 font-bold text-black transition-all duration-200 bg-purple-400 hover:scale-105 hover:cursor-pointer rounded-xl hover:bg-purple-500 hover:text-white hover:shadow-lg group"
           >
             Get Started
-            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 transform -rotate-45 hover:translate-x-1 hover:-translate-y-1 hover:rotate-45" />
+            <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
           </ScrollLink>
         </div>
       </div>

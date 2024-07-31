@@ -15,7 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../../index.css";
 import Waitlist from "./Waitlist";
 
-const Header = () => {
+const Header = ({ onJoinClick }) => {
   const navigate = useNavigate();
   const { userLoggedIn, isPro } = useAuth();
   const location = useLocation();
@@ -55,7 +55,7 @@ const Header = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 border-b border-gray-700 shadow-2xl md:px-32 bg-gray-950"
+        className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 border-b-2 border-gray-700 shadow-2xl md:px-32 bg-gray-950"
       >
         <div className="flex items-center space-x-4">
           <RouterLink
@@ -154,12 +154,12 @@ const Header = () => {
           ) : (
             <div className="flex items-center">
               <div className="hidden lg:flex">
-                <Waitlist />
+                <Waitlist onJoinClick={onJoinClick} />
               </div>
               {(location.pathname === "/landing" ||
                 location.pathname === "/") && (
                 <div className="flex lg:hidden">
-                  <Waitlist />
+                  <Waitlist onJoinClick={onJoinClick} />
                 </div>
               )}
             </div>
