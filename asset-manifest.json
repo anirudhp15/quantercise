@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "https://quantercise.com/static/css/main.208ac631.css",
-    "main.js": "https://quantercise.com/static/js/main.ec206405.js",
-    "static/media/practice.jpg": "https://quantercise.com/static/media/practice.74ba66176d262ea36222.jpg",
-    "static/media/practice_problems.jpg": "https://quantercise.com/static/media/practice_problems.a4964908aab26a490ace.jpg",
+    "main.css": "https://quantercise.com/static/css/main.b46ab826.css",
+    "main.js": "https://quantercise.com/static/js/main.ab7011fe.js",
+    "static/media/practice_problems.jpg": "https://quantercise.com/static/media/practice_problems.bf931e889a43ff9c3580.jpg",
     "static/media/progress.jpg": "https://quantercise.com/static/media/progress.101bc4611634f3e8f0e0.jpg",
     "index.html": "https://quantercise.com/index.html",
-    "main.208ac631.css.map": "https://quantercise.com/static/css/main.208ac631.css.map",
-    "main.ec206405.js.map": "https://quantercise.com/static/js/main.ec206405.js.map"
+    "main.b46ab826.css.map": "https://quantercise.com/static/css/main.b46ab826.css.map",
+    "main.ab7011fe.js.map": "https://quantercise.com/static/js/main.ab7011fe.js.map"
   },
   "entrypoints": [
-    "static/css/main.208ac631.css",
-    "static/js/main.ec206405.js"
+    "static/css/main.b46ab826.css",
+    "static/js/main.ab7011fe.js"
   ]
 }
