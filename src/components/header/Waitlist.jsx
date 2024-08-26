@@ -1,8 +1,23 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { scroller } from "react-scroll";
 
 const Waitlist = ({ onJoinClick }) => {
+  const navigate = useNavigate();
+
   const handleJoinClick = () => {
+    const currentPath = window.location.pathname;
+    if (currentPath !== "/landing") {
+      navigate("/landing", { replace: true });
+      setTimeout(() => {
+        scrollToIntroAndBounce();
+      }, 500); // Delay to allow navigation
+    } else {
+      scrollToIntroAndBounce();
+    }
+  };
+
+  const scrollToIntroAndBounce = () => {
     scroller.scrollTo("intro", {
       duration: 800,
       delay: 0,

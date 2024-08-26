@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { MdOutlineLogin } from "react-icons/md";
 import { Navigate, Link } from "react-router-dom";
 import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../../firebase/auth";
 import { useAuth } from "../../../contexts/authContext";
+import { useLowDetail } from "../../../contexts/LowDetailContext";
 import { motion } from "framer-motion";
-import { gsap } from "gsap";
+import AnimatedGrid2 from "../../landing/AnimatedGrid2";
 
 const Login = () => {
   const { userLoggedIn } = useAuth();
@@ -14,51 +16,61 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
   const loginRef = useRef(null);
 
   useEffect(() => {
-    gsap.fromTo(
-      loginRef.current,
-      { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-    );
+    // Basic fade-in animation using framer-motion
+    if (loginRef.current) {
+      loginRef.current.style.opacity = 1;
+    }
   }, []);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithEmailAndPassword(email, password);
-      } catch (error) {
-        setErrorMessage(error.message);
-      } finally {
-        setIsSigningIn(false);
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!isSigningIn) {
+        setIsSigningIn(true);
+        try {
+          await doSignInWithEmailAndPassword(email, password);
+        } catch (error) {
+          setErrorMessage(error.message);
+        } finally {
+          setIsSigningIn(false);
+        }
       }
-    }
-  };
+    },
+    [email, password, isSigningIn]
+  );
 
-  const onGoogleSignIn = async (e) => {
-    e.preventDefault();
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithGoogle();
-      } catch (error) {
-        setErrorMessage(error.message);
-      } finally {
-        setIsSigningIn(false);
+  const onGoogleSignIn = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!isSigningIn) {
+        setIsSigningIn(true);
+        try {
+          await doSignInWithGoogle();
+        } catch (error) {
+          setErrorMessage(error.message);
+        } finally {
+          setIsSigningIn(false);
+        }
       }
-    }
-  };
+    },
+    [isSigningIn]
+  );
+
+  if (userLoggedIn) {
+    return <Navigate to={"/home"} replace={true} />;
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 bg-gray-900 sm:px-6 lg:px-8">
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
-
+    <div className="flex items-center justify-center min-h-screen bg-gray-950 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 z-10 bg-black bg-opacity-20"></div>
+      {!lowDetailMode && <AnimatedGrid2 />}{" "}
       <main
         ref={loginRef}
-        className="w-full max-w-md p-8 space-y-8 bg-gray-800 border border-gray-700 shadow-xl rounded-xl"
+        className="relative z-10 w-full max-w-md p-8 space-y-8 border border-gray-500 shadow-xl opacity-0 bg-gray-950 rounded-xl"
         style={{ marginTop: "5rem" }}
       >
         <motion.div
@@ -78,8 +90,10 @@ const Login = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="space-y-6"
         >
+          <div className="w-full border-b border-gray-700 opacity-50"></div>
+
           <div className="text-center">
-            <h3 className="text-xl font-semibold text-gray-100 sm:text-2xl">
+            <h3 className="text-xl font-normal text-gray-100 sm:text-2xl">
               Welcome Back!
             </h3>
           </div>
@@ -96,7 +110,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-900"
+                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-gray-800 border border-gray-800 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-950"
               />
             </motion.div>
             <motion.div
@@ -113,7 +127,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 mt-2 text-gray-200 transition duration-300 bg-transparent border border-gray-700 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-900"
+                className="w-full px-3 py-2 my-2 text-gray-200 transition duration-300 bg-gray-800 border border-gray-800 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-950"
               />
             </motion.div>
             {errorMessage && (
@@ -134,13 +148,14 @@ const Login = () => {
               transition={{ duration: 0.1, ease: "easeInOut" }}
               type="submit"
               disabled={isSigningIn}
-              className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
+              className={`w-full px-4 py-2 text-black font-bold rounded-lg ${
                 isSigningIn
                   ? "bg-gray-500 cursor-not-allowed"
                   : "bg-green-400 hover:bg-green-500 hover:shadow-xl transition duration-300 shadow-md"
               }`}
             >
               {isSigningIn ? "Signing In..." : "Sign In"}
+              <MdOutlineLogin className="inline-block mb-[2px] ml-2 text-xl font-extrabold " />
             </motion.button>
           </form>
           <motion.p
@@ -152,7 +167,7 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to={"/register"}
-              className="font-bold text-green-400 hover:underline"
+              className="font-bold text-green-400 transition duration-200 hover:text-green-200"
             >
               Register!
             </Link>
@@ -163,7 +178,7 @@ const Login = () => {
             transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
             className="flex items-center justify-center"
           >
-            <div className="w-full border-b border-gray-700"></div>
+            <div className="w-full border-b border-gray-700 opacity-50"></div>
             <div className="absolute px-4 text-sm font-bold text-gray-400 bg-gray-800">
               OR
             </div>

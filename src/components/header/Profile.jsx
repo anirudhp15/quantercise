@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuth } from "../../contexts/authContext";
+import { useLowDetail } from "../../contexts/LowDetailContext";
+import AnimatedGrid2 from "../landing/AnimatedGrid2";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { VscEdit } from "react-icons/vsc";
 import "../../index.css";
 
 const Profile = () => {
-  const { currentUser, isPro, fetchUserActivities } = useAuth();
-  const [activities, setActivities] = useState([]);
-
-  useEffect(() => {
-    if (currentUser) {
-      const unsubscribe = fetchUserActivities(currentUser.uid, setActivities);
-      return () => unsubscribe();
-    }
-  }, [currentUser, fetchUserActivities]);
+  const { currentUser, isPro } = useAuth();
+  const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
 
   if (!currentUser) {
     return (
@@ -25,104 +22,92 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 mt-16 text-gray-300 bg-gray-900">
-      <div className="max-w-screen-lg mx-auto">
+    <div className="relative px-12 py-16 text-gray-300">
+      {!lowDetailMode && <AnimatedGrid2 />}
+      <div className="relative z-10 max-w-screen-lg mx-auto">
         <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className={`py-4 text-4xl font-bold ${
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className={`pt-6 text-4xl font-bold ${
             isPro ? "text-blue-400" : "text-green-400"
           }`}
         >
-          Account Details
+          My Profile
         </motion.h1>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="flex justify-start py-4"
+        >
+          <Link
+            to="/home"
+            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
+              isPro
+                ? "text-blue-400 border-blue-400 hover:bg-blue-400"
+                : "text-green-400 border-green-400 hover:bg-green-400"
+            }`}
+          >
+            <FaArrowLeftLong className="mr-2" /> Home
+          </Link>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="p-8 bg-gray-800 rounded-lg shadow-lg"
+          className="p-8 transition-all duration-200 border-2 border-gray-700 rounded-lg shadow-lg bg-gray-950 hover:border-gray-500"
         >
           <div className="flex flex-col items-center space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
-            <div className="relative">
+            <div className="relative border-2 border-gray-600 rounded-lg ">
               {currentUser.photoURL ? (
                 <img
                   src={currentUser.photoURL}
                   alt="Profile"
-                  className="object-cover w-32 h-32 border-4 border-green-400 rounded-full"
+                  className="object-cover w-32 h-32 border-2 border-gray-700 rounded-lg hover:border-gray-500"
                 />
               ) : (
                 <FaUserCircle className="w-32 h-32 text-gray-600" />
               )}
             </div>
             <div className="text-center sm:text-left">
-              <p className="text-xl">
-                <strong>Email:</strong> {currentUser.email}
+              <p className="text-xl font-light">
+                <strong className="font-bold">Name:</strong>{" "}
+                {currentUser.displayName || "N/A"}
               </p>
-              <p className="mt-4 text-xl">
-                <strong>Name:</strong> {currentUser.displayName || "N/A"}
+              <p className="mt-2 text-lg text-light">
+                <strong className="text-bold">Email:</strong>{" "}
+                {currentUser.email}
               </p>
-              <p className="mt-4 text-xl">
-                <strong>Member Since:</strong>{" "}
+              <p className="mt-2 text-lg text-light">
+                <strong className="text-bold">Member Since:</strong>{" "}
                 {new Date(
                   currentUser.metadata.creationTime
                 ).toLocaleDateString()}
               </p>
               <p
-                className={`mt-4 text-xl ${
+                className={`mt-2 text-lg ${
                   isPro ? "text-blue-400" : "text-green-400"
                 }`}
               >
-                <strong className="text-gray-300">Member Status:</strong>{" "}
-                {isPro ? "Pro Member" : "Free Member"}
+                <strong>Member Status:</strong> {isPro ? "Pro" : "Free Member"}
               </p>
-              <Link
-                to="/edit-profile"
-                className={`inline-block px-4 py-2 mt-4 font-bold text-white transition duration-300 rounded-xl hover:shadow-lg ${
-                  isPro
-                    ? "bg-blue-500 hover:bg-blue-600"
-                    : "bg-green-400 hover:bg-green-500"
-                }`}
-              >
-                Edit Profile
-              </Link>
             </div>
           </div>
-          <div className="mt-8">
-            <h2
-              className={`text-2xl font-normal mb-4 ${
-                isPro ? "text-blue-400" : "text-green-400"
+
+          <div className="flex justify-center mt-8 sm:justify-start">
+            <Link
+              to="/edit-profile"
+              className={`flex group hover:scale-105 flex-row px-3 py-2 font-bold text-black transition duration-300 rounded-lg shadow-lg ${
+                isPro
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-green-400 hover:bg-green-500"
               }`}
             >
-              Recent Activity
-            </h2>
-            <ul className="space-y-4">
-              {activities.length > 0 ? (
-                activities.map((activity) => (
-                  <motion.li
-                    key={activity.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="p-4 transition duration-300 bg-gray-700 rounded-lg shadow hover:shadow-lg hover:bg-gray-600"
-                  >
-                    <p className="text-lg">{activity.description}</p>
-                    <span className="text-sm text-gray-400">
-                      {new Date(activity.date).toLocaleDateString()}
-                    </span>
-                  </motion.li>
-                ))
-              ) : (
-                <motion.li
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="p-4 transition duration-300 bg-gray-700 rounded-lg shadow hover:shadow-lg hover:bg-gray-600"
-                >
-                  <p>No recent activity found.</p>
-                </motion.li>
-              )}
-            </ul>
+              Edit Profile
+              <VscEdit className="w-5 transition-all duration-150 group-hover:translate-x-1 group-hover:-translate-y-1 h-5 mt-[2px] ml-2" />
+            </Link>
           </div>
         </motion.div>
       </div>

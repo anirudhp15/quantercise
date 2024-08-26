@@ -13,11 +13,19 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useAuth } from "../../contexts/authContext";
+import { useLowDetail } from "../../contexts/LowDetailContext";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
+import AnimatedGrid2 from "../landing/AnimatedGrid2"; // Import AnimatedGrid2
+
+const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
 const PerformanceAnalytics = () => {
   const [problems, setProblems] = useState([]);
+  const { isPro } = useAuth();
+  const lowDetailMode = useLowDetail().lowDetailMode;
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -68,11 +76,6 @@ const PerformanceAnalytics = () => {
     { name: "Incorrect", value: incorrectProblems.length },
   ];
 
-  // const efficiencyData = problems.map((problem) => ({
-  //   timeSpent: problem.timeSpent,
-  //   correct: problem.correct ? 1 : 0,
-  // }));
-
   const difficultyLevels = ["Easy", "Medium", "Hard"];
   const difficultyData = difficultyLevels.map((level) => ({
     name: level,
@@ -86,101 +89,135 @@ const PerformanceAnalytics = () => {
     ).length,
   }));
 
-  const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
-
   return (
-    <div className="min-h-screen p-6 mt-16 text-gray-300 bg-gray-900">
-      <div className="max-w-screen-lg mx-auto" ref={containerRef}>
+    <div className="relative py-16 text-gray-300">
+      {!lowDetailMode && <AnimatedGrid2 />}
+
+      <div
+        className="relative z-10 items-center max-w-screen-lg mx-auto"
+        ref={containerRef}
+      >
         <motion.h1
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="py-4 text-4xl font-bold text-green-400"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className={`pt-6 text-4xl font-bold ${
+            isPro ? "text-blue-400" : "text-green-400"
+          }`}
         >
           Performance Analytics
         </motion.h1>
-        <Link
-          to="/"
-          className="block p-4 mb-4 font-bold text-center text-green-400 transition duration-300 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="flex justify-start py-4"
         >
-          Back to Home
-        </Link>
-        <div className="mt-4">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Overall Performance
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={overallData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label
+          <Link
+            to="/home"
+            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
+              isPro
+                ? "text-blue-400 border-blue-400 hover:bg-blue-400"
+                : "text-green-400 border-green-400 hover:bg-green-400"
+            }`}
+          >
+            <FaArrowLeftLong className="mr-2" /> Home
+          </Link>
+        </motion.div>
+
+        {/* Bento board style layout */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+            <h2
+              className={`text-2xl text-center ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
+            >
+              Overall Performance
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={overallData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label
+                >
+                  {overallData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+            <h2
+              className={`text-2xl text-center ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
+            >
+              Category Performance
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={categoryData}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
               >
-                {overallData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Category Performance
-          </h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={categoryData}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="completed" fill="#00C49F" />
+                <Bar dataKey="correct" fill="#FFBB28" />
+                <Bar dataKey="incorrect" fill="#FF8042" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+            <h2
+              className={`text-2xl text-center ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="completed" fill="#00C49F" />
-              <Bar dataKey="correct" fill="#FFBB28" />
-              <Bar dataKey="incorrect" fill="#FF8042" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Difficulty Analysis
-          </h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={difficultyData}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="completed" stackId="a" fill="#00C49F" />
-              <Bar dataKey="correct" stackId="a" fill="#FFBB28" />
-              <Bar dataKey="incorrect" stackId="a" fill="#FF8042" />
-            </BarChart>
-          </ResponsiveContainer>
+              Difficulty Analysis
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={difficultyData}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="completed" stackId="a" fill="#00C49F" />
+                <Bar dataKey="correct" stackId="a" fill="#FFBB28" />
+                <Bar dataKey="incorrect" stackId="a" fill="#FF8042" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

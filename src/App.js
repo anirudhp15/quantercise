@@ -1,5 +1,9 @@
 import React from "react";
-import { HashRouter as Router, useRoutes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  useRoutes,
+  useLocation,
+} from "react-router-dom";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import Header from "./components/header";
@@ -17,6 +21,7 @@ import StripeCheckout from "./components/landing/StripeCheckout";
 import SuccessPage from "./components/auth/SuccessPage";
 import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
+import Applications from "./components/sections/Applications";
 
 function RouteComponent() {
   const routesArray = [
@@ -30,6 +35,7 @@ function RouteComponent() {
     { path: "/edit-profile", element: <EditProfile /> },
     { path: "/progress", element: <ProgressTracker /> },
     { path: "/analytics", element: <PerformanceAnalytics /> },
+    { path: "/applications", element: <Applications /> },
     { path: "/pricing", element: <Pricing /> },
     { path: "/checkout", element: <StripeCheckout /> },
     { path: "/success", element: <SuccessPage /> },
@@ -40,25 +46,22 @@ function RouteComponent() {
   const location = useLocation(); // Get current location
 
   const showFooter =
-    location.pathname !== "/" && location.pathname !== "/landing";
+    location.pathname !== "/" &&
+    location.pathname !== "/landing" &&
+    location.pathname !== "/applications";
+
+  const showHeader = location.pathname !== "/applications";
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <div className="flex flex-col flex-grow w-full bg-gray-900">
-        {routesElement}
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-950">
+      {showHeader && <Header />}
+      <div className="flex flex-col flex-grow w-full">{routesElement}</div>
       {showFooter && <Footer />}
     </div>
   );
 }
 
 function App() {
-  const basename =
-    process.env.NODE_ENV === "production"
-      ? process.env.REACT_APP_BASENAME_PROD
-      : process.env.REACT_APP_BASENAME_DEV;
-
   return (
     <AuthProvider>
       <Router>

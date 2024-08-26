@@ -1,9 +1,9 @@
-export const quantQuestionsVersion = 6;
+export const quantQuestionsVersion = 9;
 
 export const quantPracticeQuestions = [
   {
     id: 1,
-    title: "Probability of 3 Heads in 5 Tosses",
+    title: "3 Heads in 5 Tosses",
     difficultyScore: 3,
     difficulty: "Easy",
     userDifficultyRatings: [3],
@@ -61,7 +61,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 3,
-    title: "Normal Distribution Between -1 and 1",
+    title: "Normal Between -1 and 1",
     difficultyScore: 5,
     difficulty: "Medium",
     userDifficultyRatings: [5],
@@ -90,7 +90,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 4,
-    title: "Bayes' Theorem Disease Probability",
+    title: "Bayes' Disease",
     difficultyScore: 7,
     difficulty: "Hard",
     userDifficultyRatings: [7],
@@ -119,7 +119,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 5,
-    title: "Martingale Betting Strategy Pitfalls",
+    title: "Martingale Pitfalls",
     difficultyScore: 6,
     difficulty: "Medium",
     userDifficultyRatings: [6],
@@ -148,7 +148,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 6,
-    title: "Markov Chain Definition Example",
+    title: "Define Markov Chain",
     difficultyScore: 5,
     difficulty: "Medium",
     userDifficultyRatings: [5],
@@ -262,7 +262,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 10,
-    title: "Arbitrage in Financial Markets",
+    title: "Arbitrage in Markets",
     difficultyScore: 6,
     difficulty: "Medium",
     userDifficultyRatings: [6],
@@ -806,7 +806,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 29,
-    title: "Probability of Same Color Cards",
+    title: "Same Color Cards",
     difficultyScore: 6,
     difficulty: "Medium",
     userDifficultyRatings: [6],
@@ -922,7 +922,7 @@ export const quantPracticeQuestions = [
   },
   {
     id: 33,
-    title: "Probability of Non-adjacent Balls",
+    title: "Non-adjacent Balls",
     difficultyScore: 6,
     difficulty: "Medium",
     userDifficultyRatings: [6],

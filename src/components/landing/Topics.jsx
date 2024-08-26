@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   FaCalculator,
   FaCode,
   FaChartLine,
   FaPuzzlePiece,
 } from "react-icons/fa";
+import { motion, useAnimation } from "framer-motion";
+import { throttle } from "lodash";
 import "../../index.css";
 
 const categories = [
@@ -12,16 +14,16 @@ const categories = [
     name: "MATHEMATICAL FOUNDATIONS",
     icon: <FaCalculator className="text-xl text-blue-300" />,
     subtopics: [
-      "Bayes' Theorem",
+      "Bayesian Statistics",
       "Probability Distributions",
-      "Descriptive Statistics",
-      "Inferential Statistics",
+      "Frequentist Statistics",
+      "Markov Chains",
       "Matrix Operations",
       "Eigenvalues and Eigenvectors",
       "Multivariable Calculus",
+      "Combinatorics",
       "Multiple Integrals",
       "Differential Equations",
-      "Linear Programming",
     ],
   },
   {
@@ -31,9 +33,8 @@ const categories = [
       "Arrays",
       "Trees",
       "Graphs",
-      "Merge Sort",
-      "Quick Sort",
-      "Binary Search",
+      "Sorting Algorithms",
+      "Searching Algorithms",
       "Knapsack Problem",
       "Dijkstra Algorithm",
       "Big O Notation",
@@ -41,8 +42,7 @@ const categories = [
       "Dynamic Programming",
       "Hash Tables",
       "Recursion",
-      "Breadth-First Search",
-      "Depth-First Search",
+      "BFS & DFS",
     ],
   },
   {
@@ -72,106 +72,146 @@ const categories = [
       "Inductive Reasoning",
       "Pattern Recognition",
       "Cryptarithms",
-      "Magic Squares",
+      "Number Theory",
       "Nash Equilibrium",
-      "Monty Hall Problem",
       "Birthday Paradox",
-      "Travelling Salesman Problem",
       "Prime Numbers",
-      "Combinatorics",
       "Arithmetic Progressions",
       "Geometric Progressions",
+      "Game Theory",
     ],
   },
 ];
 
-const Topics = () => {
-  useEffect(() => {
-    const handleScroll = () => {
+const Topics = React.memo(() => {
+  const controls = useAnimation();
+
+  const handleScroll = useCallback(
+    throttle(() => {
       const scrollPosition = window.scrollY;
       const screenWidth = window.innerWidth;
-      let multiplier;
-
-      if (screenWidth < 768) {
-        // Mobile screens
-        multiplier = 0.25;
-      } else if (screenWidth >= 1280) {
-        // XL screens
-        multiplier = 2;
-      } else {
-        // Other screens
-        multiplier = 1.5;
-      }
+      const multiplier =
+        screenWidth < 768 ? 0.25 : screenWidth >= 1280 ? 2 : 1.5;
 
       document.querySelectorAll(".marquee").forEach((marquee) => {
         const direction = marquee.classList.contains("marquee-left") ? -1 : 1;
         marquee.style.transform = `translateX(${
           scrollPosition * direction * multiplier
         }px)`;
+
+        const element = document.getElementById("concepts-words");
+        const rect = element.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+
+        if (isVisible) {
+          controls.start({ opacity: 1, y: 0 });
+        }
       });
-    };
+    }, 100),
+    []
+  );
 
+  useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   return (
     <div id="concepts" className="w-full min-h-screen py-16 text-gray-300">
       <div className="relative max-w-screen-lg px-4 mx-auto text-center">
         <div className="mx-auto text-center">
-          <h2 className="relative pt-4 text-3xl font-bold text-transparent z-2 md:pb-8 sm:text-4xl md:text-5xl bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">
+          <motion.h2
+            id="concepts-words"
+            initial={{ opacity: 0, y: 20 }}
+            animate={controls}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="relative pt-4 text-3xl font-bold text-transparent z-2 md:pb-8 sm:text-4xl md:text-5xl gradient-text animate-gradient"
+          >
             Areas of Focus
-          </h2>
+          </motion.h2>
         </div>
-        <p className="mt-4 text-lg font-medium sm:text-xl md:text-2xl">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-4 text-lg font-medium sm:text-xl md:text-2xl"
+        >
           Quantercise provides a comprehensive range of topics designed to help
           dedicated students excel in quant finance interviews.
-        </p>
+        </motion.p>
       </div>
-      <div className="relative z-10 w-5/6 p-10 mx-auto mt-8 transition-all duration-200 border-2 border-gray-500 wrapper bg-gray-950 rounded-3xl hover:border-gray-300">
-        {categories.map((category, index) => (
-          <div key={index} className="category-section">
-            <div
-              className={`category-label flex items-center justify-center ${
-                index % 2 === 0
-                  ? "md:justify-start md:ml-8"
-                  : "md:justify-end md:mr-8"
-              } mt-4`}
-            >
-              <span className="hidden md:block">{category.icon}</span>
-              <span className="relative ml-2 font-semibold text-center text-transparent md:text-left z-2 bg-clip-text bg-gradient-to-r from-blue-500 to-green-400">
-                {category.name}
-              </span>
-            </div>
-            <div className="marquee-container">
+
+      <div className="hidden lg:block">
+        <div className="relative z-10 w-5/6 p-10 mx-auto mt-8 transition-all duration-200 border-2 border-gray-500 wrapper bg-gray-950 rounded-3xl hover:border-gray-300">
+          {categories.map((category, index) => (
+            <div key={index} className="category-section">
               <div
-                className={`marquee ${
-                  index % 2 === 0 ? "marquee-left" : "marquee-right"
-                }`}
+                className={`category-label flex items-center justify-center ${
+                  index % 2 === 0
+                    ? "md:justify-start md:ml-8"
+                    : "md:justify-end md:mr-8"
+                } mt-4`}
               >
-                {category.subtopics
-                  .concat(category.subtopics)
-                  .map((subtopic, subIndex) => (
-                    <div
-                      key={subIndex}
-                      className={`marquee-item ${
-                        index % 2 === 0 ? "left-align" : "right-align"
-                      }`}
-                    >
-                      <p className="font-extralight">{subtopic}</p>
-                    </div>
-                  ))}
+                <span className="hidden md:block">{category.icon}</span>
+                <span className="relative ml-2 font-semibold text-center text-transparent md:text-left z-2 gradient-text animate-gradient">
+                  {category.name}
+                </span>
               </div>
+              <div className="marquee-container">
+                <div
+                  className={`marquee ${
+                    index % 2 === 0 ? "marquee-left" : "marquee-right"
+                  }`}
+                >
+                  {category.subtopics
+                    .concat(category.subtopics)
+                    .map((subtopic, subIndex) => (
+                      <div
+                        key={subIndex}
+                        className={`marquee-item ${
+                          index % 2 === 0 ? "left-align" : "right-align"
+                        }`}
+                      >
+                        <p className="font-extralight">{subtopic}</p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+              {index < categories.length - 1 && <div className="divider"></div>}
             </div>
-            {index < categories.length - 1 && <div className="divider"></div>}
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      {/* Optimized Mobile View */}
+      <div className="block lg:hidden">
+        <div className="grid grid-cols-1 gap-6 mx-4 mt-10">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className="relative z-10 w-2/3 p-6 mx-auto text-center transition-all duration-200 border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300"
+            >
+              <div className="flex justify-center mb-4">
+                {/* <span className="mr-2">{category.icon}</span> */}
+                <span className="font-semibold text-transparent gradient-text animate-gradient">
+                  {category.name}
+                </span>
+              </div>
+              <ul className="ml-4 list-none list-inside">
+                {category.subtopics.map((subtopic, subIndex) => (
+                  <li key={subIndex} className="text-sm font-extralight">
+                    {subtopic}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-};
+});
 
 export default Topics;
