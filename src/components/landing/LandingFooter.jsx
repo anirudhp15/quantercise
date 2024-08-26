@@ -22,7 +22,7 @@ const footerVariants = {
   },
 };
 
-const LandingFooter = () => {
+const LandingFooter = ({ onJoinClick }) => {
   const form = useRef();
   const [feedback, setFeedback] = useState({
     from_name: "",
@@ -67,7 +67,7 @@ const LandingFooter = () => {
       initial="hidden"
       animate="visible"
       variants={footerVariants}
-      className="relative bottom-0 z-10 w-full py-8 text-gray-300 border-t-2 border-gray-700 bg-gray-950"
+      className="relative bottom-0 z-10 w-full py-8 text-gray-300 border-t-4 border-gray-700 bg-gray-950"
     >
       <div
         id="landingfooter"
@@ -85,14 +85,13 @@ const LandingFooter = () => {
           >
             Quantercise
           </RouterLink>
-          <p className="text-sm text-gray-400">
-            Condition your quantitative thinking.
-          </p>
+          <p className="pb-4 text-sm text-gray-400">Stay Sharpe.</p>
           <div className="flex flex-row items-center mt-4 space-x-8 lg:items-start">
             <ScrollLink
               to="intro"
               smooth={true}
               duration={800}
+              onJoinClick={onJoinClick}
               className="text-sm text-gray-400 transition duration-300 hover:text-white hover:cursor-pointer"
             >
               Join Now
@@ -136,7 +135,7 @@ const LandingFooter = () => {
                 <FaGithub size={24} />
               </a>
               <a
-                href="https://www.linkedin.com/in/anirudh-pottammal-01b186216/"
+                href="https://www.linkedin.com/company/quantercise"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition duration-200 text-linkedin hover:text-linkedin-hover"

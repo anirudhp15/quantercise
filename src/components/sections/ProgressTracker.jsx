@@ -15,6 +15,10 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useAuth } from "../../contexts/authContext";
+import { useLowDetail } from "../../contexts/LowDetailContext";
+import AnimatedGrid2 from "../landing/AnimatedGrid2";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
@@ -22,6 +26,8 @@ const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
 const ProgressTracker = () => {
   const [problems, setProblems] = useState([]);
+  const lowDetailMode = useLowDetail().lowDetailMode;
+  const { isPro } = useAuth();
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -125,11 +131,6 @@ const ProgressTracker = () => {
     },
   ];
 
-  // const progressOverTime = problems.map((problem) => ({
-  //   date: new Date(problem.date).toLocaleDateString(),
-  //   correct: problem.correct ? 1 : 0,
-  // }));
-
   const milestoneData = [
     {
       milestone: "10 Problems Solved",
@@ -146,50 +147,106 @@ const ProgressTracker = () => {
   ];
 
   return (
-    <div className="min-h-screen p-6 mt-16 text-gray-300 bg-gray-900">
-      <div className="max-w-screen-lg mx-auto" ref={containerRef}>
+    <div className="relative py-16 text-gray-300">
+      {!lowDetailMode && <AnimatedGrid2 />}
+
+      <div className="relative z-10 max-w-screen-lg mx-auto" ref={containerRef}>
         <motion.h1
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="py-4 text-4xl font-bold text-green-400"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className={`pt-6 text-4xl font-bold ${
+            isPro ? "text-blue-400" : "text-green-400"
+          }`}
         >
           Progress Tracker
         </motion.h1>
-        <Link
-          to="/"
-          className="block p-4 mb-4 font-bold text-center text-green-400 transition duration-300 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="flex justify-start py-4"
         >
-          Back to Home
-        </Link>
-        <div className="mt-4">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Overall Progress
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="count" stroke="#82ca9d" />
-            </LineChart>
-          </ResponsiveContainer>
+          <Link
+            to="/home"
+            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
+              isPro
+                ? "text-blue-400 border-blue-400 hover:bg-blue-400"
+                : "text-green-400 border-green-400 hover:bg-green-400"
+            }`}
+          >
+            <FaArrowLeftLong className="mr-2" /> Home
+          </Link>
+        </motion.div>
+
+        {/* Overall Progress and Time Spent Analysis Side by Side */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+            <h2
+              className={`text-2xl text-center ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
+            >
+              Overall Progress
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="count" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+            <h2
+              className={`text-2xl text-center ${
+                isPro ? "text-blue-400" : "text-green-400"
+              }`}
+            >
+              Time Spent Analysis
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="category" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="timeSpent" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
+
+        {/* Detailed Category Insights */}
         <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Category Performance
+          <h2
+            className={`p-4 md:pl-0 font-semibold text-2xl text-center md:text-left ${
+              isPro ? "text-blue-400" : "text-green-400"
+            }`}
+          >
+            Detailed Category Insights
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {categoryData.map((category) => (
               <motion.div
                 key={category.category}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="p-4 bg-gray-800 rounded-lg shadow-lg"
+                className="p-4 border rounded-lg shadow-lg bg-gray-950"
               >
+                <h3
+                  className={`text-xl font-normal ${
+                    isPro ? "text-blue-400" : "text-green-400"
+                  }`}
+                >
+                  {category.category}
+                </h3>
                 <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie
@@ -206,7 +263,11 @@ const ProgressTracker = () => {
                       fill="#8884d8"
                       label
                     >
-                      {data.map((entry, index) => (
+                      {[
+                        { name: "Completed", value: category.completed },
+                        { name: "Correct", value: category.correct },
+                        { name: "Incorrect", value: category.incorrect },
+                      ].map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index % COLORS.length]}
@@ -216,9 +277,6 @@ const ProgressTracker = () => {
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
-                <h3 className="text-xl font-bold text-green-400">
-                  {category.category}
-                </h3>
                 <p className="mt-2">
                   <span className="font-bold">Completed: </span>
                   {category.completed}
@@ -239,38 +297,14 @@ const ProgressTracker = () => {
             ))}
           </div>
         </div>
+
+        {/* Milestones & Achievements */}
         <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Time Spent Analysis
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={categoryData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Time Spent" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        {/* <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
-            Improvement Over Time
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={progressOverTime}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="correct" stroke="#82ca9d" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div> */}
-        <div className="mt-8">
-          <h2 className="p-4 text-2xl text-center text-green-400">
+          <h2
+            className={`p-4 md:pl-0 font-semibold text-2xl text-center md:text-left ${
+              isPro ? "text-blue-400" : "text-green-400"
+            }`}
+          >
             Milestones & Achievements
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -284,7 +318,11 @@ const ProgressTracker = () => {
                   milestone.achieved ? "bg-green-800" : "bg-gray-800"
                 }`}
               >
-                <h3 className="text-xl font-bold text-green-400">
+                <h3
+                  className={`text-xl font-bold ${
+                    isPro ? "text-blue-400" : "text-green-400"
+                  }`}
+                >
                   {milestone.milestone}
                 </h3>
                 <p className="mt-2">

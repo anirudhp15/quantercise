@@ -7,6 +7,7 @@ import Topics from "./Topics";
 import FAQ from "./FAQ";
 import AnimatedGrid from "./AnimatedGrid";
 import Header from "../header/index";
+import Footer from "../footer/Footer";
 
 const LandingPage = () => {
   const [triggerBounce, setTriggerBounce] = useState(false);
@@ -30,6 +31,7 @@ const LandingPage = () => {
       <Pricing />
       {/* <FAQ /> */}
       <LandingFooter />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/authContext";
 import { motion } from "framer-motion";
-import { storage } from "../../firebase/firebase"; // Import storage from firebase.js
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import necessary functions from Firebase Storage
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-import { FaTimes } from "react-icons/fa"; // Import close icon
+import { storage } from "../../firebase/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { FaTimes } from "react-icons/fa";
+import axios from "axios";
 
 const EditProfile = () => {
   const { currentUser, updateProfile } = useAuth();
   const [displayName, setDisplayName] = useState(currentUser.displayName || "");
+  const [email, setEmail] = useState(currentUser.email || "");
   const [photoFile, setPhotoFile] = useState(null);
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
@@ -30,9 +32,18 @@ const EditProfile = () => {
         photoURL = await getDownloadURL(photoRef);
       }
 
+      // Update the user's profile in Firebase
       await updateProfile({ displayName, photoURL });
+
+      // Update the user's profile in MongoDB
+      await axios.put(`http://localhost:4242/api/user/${currentUser.uid}`, {
+        displayName,
+        photoURL,
+        email,
+      });
+
       setMessage("Profile updated successfully!");
-      navigate("/profile"); // Navigate back to the profile page upon success
+      navigate("/profile");
     } catch (error) {
       setMessage("Failed to update profile: " + error.message);
     }
@@ -74,6 +85,18 @@ const EditProfile = () => {
                 onChange={(e) => setDisplayName(e.target.value)}
                 className="block w-full px-3 py-2 mt-1 text-gray-300 transition duration-300 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
                 placeholder="Enter your display name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full px-3 py-2 mt-1 text-gray-300 transition duration-300 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                placeholder="Enter your email"
               />
             </div>
             <div>
