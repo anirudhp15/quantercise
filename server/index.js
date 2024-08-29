@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const Question = require("./models/Question");
+const questionsRoutes = require("./routes/questions");
+const User = require("./models/User");
 
 const app = express();
 
@@ -13,6 +14,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://quantercise.com",
+  "https://quantercise-api.vercel.app",
   "https://anirudhp15.github.io/quantercise",
 ];
 
@@ -50,6 +52,7 @@ mongoose
 // Use routes
 app.use("/api/auth", authRoutes); // Handles /firebase-login and /google-login
 app.use("/api/user", userRoutes);
+app.use("/api/questions", questionsRoutes);
 // Stripe checkout session creation
 app.post("/create-checkout-session", async (req, res) => {
   const { priceId } = req.body;
@@ -105,43 +108,6 @@ app.get("/verify-checkout-session", async (req, res) => {
   } catch (error) {
     console.error("Error verifying checkout session:", error);
     res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-// Endpoint to fetch questions from MongoDB
-app.get("/api/questions", async (req, res) => {
-  try {
-    const questions = await Question.find({});
-    res.json(questions);
-  } catch (error) {
-    console.error("Error fetching questions:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Endpoint to fetch unique tags for each category
-app.get("/api/tags", async (req, res) => {
-  try {
-    const categories = [
-      "Critical Mathematical Foundations",
-      "Programming and Algorithmic Thinking",
-      "Financial Concepts and Modeling",
-      "Brain Teasers and Logical Puzzles",
-    ];
-
-    // Initialize an object to store the tags for each category
-    const tagsByCategory = {};
-
-    for (const category of categories) {
-      // Fetch unique tags for each category
-      const tags = await Question.distinct("tags", { category: category });
-      tagsByCategory[category] = tags;
-    }
-
-    res.json(tagsByCategory);
-  } catch (error) {
-    console.error("Error fetching tags:", error);
-    res.status(500).json({ error: error.message });
   }
 });
 

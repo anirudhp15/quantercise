@@ -66,7 +66,7 @@ const Pricing = () => {
         return;
       }
       const response = await axios.post(
-        "http://localhost:4242/create-checkout-session",
+        `${YOUR_DOMAIN}/create-checkout-session`,
         { priceId }
       );
       if (response.data.url) {

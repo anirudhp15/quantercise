@@ -10,6 +10,9 @@ import {
 } from "firebase/auth";
 import axios from "axios";
 
+// Define your domain
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
@@ -25,7 +28,7 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
       user.photoURL || "../../assets/images/default_profile.jpg"; // Default if no profile picture
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post("http://localhost:4242/api/auth/firebase-login", {
+    await axios.post(`${YOUR_DOMAIN}/api/auth/firebase-login`, {
       uid: user.uid,
       email: user.email,
       displayName,
@@ -54,7 +57,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
       user.photoURL || "../../assets/images/default_profile.jpg";
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post("http://localhost:4242/api/auth/login", {
+    await axios.post(`${YOUR_DOMAIN}/api/auth/login`, {
       uid: user.uid,
       email: user.email,
       displayName,
@@ -79,7 +82,7 @@ export const doSignInWithGoogle = async () => {
       user.photoURL || "../../assets/images/default_profile.jpg";
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post("http://localhost:4242/api/auth/google-login", {
+    await axios.post(`${YOUR_DOMAIN}/api/auth/google-login`, {
       uid: user.uid,
       email: user.email,
       displayName,
