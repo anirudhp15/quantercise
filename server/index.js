@@ -40,8 +40,8 @@ mongoose
         .find({})
         .toArray();
       console.log(
-        "Users collection found. Documents in users collection:"
-        // users
+        "Users collection found. Documents in users collection:",
+        users
       );
     } else {
       console.log("Users collection does not exist.");
