@@ -6,6 +6,9 @@ import {
 } from "firebase/auth";
 import axios from "axios";
 
+// Define your domain
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 const AuthContext = React.createContext();
 
 export function useAuth() {
@@ -36,13 +39,13 @@ export function AuthProvider({ children }) {
       try {
         // Get the MongoDB ID based on the Firebase UID or Google ID
         const { data: mongoIdResponse } = await axios.get(
-          `http://localhost:4242/api/user/mongoId/${user.uid}`
+          `${YOUR_DOMAIN}/api/user/mongoId/${user.uid}`
         );
         const mongoId = mongoIdResponse.mongoId;
 
         // Fetch user data from MongoDB using the MongoDB ID
         const { data: userResponse } = await axios.get(
-          `http://localhost:4242/api/user/${mongoId}`
+          `${YOUR_DOMAIN}/api/user/${mongoId}`
         );
 
         // Set the Pro status based on the response
@@ -50,7 +53,7 @@ export function AuthProvider({ children }) {
           setIsPro(userResponse.isPro || false);
         } else {
           // If the user doesn't exist in MongoDB, you can optionally create a new entry
-          await axios.post("http://localhost:4242/api/user", {
+          await axios.post(`${YOUR_DOMAIN}/api/user`, {
             firebaseUid: user.uid,
             email: user.email,
             isPro: false,
@@ -59,7 +62,7 @@ export function AuthProvider({ children }) {
         }
 
         // Increment sign-in count in MongoDB
-        await axios.put(`http://localhost:4242/api/user/${mongoId}/signin`);
+        await axios.put(`${YOUR_DOMAIN}/api/user/${mongoId}/signin`);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -82,11 +85,11 @@ export function AuthProvider({ children }) {
       // Optionally update MongoDB with the new display name and photo URL
       try {
         const { data: mongoIdResponse } = await axios.get(
-          `http://localhost:4242/api/user/mongoId/${auth.currentUser.uid}`
+          `${YOUR_DOMAIN}/api/user/mongoId/${auth.currentUser.uid}`
         );
         const mongoId = mongoIdResponse.mongoId;
 
-        await axios.put(`http://localhost:4242/api/user/${mongoId}`, {
+        await axios.put(`${YOUR_DOMAIN}/api/user/${mongoId}`, {
           displayName,
           photoURL,
         });

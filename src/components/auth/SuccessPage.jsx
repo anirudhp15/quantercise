@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../../contexts/authContext";
 import axios from "axios";
 
+// Define your domain
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 const SuccessPage = () => {
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,7 @@ const SuccessPage = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:4242/verify-checkout-session",
+          `${YOUR_DOMAIN}/verify-checkout-session`,
           {
             sessionId,
             userId: currentUser ? currentUser.uid : null,

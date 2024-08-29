@@ -9,6 +9,9 @@ import axios from "axios";
 import "../../index.css";
 import { useLowDetail } from "../../contexts/LowDetailContext"; // Import the context
 
+// Define your domain
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 // Memoized Home Component
 const Home = React.memo(() => {
   const { currentUser } = useAuth();
@@ -22,7 +25,7 @@ const Home = React.memo(() => {
 
     try {
       const { data } = await axios.get(
-        `http://localhost:4242/api/user/${currentUser.uid}`
+        `${YOUR_DOMAIN}/api/user/${currentUser.uid}`
       );
       setIsPro(data.user.isPro);
 

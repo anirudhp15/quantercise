@@ -29,6 +29,9 @@ import AnimatedGrid2 from "../landing/AnimatedGrid2";
 import CodeEditor from "./CodeEditor";
 import "../../index.css";
 
+// Define your domain
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 const { Option } = Select;
 
 const categories = [
@@ -78,7 +81,7 @@ const PracticeProblems = React.memo(() => {
   useEffect(() => {
     const fetchMongoId = async () => {
       try {
-        const url = "http://localhost:4242/api/user/mongoId/" + currentUser.uid;
+        const url = `${YOUR_DOMAIN}/api/user/mongoId/` + currentUser.uid;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -104,8 +107,8 @@ const PracticeProblems = React.memo(() => {
         if (!mongoId) return;
 
         const [problemsResponse, progressResponse] = await Promise.all([
-          fetch("http://localhost:4242/api/questions"),
-          fetch(`http://localhost:4242/api/user/progress/${mongoId}`),
+          fetch(`${YOUR_DOMAIN}/api/questions`),
+          fetch(`${YOUR_DOMAIN}/api/user/progress/${mongoId}`),
         ]);
 
         if (!problemsResponse.ok || !progressResponse.ok) {
@@ -488,7 +491,7 @@ const PracticeProblems = React.memo(() => {
             </div>
           </div>
           <p className="py-12 text-lg font-semibold text-gray-300">
-            No problems bookmarked.
+            No problems found.
           </p>
         </div>
       );
