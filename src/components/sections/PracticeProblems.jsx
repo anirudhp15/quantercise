@@ -30,8 +30,8 @@ import CodeEditor from "./CodeEditor";
 import "../../index.css";
 
 // Define your domain
-// const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
-const YOUR_DOMAIN = "http://localhost:4242";
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+// const YOUR_DOMAIN = "http://localhost:4242";
 
 const { Option } = Select;
 
@@ -85,7 +85,7 @@ const PracticeProblems = React.memo(() => {
       console.log("Current user:", currentUser);
       try {
         const response = await fetch(
-          `http://localhost:4242/api/user/mongoId/${currentUser.uid}`
+          `https://quantercise-api.vercel.app/api/user/mongoId/${currentUser.uid}`
         );
 
         // Check if the response is OK and is JSON
@@ -110,12 +110,15 @@ const PracticeProblems = React.memo(() => {
       if (!mongoId) return;
       try {
         const [problemsResponse, progressResponse] = await Promise.all([
-          fetch(`${YOUR_DOMAIN}/api/questions`),
-          fetch(`${YOUR_DOMAIN}/api/user/progress/${mongoId}`),
+          fetch(`https://quantercise-api.vercel.app/api/questions`),
+          fetch(
+            `https://quantercise-api.vercel.app/api/user/progress/${mongoId}`
+          ),
         ]);
 
         console.log("Fetching problems and progress for user:", mongoId);
         console.log("Problems response:", problemsResponse);
+        console.log("Progress response:", progressResponse);
 
         if (!problemsResponse.ok || !progressResponse.ok)
           throw new Error("Error fetching data");
@@ -142,11 +145,14 @@ const PracticeProblems = React.memo(() => {
   // Update problem progress in the backend
   const updateProblemProgress = async ({ userId, questionId, progress }) => {
     try {
-      await fetch("/api/user/update-progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, questionId, progress }),
-      });
+      await fetch(
+        "https://quantercise-api.vercel.app/api/user/update-progress",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, questionId, progress }),
+        }
+      );
     } catch (error) {
       console.error("Failed to update problem progress:", error);
     }
@@ -340,11 +346,7 @@ const PracticeProblems = React.memo(() => {
       >
         <Link
           to="/home"
-          className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
-            isPro
-              ? "text-blue-400 border-blue-400 hover:bg-blue-400"
-              : "text-green-400 border-green-400 hover:bg-green-400"
-          }`}
+          className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black text-green-400 border-green-400 hover:bg-green-400`}
         >
           <FaArrowLeftLong className="ml-1 mr-2 transition-all duration-200 group-hover:-translate-x-1" />
           Home
@@ -412,14 +414,10 @@ const PracticeProblems = React.memo(() => {
         <div className="grid grid-cols-1 gap-6 pb-12 text-center">
           <div className="flex flex-row w-full max-w-screen-lg mx-auto my-4">
             <button
-              className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
-                isPro
-                  ? "text-blue-400 border-blue-400 hover:bg-blue-400"
-                  : "text-green-400 border-green-400 hover:bg-green-400"
-              }`}
+              className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black`}
               onClick={handleBackToCategories}
             >
-              <FaArrowLeftLong className="ml-1 mr-2 transition-all duration-200 group-hover:-translate-x-1" />{" "}
+              <FaArrowLeftLong className="ml-1 mr-1 transition-all duration-200 group-hover:-translate-x-2" />{" "}
               Categories
             </button>
 
@@ -516,14 +514,10 @@ const PracticeProblems = React.memo(() => {
       <div ref={containerRef}>
         <div className="flex flex-row max-w-screen-lg mx-auto my-4">
           <button
-            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
-              isPro
-                ? "text-blue-400 border-blue-400 hover:bg-blue-400"
-                : "text-green-400 border-green-400 hover:bg-green-400"
-            }`}
+            className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black`}
             onClick={handleBackToCategories}
           >
-            <FaArrowLeftLong className="ml-1 mr-2 transition-all duration-200 group-hover:-translate-x-1" />{" "}
+            <FaArrowLeftLong className="ml-1 mr-1 transition-all duration-200 group-hover:-translate-x-2" />{" "}
             Categories
           </button>
           <Input
@@ -542,7 +536,7 @@ const PracticeProblems = React.memo(() => {
           <Select
             value={selectedTag}
             onChange={handleTagChange}
-            className="hidden w-auto ml-4 md:block"
+            className="hidden w-full ml-4 md:block"
             style={{
               maxWidth: 200,
               border: "2px solid #4ade80",
@@ -609,7 +603,7 @@ const PracticeProblems = React.memo(() => {
                   : "border border-gray-700"
               } shadow-lg rounded-lg bg-gray-900 ${
                 !isPro && problem.isPro ? "relative opacity-100" : ""
-              } hover:translate-x-1 hover:-translate-y-1 transition-transform duration-300 ${
+              } xl:hover:translate-x-1 xl:hover:-translate-y-1 transition-transform duration-300 ${
                 !isPro && problem.isPro ? "cursor-not-allowed" : ""
               }`}
               onClick={() => handleSolveProblem(problem)}
@@ -940,9 +934,7 @@ const PracticeProblems = React.memo(() => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`text-4xl max-w-screen-lg mx-auto font-bold ${
-              isPro ? "text-blue-400" : "text-green-400"
-            }`}
+            className={`text-4xl max-w-screen-lg mx-auto font-bold text-green-400`}
           >
             Practice Problems
             <ReactTyped

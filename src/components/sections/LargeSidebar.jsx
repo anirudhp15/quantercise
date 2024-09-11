@@ -57,13 +57,13 @@ const LargeSidebar = ({ children, expanded, setExpanded }) => {
 
         {!expanded && (
           <div className="flex flex-col items-center pb-1 mb-1 border-b border-gray-700">
-            <img src={Logo} alt="Logo" className="w-10 h-10" />
-            <button
+            <img src={Logo} alt="Logo" className="w-10 h-10 my-2" />
+            {/* <button
               onClick={() => setExpanded((curr) => !curr)}
               className={`px-3 py-2 mt-2 mb-1 rounded-lg ${colorClass} bg-black hover:bg-gray-700`}
             >
               <ChevronLast />
-            </button>
+            </button> */}
           </div>
         )}
 
@@ -87,7 +87,7 @@ const LargeSidebar = ({ children, expanded, setExpanded }) => {
                       className="w-10 h-10 rounded-lg"
                     />
                   ) : null
-                ) : (
+                ) : expanded ? null : (
                   <FaUserCog className="w-10 h-10 text-gray-400" />
                 )}
               </Link>

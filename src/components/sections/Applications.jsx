@@ -15,14 +15,16 @@ import {
   Edit,
 } from "lucide-react";
 import AnimatedGrid2 from "../landing/AnimatedGrid2";
+import axios from "axios"; // Import Axios
 import "../../index.css";
 import { LargeSidebar, SidebarItem } from "./LargeSidebar";
-import { SmallSidebar } from "./SmallSidebar"; // Import the SmallSidebar
-import AuthContext from "../../contexts/authContext"; // Import AuthContext for user info
+import { SmallSidebar } from "./SmallSidebar";
+import AuthContext from "../../contexts/authContext";
 
 const Applications = () => {
-  const { isPro } = useContext(AuthContext); // Get isPro status from context
+  const { user } = useContext(AuthContext); // Access logged-in user data
   const [applications, setApplications] = useState([]);
+  const { isPro } = useContext(AuthContext);
   const [form, setForm] = useState({
     company: "",
     position: "",
@@ -37,71 +39,90 @@ const Applications = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
-  const [expanded, setExpanded] = useState(true); // Change this to false to set default to closed
-  const [smallSidebarExpanded, setSmallSidebarExpanded] = useState(true); // New state for SmallSidebar
-  const [expandedRow, setExpandedRow] = useState(null); // State to track expanded row for small screens
-  const [expandedNotesRow, setExpandedNotesRow] = useState(null); // State to track expanded row for notes
+  const [expanded, setExpanded] = useState(true);
+  const [smallSidebarExpanded, setSmallSidebarExpanded] = useState(true);
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedNotesRow, setExpandedNotesRow] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
+  // Fetch applications from MongoDB on component load
   useEffect(() => {
-    const storedApplications = JSON.parse(localStorage.getItem("applications"));
-    if (storedApplications) {
-      setApplications(storedApplications);
+    if (user && user.email) {
+      axios
+        .get(`/api/applications/user-applications/${user.email}`)
+        .then((response) => {
+          setApplications(response.data.applications); // Set the applications data from MongoDB
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching applications:", error);
+          setError("Error fetching applications. Please try again later.");
+          setLoading(false);
+        });
     }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("applications", JSON.stringify(applications));
-  }, [applications]);
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
+  // Save application to MongoDB
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (editMode) {
-      setApplications(
-        applications.map((application) =>
-          application.id === currentId
-            ? { ...form, id: currentId }
-            : application
-        )
-      );
-    } else {
-      setApplications([...applications, { ...form, id: uuidv4() }]);
-    }
-    setForm({
-      company: "",
-      position: "",
-      status: "",
-      dateOfSubmission: "",
-      deadlineDate: "",
-      notes: "",
-      field: "",
-      coverLetter: "No Cover Letter",
-      location: "",
-    });
-    setIsFormOpen(false);
-    setEditMode(false);
-    setCurrentId(null);
+    const newApplication = { ...form, dateOfSubmission: new Date() };
+
+    axios
+      .post("/api/applications/add-application", {
+        email: user.email,
+        application: newApplication,
+      })
+      .then((response) => {
+        setApplications(response.data.applications); // Update local state
+        setForm({
+          company: "",
+          position: "",
+          status: "",
+          dateOfSubmission: "",
+          deadlineDate: "",
+          notes: "",
+          field: "",
+          coverLetter: "No Cover Letter",
+          location: "",
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding application:", error);
+        setError("Error saving application. Please try again.");
+      });
   };
 
-  const handleDelete = (id) => {
-    setApplications(
-      applications.filter((application) => application.id !== id)
-    );
-  };
-
+  // Edit existing application
   const handleEdit = (id) => {
-    const application = applications.find(
-      (application) => application.id === id
-    );
+    const application = applications.find((app) => app.id === id);
     setForm(application);
     setIsFormOpen(true);
     setEditMode(true);
     setCurrentId(id);
   };
+
+  // Delete application from MongoDB
+  const handleDelete = (id) => {
+    axios
+      .post("/api/applications/delete-application", { id, email: user.email })
+      .then((response) => {
+        setApplications(response.data.applications); // Update state
+      })
+      .catch((error) => {
+        console.error("Error deleting application:", error);
+        setError("Error deleting application. Please try again.");
+      });
+  };
+
+  // Render loading, error, or the actual applications list
+  if (loading) return <p>Loading applications...</p>;
+  if (error) return <p>{error}</p>;
 
   const handleFormToggle = () => {
     setIsFormOpen(!isFormOpen);
@@ -155,11 +176,21 @@ const Applications = () => {
       <AnimatedGrid2 />
       <div className="absolute inset-0 bg-black z-5 bg-opacity-90" />
       <LargeSidebar expanded={expanded} setExpanded={setExpanded}>
-        <SidebarItem icon={<FaArrowLeftLong />} text="Home" link="/home" />
+        <SidebarItem
+          className="group"
+          icon={
+            <FaArrowLeftLong className="transition-all duration-200 group-hover:-translate-x-1" />
+          }
+          text="Home"
+          link="/home"
+        />
         <div className="border-t border-gray-700" />
         <div className="mt-4 space-y-2">
           <SidebarItem
-            icon={<FaPlus />}
+            className="group"
+            icon={
+              <FaPlus className="transition-all duration-200 group-hover:rotate-90" />
+            }
             text="Add New Application"
             onClick={handleFormToggle}
           />

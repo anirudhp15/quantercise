@@ -57,7 +57,11 @@ const Register = () => {
         await fetchUserProStatus(userCredential.user.uid); // Fetch and set isPro status
         navigate("/home");
       } catch (error) {
-        setErrorMessage(error.message);
+        if (error.code === "auth/email-already-in-use") {
+          setErrorMessage("This email is already registered. Please log in.");
+        } else {
+          setErrorMessage(error.message);
+        }
       } finally {
         setIsRegistering(false);
       }

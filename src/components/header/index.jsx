@@ -58,7 +58,7 @@ const Header = ({ onJoinClick }) => {
       <motion.nav
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut", delay: 7 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 5 }}
         className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 border-b-4 border-gray-700 shadow-2xl md:px-32 bg-gray-950"
       >
         <div className="flex items-center space-x-4">
@@ -115,7 +115,7 @@ const Header = ({ onJoinClick }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className={`fixed inset-0 z-30 flex flex-col items-center justify-center w-full h-full ${overlayColor}`}
+                    className={`fixed inset-0 z-50 flex flex-col items-center justify-center w-full h-full ${overlayColor}`}
                   >
                     <FaTimes
                       className="absolute text-black cursor-pointer top-5 right-[5vw] md:right-[10vw] hover:text-gray-800"
