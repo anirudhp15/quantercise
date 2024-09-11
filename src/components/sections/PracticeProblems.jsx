@@ -30,7 +30,8 @@ import CodeEditor from "./CodeEditor";
 import "../../index.css";
 
 // Define your domain
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+// const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+const YOUR_DOMAIN = "http://localhost:4242";
 
 const { Option } = Select;
 
@@ -80,40 +81,44 @@ const PracticeProblems = React.memo(() => {
   // Fetch the MongoDB ID based on Firebase UID or Google ID
   useEffect(() => {
     const fetchMongoId = async () => {
+      console.log("Fetching MongoDB ID for user:", currentUser.uid);
+      console.log("Current user:", currentUser);
       try {
-        const url = `${YOUR_DOMAIN}/api/user/mongoId/` + currentUser.uid;
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await fetch(
+          `http://localhost:4242/api/user/mongoId/${currentUser.uid}`
+        );
 
+        // Check if the response is OK and is JSON
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
+        // Try parsing the response as JSON
+        const data = await response.json();
         setMongoId(data.mongoId);
       } catch (error) {
         console.error("Failed to fetch MongoDB ID:", error);
       }
     };
 
-    if (currentUser) {
-      fetchMongoId();
-    }
+    if (currentUser) fetchMongoId();
   }, [currentUser]);
 
-  // Fetch problems and user progress from backend using MongoDB ID
+  // Fetch problems and user progress from backend
   useEffect(() => {
     const fetchProblemsAndProgress = async () => {
+      if (!mongoId) return;
       try {
-        if (!mongoId) return;
-
         const [problemsResponse, progressResponse] = await Promise.all([
           fetch(`${YOUR_DOMAIN}/api/questions`),
           fetch(`${YOUR_DOMAIN}/api/user/progress/${mongoId}`),
         ]);
 
-        if (!problemsResponse.ok || !progressResponse.ok) {
-          throw new Error(`HTTP error! status: ${problemsResponse.status}`);
-        }
+        console.log("Fetching problems and progress for user:", mongoId);
+        console.log("Problems response:", problemsResponse);
+
+        if (!problemsResponse.ok || !progressResponse.ok)
+          throw new Error("Error fetching data");
 
         const problemsData = await problemsResponse.json();
         const progressData = await progressResponse.json();
@@ -131,19 +136,15 @@ const PracticeProblems = React.memo(() => {
       }
     };
 
-    if (mongoId) {
-      fetchProblemsAndProgress();
-    }
+    if (mongoId) fetchProblemsAndProgress();
   }, [mongoId]);
 
-  // Function to update problem progress in the backend
+  // Update problem progress in the backend
   const updateProblemProgress = async ({ userId, questionId, progress }) => {
     try {
       await fetch("/api/user/update-progress", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, questionId, progress }),
       });
     } catch (error) {

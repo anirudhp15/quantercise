@@ -30,7 +30,7 @@ const Register = () => {
 
   const fetchUserProStatus = async (uid) => {
     try {
-      const response = await axios.get(`/api/users/${uid}`); // Adjust API endpoint
+      const response = await axios.get(`/api/user/${uid}`); // Adjust API endpoint
       if (response.data && response.data.isPro !== undefined) {
         setIsPro(response.data.isPro); // Set the isPro status in the app's state
       }

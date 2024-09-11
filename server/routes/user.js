@@ -246,4 +246,32 @@ router.post("/update-pro-status", async (req, res) => {
   }
 });
 
+// UPDATE: Increment user's sign-in count based on their mongoId
+router.put("/:id/signin", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate the mongoId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid user ID format" });
+    }
+
+    // Find the user by mongoId and increment the signInCount
+    const user = await User.findByIdAndUpdate(
+      id,
+      { $inc: { signInCount: 1 } }, // Increment the signInCount by 1
+      { new: true } // Return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "Sign-in count incremented successfully", user });
+  } catch (error) {
+    console.error("Error incrementing sign-in count:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { PiArrowArcRightThin } from "react-icons/pi";
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
 import backgroundImage from "../../assets/images/practice_problems.jpg";
@@ -16,7 +17,7 @@ const Intro = React.memo(({ triggerBounce }) => {
   const form = useRef();
 
   const quote = "Luck is what happens when preparation meets opportunity.";
-  const author = "- Seneca, Circa 1st Century AD";
+  const author = "- Seneca, c. 1-100 AD.";
 
   const handleEmailChange = useCallback((e) => {
     setEmail(e.target.value);
@@ -234,15 +235,15 @@ const Intro = React.memo(({ triggerBounce }) => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 2.5, delay: 0.3 }}
-              className="relative z-10 max-w-screen-xl mx-auto mt-8 lg:mt-0 lg:w-1/2"
+              className="relative z-10 max-w-screen-xl mx-auto mt-4 lg:mt-0 lg:w-1/2"
             >
               <div className="relative flex flex-col">
-                <div className="flex items-center lg:items-start">
+                <div className="flex items-end justify-start space-x-4">
                   <motion.div
                     initial={{ opacity: 0, x: 15, y: 15 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
                     transition={{ duration: 1.5, delay: 0.5 }}
-                    className="relative max-w-sm overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
+                    className="relative max-w-sm mb-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
                     <img
                       src={backgroundImage}
@@ -261,13 +262,28 @@ const Intro = React.memo(({ triggerBounce }) => {
                       </p>
                     </div>
                   </motion.div>
+                  <motion.div
+                    initial={{ clipPath: "inset(0 0 100% 0)" }}
+                    animate={{ clipPath: "inset(0 0 0 0)" }}
+                    transition={{ duration: 1.5, ease: "easeIn", delay: 2.5 }}
+                  >
+                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-300 rotate-90 lg:block" />
+                  </motion.div>
                 </div>
-                <div className="flex items-center justify-center lg:justify-end">
+                <div className="flex items-start justify-center space-x-4 lg:justify-end">
+                  <motion.div
+                    initial={{ clipPath: "inset(100% 0 0 0)" }}
+                    animate={{ clipPath: "inset(0 0 0 0)" }}
+                    transition={{ duration: 1.5, delay: 2.7 }}
+                  >
+                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-300 -rotate-90 lg:block" />
+                  </motion.div>
+
                   <motion.div
                     initial={{ opacity: 0, x: -15, y: -15 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
                     transition={{ duration: 1.5, delay: 0.7 }}
-                    className="relative max-w-sm mt-8 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
+                    className="relative max-w-sm mt-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
                     <img
                       src={trackingImage}
