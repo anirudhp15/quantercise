@@ -1,5 +1,17 @@
 const mongoose = require("mongoose");
 
+const applicationSchema = new mongoose.Schema({
+  company: { type: String, required: true },
+  position: { type: String, required: true },
+  status: { type: String, required: true },
+  dateOfSubmission: { type: Date, required: true },
+  deadlineDate: { type: Date },
+  notes: { type: String },
+  field: { type: String, required: true },
+  coverLetter: { type: String, default: "No Cover Letter" },
+  location: { type: String },
+});
+
 // Define the Problem Progress sub-schema
 const problemProgressSchema = new mongoose.Schema({
   questionId: {
@@ -78,6 +90,7 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
   progress: [problemProgressSchema], // Embed the Problem Progress sub-schema as an array
+  applications: [applicationSchema], // Embed the Application sub-schema as an array
 });
 
 // Add a pre-save hook to update the `updatedAt` field before saving

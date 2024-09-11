@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 
 // Define your domain
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+// const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
   const userCredential = await createUserWithEmailAndPassword(
@@ -28,13 +28,16 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
       user.photoURL || "../../assets/images/default_profile.jpg"; // Default if no profile picture
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post(`${YOUR_DOMAIN}/api/auth/firebase-login`, {
-      uid: user.uid,
-      email: user.email,
-      displayName,
-      profilePicture,
-      isPro: false, // Default isPro to false for newly created users
-    });
+    await axios.post(
+      `https://quantercise-api.vercel.app/api/auth/firebase-login`,
+      {
+        uid: user.uid,
+        email: user.email,
+        displayName,
+        profilePicture,
+        isPro: false, // Default isPro to false for newly created users
+      }
+    );
   } catch (error) {
     console.error("Error sending user info to server:", error);
   }
@@ -57,7 +60,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
       user.photoURL || "../../assets/images/default_profile.jpg";
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post(`${YOUR_DOMAIN}/api/auth/login`, {
+    await axios.post(`https://quantercise-api.vercel.app/api/auth/login`, {
       uid: user.uid,
       email: user.email,
       displayName,
@@ -82,12 +85,15 @@ export const doSignInWithGoogle = async () => {
       user.photoURL || "../../assets/images/default_profile.jpg";
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post(`${YOUR_DOMAIN}/api/auth/google-login`, {
-      uid: user.uid,
-      email: user.email,
-      displayName,
-      profilePicture,
-    });
+    await axios.post(
+      `https://quantercise-api.vercel.app/api/auth/google-login`,
+      {
+        uid: user.uid,
+        email: user.email,
+        displayName,
+        profilePicture,
+      }
+    );
   } catch (error) {
     console.error("Error sending user info to server:", error);
   }

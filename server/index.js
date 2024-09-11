@@ -6,6 +6,7 @@ const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const questionsRoutes = require("./routes/questions");
+const applicationsRoute = require("./routes/applications");
 const User = require("./models/User");
 
 const app = express();
@@ -53,6 +54,7 @@ mongoose
 app.use("/api/auth", authRoutes); // Handles /firebase-login and /google-login
 app.use("/api/user", userRoutes);
 app.use("/api/questions", questionsRoutes);
+app.use("/api/applications", applicationsRoute);
 // Stripe checkout session creation
 app.post("/create-checkout-session", async (req, res) => {
   const { priceId } = req.body;
