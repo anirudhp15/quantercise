@@ -6,13 +6,14 @@ import axios from "axios";
 import PropTypes from "prop-types";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 console.log("Stripe Promise:", stripePromise);
 
 const PriceCard = React.memo(
   ({ title, price, period, features, color, priceId, handleCheckout }) => {
     return (
-      <div className="w-full max-w-sm p-6 mt-8 transition-all duration-200 border-2 border-gray-500 bg-gray-950 rounded-xl hover:border-gray-300">
-        <h3 className={`text-xl font-medium sm:text-md ${color}`}>{title}</h3>
+      <div className="w-full max-w-lg p-6 mt-8 transition-all duration-200 border-2 border-gray-500 bg-gray-950 rounded-xl hover:border-gray-300">
+        <h3 className={`text-xl font-bold sm:text-md ${color}`}>{title}</h3>
         <p className="mt-2 text-3xl font-bold text-gray-300 xl:text-4xl">
           <span className="text-gray-300">{price}</span>
           <span className="ml-2 text-sm text-gray-300">{period}</span>
@@ -96,7 +97,7 @@ const Pricing = () => {
             Choose the plan that best fits your needs.
           </p>
         </div>
-        <div className="relative z-10 flex flex-col items-center justify-center w-full lg:flex-row lg:justify-around lg:gap-8">
+        <div className="relative z-10 flex flex-col items-center justify-center w-full lg:flex-row lg:justify-around lg:gap-2">
           <PriceCard
             title="Starter"
             price="$0"

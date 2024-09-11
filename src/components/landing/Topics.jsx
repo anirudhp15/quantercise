@@ -191,7 +191,7 @@ const Topics = React.memo(() => {
           {categories.map((category, index) => (
             <div
               key={index}
-              className="relative z-10 w-2/3 p-6 mx-auto text-center transition-all duration-200 border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300"
+              className="relative z-10 w-2/3 p-6 mx-auto text-center transition-all duration-200 border-2 border-gray-500 rounded-lg shadow-lg sm:w-1/2 bg-gray-950 hover:border-gray-300"
             >
               <div className="flex justify-center mb-4">
                 {/* <span className="mr-2">{category.icon}</span> */}
@@ -201,7 +201,7 @@ const Topics = React.memo(() => {
               </div>
               <ul className="ml-4 list-none list-inside">
                 {category.subtopics.map((subtopic, subIndex) => (
-                  <li key={subIndex} className="text-sm font-extralight">
+                  <li key={subIndex} className="text-sm font-light">
                     {subtopic}
                   </li>
                 ))}

@@ -7,16 +7,15 @@ import AnimatedGrid2 from "../landing/AnimatedGrid2";
 import { ReactTyped } from "react-typed";
 import axios from "axios";
 import "../../index.css";
-import { useLowDetail } from "../../contexts/LowDetailContext"; // Import the context
+import { useLowDetail } from "../../contexts/LowDetailContext";
 
 // Define your domain
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+const YOUR_DOMAIN = "http://localhost:4242";
 
-// Memoized Home Component
 const Home = React.memo(() => {
   const { currentUser } = useAuth();
-  const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
-  const [isPro, setIsPro] = useState(false);
+  const { lowDetailMode } = useLowDetail(); // Access Low Detail Mode
+  const [isPro, setIsPro] = useState(false); // State for Pro status
   const [problemsCompleted, setProblemsCompleted] = useState(0);
 
   // Fetch user's Pro status and progress from the backend
@@ -24,11 +23,28 @@ const Home = React.memo(() => {
     if (!currentUser) return;
 
     try {
-      const { data } = await axios.get(
-        `${YOUR_DOMAIN}/api/user/${currentUser.uid}`
-      );
-      setIsPro(data.user.isPro);
+      // Determine if the user is using Google or Firebase authentication
+      const authType = currentUser.providerData[0]?.providerId.includes(
+        "google"
+      )
+        ? "googleId"
+        : "firebaseUid";
 
+      // Step 1: Fetch mongoId based on googleId or firebaseUid
+      const mongoIdResponse = await axios.get(
+        `${YOUR_DOMAIN}/api/user/mongoId/${currentUser.uid}`
+      );
+      const mongoId = mongoIdResponse.data.mongoId;
+
+      // Step 2: Fetch user data using mongoId
+      const userDataResponse = await axios.get(
+        `${YOUR_DOMAIN}/api/user/${mongoId}`
+      );
+
+      // Step 3: Set the isPro status
+      setIsPro(userDataResponse.data.isPro);
+
+      // Step 4: Fetch and count completed problems (if stored in localStorage)
       const storedProblems = JSON.parse(localStorage.getItem("problems")) || [];
       const completedCount = storedProblems.filter((p) => p.completed).length;
       setProblemsCompleted(completedCount);

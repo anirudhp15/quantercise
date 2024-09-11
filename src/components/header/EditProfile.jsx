@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
+
 const EditProfile = () => {
   const { currentUser, updateProfile } = useAuth();
   const [displayName, setDisplayName] = useState(currentUser.displayName || "");
