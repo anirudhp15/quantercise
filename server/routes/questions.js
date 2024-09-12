@@ -72,7 +72,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to fetch unique tags for each category
+// Fetch unique tags for each category
 router.get("/tags", async (req, res) => {
   try {
     const categories = [
@@ -82,11 +82,9 @@ router.get("/tags", async (req, res) => {
       "Brain Teasers and Logical Puzzles",
     ];
 
-    // Initialize an object to store the tags for each category
     const tagsByCategory = {};
 
     for (const category of categories) {
-      // Fetch unique tags for each category
       const tags = await Question.distinct("tags", { category: category });
       tagsByCategory[category] = tags;
     }
@@ -95,6 +93,20 @@ router.get("/tags", async (req, res) => {
   } catch (error) {
     console.error("Error fetching tags:", error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Fetch a random question
+router.get("/random", async (req, res) => {
+  try {
+    const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
+    if (randomQuestion.length === 0) {
+      return res.status(404).json({ error: "No questions found" });
+    }
+    res.json(randomQuestion[0]);
+  } catch (error) {
+    console.error("Error fetching random question:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

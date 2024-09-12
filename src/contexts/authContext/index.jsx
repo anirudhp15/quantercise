@@ -88,7 +88,7 @@ export function AuthProvider({ children }) {
       // Optionally update MongoDB with the new display name and photo URL
       try {
         const { data: mongoIdResponse } = await axios.get(
-          `/api/user/mongoId/${auth.currentUser.uid}`
+          `${YOUR_DOMAIN}/api/user/mongoId/${auth.currentUser.uid}`
         );
         const mongoId = mongoIdResponse.mongoId;
 

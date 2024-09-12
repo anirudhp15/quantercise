@@ -151,14 +151,8 @@ const Intro = React.memo(({ triggerBounce }) => {
               >
                 A cutting-edge platform designed to elevate your quantitative
                 skills.{" "}
-                <span className="font-medium text-transparent animate-gradient gradient-text">
-                  Join our waitlist
-                </span>{" "}
-                to be the first notified when we go live on{" "}
-                <span className="font-bold text-transparent whitespace-nowrap animate-gradient gradient-text">
-                  September 1st
-                </span>
-                :
+                <span className="font-black text-white">Join our waitlist</span>{" "}
+                to be notified when new updates are released.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -167,15 +161,12 @@ const Intro = React.memo(({ triggerBounce }) => {
                 className="block mt-6 text-lg font-medium text-gray-300 md:hidden sm:text-xl md:text-2xl"
               >
                 Join our{" "}
-                <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+                <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
                   waitlist
                 </span>{" "}
-                to be the first notified when we go live on{" "}
-                <span className="font-bold text-transparent whitespace-nowrap bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-                  September 1st:
-                </span>
+                to be notified when new updates are released.
               </motion.p>
-              <motion.p
+              {/* <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.6 }}
@@ -187,7 +178,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                   <li>Detailed follow-up questions</li>
                   <li>Site-integrated internship application manager</li>
                 </ul>
-              </motion.p>
+              </motion.p> */}
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

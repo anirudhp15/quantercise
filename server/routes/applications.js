@@ -19,6 +19,7 @@ router.post("/add-application", async (req, res) => {
       .status(200)
       .json({ message: "Application saved", applications: user.applications });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error", error });
   }
 });
