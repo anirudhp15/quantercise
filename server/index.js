@@ -55,6 +55,7 @@ app.use("/api/auth", authRoutes); // Handles /firebase-login and /google-login
 app.use("/api/user", userRoutes);
 app.use("/api/questions", questionsRoutes);
 app.use("/api/applications", applicationsRoute);
+
 // Stripe checkout session creation
 app.post("/create-checkout-session", async (req, res) => {
   const { priceId } = req.body;

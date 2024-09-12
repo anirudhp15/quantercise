@@ -6,14 +6,7 @@ import { motion } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
-import {
-  ChevronLast,
-  ChevronFirst,
-  BarChart,
-  BookOpen,
-  Activity,
-  Edit,
-} from "lucide-react";
+import { BarChart, BookOpen, Activity, Edit } from "lucide-react";
 import AnimatedGrid2 from "../landing/AnimatedGrid2";
 import axios from "axios"; // Import Axios
 import "../../index.css";
@@ -21,10 +14,13 @@ import { LargeSidebar, SidebarItem } from "./LargeSidebar";
 import { SmallSidebar } from "./SmallSidebar";
 import AuthContext from "../../contexts/authContext";
 
+// Define your domain
+const YOUR_DOMAIN =
+  process.env.YOUR_DOMAIN || "https://quantercise-api.vercel.app";
+
 const Applications = () => {
-  const { user } = useContext(AuthContext); // Access logged-in user data
+  const { currentUser, isPro } = useContext(AuthContext);
   const [applications, setApplications] = useState([]);
-  const { isPro } = useContext(AuthContext);
   const [form, setForm] = useState({
     company: "",
     position: "",
@@ -48,9 +44,12 @@ const Applications = () => {
 
   // Fetch applications from MongoDB on component load
   useEffect(() => {
-    if (user && user.email) {
+    console.log("User:", currentUser);
+    if (currentUser && currentUser.email) {
       axios
-        .get(`/api/applications/user-applications/${user.email}`)
+        .get(
+          `https://quantercise-api.vercel.app/api/applications/user-applications/${currentUser.email}`
+        )
         .then((response) => {
           setApplications(response.data.applications); // Set the applications data from MongoDB
           setLoading(false);
@@ -61,7 +60,7 @@ const Applications = () => {
           setLoading(false);
         });
     }
-  }, [user]);
+  }, [currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -73,11 +72,20 @@ const Applications = () => {
     e.preventDefault();
     const newApplication = { ...form, dateOfSubmission: new Date() };
 
+    if (!currentUser || !currentUser.email) {
+      console.error("User is not logged in or email is missing.");
+      setError("User is not logged in or email is missing.");
+      return;
+    }
+
     axios
-      .post("/api/applications/add-application", {
-        email: user.email,
-        application: newApplication,
-      })
+      .post(
+        "https://quantercise-api.vercel.app/api/applications/add-application",
+        {
+          email: currentUser.email,
+          application: newApplication,
+        }
+      )
       .then((response) => {
         setApplications(response.data.applications); // Update local state
         setForm({
@@ -110,7 +118,13 @@ const Applications = () => {
   // Delete application from MongoDB
   const handleDelete = (id) => {
     axios
-      .post("/api/applications/delete-application", { id, email: user.email })
+      .post(
+        "https://quantercise-api.vercel.app/api/applications/delete-application",
+        {
+          id,
+          email: currentUser.email,
+        }
+      )
       .then((response) => {
         setApplications(response.data.applications); // Update state
       })
@@ -120,9 +134,9 @@ const Applications = () => {
       });
   };
 
-  // Render loading, error, or the actual applications list
-  if (loading) return <p>Loading applications...</p>;
-  if (error) return <p>{error}</p>;
+  // // Render loading, error, or the actual applications list
+  // if (loading) return <p>Loading applications...</p>;
+  // if (error) return <p>{error}</p>;
 
   const handleFormToggle = () => {
     setIsFormOpen(!isFormOpen);
@@ -371,7 +385,11 @@ const Applications = () => {
               <div className="relative z-10 hidden w-full overflow-auto rounded-lg shadow-lg lg:block bg-gray-950">
                 <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
                   <thead>
-                    <tr className="text-green-400 bg-gray-800">
+                    <tr
+                      className={`bg-gray-800 ${
+                        isPro ? "text-blue-400" : "text-green-400"
+                      }`}
+                    >
                       {[
                         "Company",
                         "Position",
