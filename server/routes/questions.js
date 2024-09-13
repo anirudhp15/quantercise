@@ -100,12 +100,15 @@ router.get("/tags", async (req, res) => {
 router.get("/random", async (req, res) => {
   try {
     const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
+
     if (randomQuestion.length === 0) {
       return res.status(404).json({ error: "No questions found" });
     }
+
     res.json(randomQuestion[0]);
   } catch (error) {
-    console.log("Error fetching random question:", error);
+    console.log(error);
+    console.error("Error fetching random question:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

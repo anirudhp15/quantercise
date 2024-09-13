@@ -154,7 +154,7 @@ router.post("/register", async (req, res) => {
     req.session.userId = newUser._id;
 
     // Redirect to home page
-    res.redirect("/home");
+    res.redirect(`${process.env.DOMAIN}/home`);
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(500).json({ error: error.message });

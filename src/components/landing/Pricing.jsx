@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 
 // Load the Stripe public key
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 
 const PriceCard = React.memo(
   ({
@@ -96,7 +95,7 @@ const Pricing = () => {
       setError(null);
 
       const response = await axios.post(
-        `${YOUR_DOMAIN}/create-checkout-session`,
+        `http://localhost:4242/api/stripe/create-checkout-session`,
         { priceId }
       );
       if (response.data.url) {
@@ -161,7 +160,9 @@ const Pricing = () => {
             ]}
             color="text-green-400"
             priceId={
-              isAnnual ? "starter_annual_price_id" : "starter_monthly_price_id"
+              isAnnual
+                ? "price_1PrL4B2LYK3gCcnXwaBSR3uB"
+                : "price_1PfQac2LYK3gCcnX2jnYp8du"
             }
             handleCheckout={handleCheckout}
             badgeText={isAnnual ? "Annual Commitment" : "For Beginners"}
@@ -179,7 +180,11 @@ const Pricing = () => {
               "Detailed follow-up questions for each question",
             ]}
             color="text-blue-400"
-            priceId={isAnnual ? "pro_annual_price_id" : "pro_monthly_price_id"}
+            priceId={
+              isAnnual
+                ? "price_1PyaL42LYK3gCcnX2coQGFMH"
+                : "price_1PyaJH2LYK3gCcnXQyg47GM7"
+            }
             handleCheckout={handleCheckout}
             badgeText={isAnnual ? "Best Value - Save 17%" : "Most Popular"}
             isAnnual={isAnnual}
