@@ -136,7 +136,7 @@ const Topics = React.memo(() => {
           initial={{ opacity: 0, y: 20 }}
           animate={controls}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-4 text-lg font-medium sm:text-xl md:text-2xl"
+          className="mt-4 text-lg font-normal sm:text-xl md:text-2xl"
         >
           Quantercise provides a comprehensive range of topics designed to help
           dedicated students excel in quant finance interviews.
