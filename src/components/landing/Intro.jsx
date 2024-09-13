@@ -147,7 +147,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="hidden mt-6 text-lg font-medium text-gray-300 md:block sm:text-xl md:text-2xl"
+                className="hidden mt-6 text-lg font-normal text-gray-300 md:block sm:text-xl md:text-2xl"
               >
                 A cutting-edge platform designed to elevate your quantitative
                 skills.{" "}
@@ -201,7 +201,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                   />
                   <motion.button
                     type="submit"
-                    className={`w-auto px-6 py-2 text-lg font-bold text-black transition-all duration-200 bg-green-400 rounded-lg shadow-lg whitespace-nowrap lg:mt-0 ${
+                    className={`w-auto px-6 py-2 text-lg font-bold text-black transition-all duration-200 bg-green-400  shadow-lg whitespace-nowrap lg:mt-0 ${
                       triggerBounce
                         ? "animate-bounce outline-2 outline outline-offset-4 outline-green-400"
                         : ""

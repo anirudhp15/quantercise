@@ -180,7 +180,7 @@ const LandingFooter = ({ onJoinClick }) => {
         </motion.div>
       </div>
       <div className="flex flex-col items-center justify-center px-4 py-6 rounded-lg">
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-center text-white">
           Have suggestions for features? Let us know!
         </h2>
         <form

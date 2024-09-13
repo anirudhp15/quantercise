@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Intro from "./Intro";
 import Features from "./Features";
 import Pricing from "./Pricing";
+import POTD from "./ProblemOfTheDay";
 import LandingFooter from "./LandingFooter";
 import Topics from "./Topics";
 import FAQ from "./FAQ";
@@ -27,6 +28,7 @@ const LandingPage = () => {
       <Header onJoinClick={handleJoinClick} /> {/* Pass the prop here */}
       <Intro triggerBounce={triggerBounce} />
       {/* <Features /> */}
+      <POTD />
       <Topics />
       <Pricing />
       {/* <FAQ /> */}

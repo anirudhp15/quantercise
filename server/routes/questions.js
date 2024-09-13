@@ -105,7 +105,7 @@ router.get("/random", async (req, res) => {
     }
     res.json(randomQuestion[0]);
   } catch (error) {
-    console.error("Error fetching random question:", error);
+    console.log("Error fetching random question:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
