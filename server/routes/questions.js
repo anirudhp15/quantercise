@@ -1,7 +1,7 @@
-// Import necessary modules
 const express = require("express");
 const router = express.Router();
 const Question = require("../models/Question");
+const mongoose = require("mongoose"); // Import mongoose to use ObjectId
 
 // Fetch All Questions
 router.get("/", async (req, res) => {
@@ -16,8 +16,15 @@ router.get("/", async (req, res) => {
 
 // Fetch a Single Question by ID
 router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Question ID" });
+  }
+
   try {
-    const question = await Question.findById(req.params.id);
+    const question = await Question.findById(id);
     if (!question) {
       return res.status(404).json({ error: "Question not found" });
     }
@@ -42,12 +49,17 @@ router.post("/", async (req, res) => {
 
 // Update an Existing Question
 router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Question ID" });
+  }
+
   try {
-    const updatedQuestion = await Question.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const updatedQuestion = await Question.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!updatedQuestion) {
       return res.status(404).json({ error: "Question not found" });
     }
@@ -60,8 +72,15 @@ router.put("/:id", async (req, res) => {
 
 // Delete a Question
 router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Question ID" });
+  }
+
   try {
-    const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
+    const deletedQuestion = await Question.findByIdAndDelete(id);
     if (!deletedQuestion) {
       return res.status(404).json({ error: "Question not found" });
     }
