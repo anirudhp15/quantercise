@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 // Fetch a Single Question by ID
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
   const { id } = req.params;
 
   // Check if the ID is a valid ObjectId
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Add a New Question
-router.post("/", async (req, res) => {
+router.post("/single/", async (req, res) => {
   try {
     const newQuestion = new Question(req.body);
     const savedQuestion = await newQuestion.save();
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update an Existing Question
-router.put("/:id", async (req, res) => {
+router.put("/single/:id", async (req, res) => {
   const { id } = req.params;
 
   // Check if the ID is a valid ObjectId
@@ -71,7 +71,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a Question
-router.delete("/:id", async (req, res) => {
+router.delete("/single/:id", async (req, res) => {
   const { id } = req.params;
 
   // Check if the ID is a valid ObjectId
