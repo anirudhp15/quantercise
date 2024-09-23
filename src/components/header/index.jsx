@@ -64,7 +64,7 @@ const Header = ({ onJoinClick }) => {
         <div className="flex items-center space-x-4">
           <RouterLink
             className={`z-10 text-xl font-bold transition duration-300 ${
-              location.pathname === "/landing"
+              location.pathname === "/landing" || location.pathname === "/"
                 ? "text-green-400 hover:text-green-200"
                 : isPro
                 ? "text-blue-400 hover:text-blue-200"
@@ -96,7 +96,9 @@ const Header = ({ onJoinClick }) => {
         </div>
 
         <div className="flex items-center">
-          {userLoggedIn && location.pathname !== "/landing" ? (
+          {userLoggedIn &&
+          location.pathname !== "/landing" &&
+          location.pathname !== "/" ? (
             <div className="relative z-30">
               <button
                 className={`group flex rounded-lg hover:scale-105 items-center px-4 py-1 text-sm font-bold transition-all duration-200 transform border-2 ${

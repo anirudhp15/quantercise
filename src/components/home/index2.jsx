@@ -178,54 +178,58 @@ const Home = React.memo(() => {
               </div>
             </motion.div>
 
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-              }}
-              className="relative group lg:col-span-2"
-            >
-              <div className="relative z-10 p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
-                <h2 className="text-xl font-semibold text-purple-400 transition-all duration-200 sm:text-2xl group-hover:text-purple-500">
-                  Performance Analytics
-                </h2>
-                <p className="mt-2 font-thin">
-                  Track your performance and identify areas for improvement.
-                </p>
-                <Link
-                  to="/analytics"
-                  className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-purple-500 shadow-sm hover:scale-105 hover:text-white hover:bg-purple-400 rounded-xl hover:shadow-lg group/link"
-                >
-                  View Analytics
-                  <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
-                </Link>
-              </div>
-            </motion.div>
+            {isPro && (
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+                }}
+                className="relative group lg:col-span-2"
+              >
+                <div className="relative z-10 p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+                  <h2 className="text-xl font-semibold text-purple-400 transition-all duration-200 sm:text-2xl group-hover:text-purple-500">
+                    Performance Analytics
+                  </h2>
+                  <p className="mt-2 font-thin">
+                    Track your performance and identify areas for improvement.
+                  </p>
+                  <Link
+                    to="/analytics"
+                    className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-purple-500 shadow-sm hover:scale-105 hover:text-white hover:bg-purple-400 rounded-xl hover:shadow-lg group/link"
+                  >
+                    View Analytics
+                    <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
+                  </Link>
+                </div>
+              </motion.div>
+            )}
 
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-              }}
-              className="relative group lg:col-span-3"
-            >
-              <div className="relative z-10 h-full p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
-                <h2 className="text-xl font-semibold transition-all duration-200 text-sky-300 sm:text-2xl group-hover:text-sky-400">
-                  Application Tracker
-                </h2>
-                <p className="mt-2 font-thin">
-                  Keep track of your internship/job applications and upcoming
-                  interviews.
-                </p>
-                <Link
-                  to="/applications"
-                  className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 shadow-sm bg-sky-500 hover:scale-105 hover:text-white hover:bg-sky-400 rounded-xl hover:shadow-lg group/link"
-                >
-                  View Applications
-                  <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
-                </Link>
-              </div>
-            </motion.div>
+            {isPro && (
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+                }}
+                className="relative group lg:col-span-3"
+              >
+                <div className="relative z-10 h-full p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+                  <h2 className="text-xl font-semibold transition-all duration-200 text-sky-300 sm:text-2xl group-hover:text-sky-400">
+                    Application Tracker
+                  </h2>
+                  <p className="mt-2 font-thin">
+                    Keep track of your internship/job applications and upcoming
+                    interviews.
+                  </p>
+                  <Link
+                    to="/applications"
+                    className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 shadow-sm bg-sky-500 hover:scale-105 hover:text-white hover:bg-sky-400 rounded-xl hover:shadow-lg group/link"
+                  >
+                    View Applications
+                    <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
+                  </Link>
+                </div>
+              </motion.div>
+            )}
 
             <motion.div
               variants={{

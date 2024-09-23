@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { GrValidate } from "react-icons/gr";
+import { TbAlertSquareRounded } from "react-icons/tb";
 import axios from "axios";
 import PropTypes from "prop-types";
 
@@ -33,6 +35,12 @@ const PriceCard = React.memo(
             }`}
           >
             {badgeText}
+            {isAnnual && (
+              <GrValidate className="inline-block h-4 w-4 mb-[2px] ml-1" />
+            )}
+            {!isAnnual && (
+              <TbAlertSquareRounded className="inline-block h-4 w-4 mb-[2px] ml-1" />
+            )}
           </div>
         )}
         <h3 className={`text-2xl xl:text-4xl font-bold sm:text-md ${color}`}>
@@ -129,11 +137,13 @@ const Pricing = () => {
           </p>
 
           {/* Sleek Toggle Switch for Monthly/Annual Pricing */}
-          <div className="relative z-20 flex items-center justify-center mt-8 font-bold">
-            <span className="mr-2 text-gray-300">Monthly</span>
+          <div className="relative z-10 flex items-center justify-center mt-8 font-bold">
+            <span className="mr-4 text-gray-300">Monthly</span>
             <div
-              className={`relative inline-block w-16 h-8 rounded-full ring-2 ring-offset-1 hover:cursor-pointer transition-all duration-300 ${
-                isAnnual ? "bg-blue-400" : "bg-gray-300"
+              className={`relative inline-block w-16 h-8 rounded-full outline-offset-4 outline outline-2 hover:cursor-pointer transition-all duration-300 ${
+                isAnnual
+                  ? "bg-blue-400 outline-blue-400"
+                  : "bg-green-400 outline-green-400"
               }`}
               onClick={togglePricing}
             >
@@ -143,7 +153,7 @@ const Pricing = () => {
                 }`}
               />
             </div>
-            <span className="ml-2 text-gray-300">Annually</span>
+            <span className="ml-4 text-gray-300">Annually</span>
           </div>
         </div>
 
@@ -156,6 +166,7 @@ const Pricing = () => {
             features={[
               "Access to all 100 questions",
               "Assistive hints for each question",
+              "Basic progress tracking",
               "Detailed solution walkthroughs",
             ]}
             color="text-green-400"
@@ -176,6 +187,7 @@ const Pricing = () => {
             period={isAnnual ? "/ year" : "/ month"}
             features={[
               "Access to all 100 questions",
+              "Advanced progress and performance analytics",
               "Site-integrated applications tracking dashboard",
               "Detailed follow-up questions for each question",
             ]}

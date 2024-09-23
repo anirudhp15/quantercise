@@ -5,6 +5,11 @@ import {
   FaChartLine,
   FaPuzzlePiece,
 } from "react-icons/fa";
+import { TbMathMax } from "react-icons/tb";
+import { AiOutlineCode } from "react-icons/ai";
+import { BsBank } from "react-icons/bs";
+import { LiaBrainSolid } from "react-icons/lia";
+
 import { motion, useAnimation } from "framer-motion";
 import { throttle } from "lodash";
 import "../../index.css";
@@ -12,7 +17,7 @@ import "../../index.css";
 const categories = [
   {
     name: "MATHEMATICAL FOUNDATIONS",
-    icon: <FaCalculator className="text-xl text-blue-300" />,
+    icon: <TbMathMax className="w-8 h-8 text-xl text-white" />,
     subtopics: [
       "Bayesian Statistics",
       "Probability Distributions",
@@ -28,7 +33,7 @@ const categories = [
   },
   {
     name: "ALGORITHMS & DATA STRUCTURES",
-    icon: <FaCode className="text-2xl text-sky-400" />,
+    icon: <AiOutlineCode className="w-8 h-8 text-2xl text-white" />,
     subtopics: [
       "Arrays",
       "Trees",
@@ -47,7 +52,7 @@ const categories = [
   },
   {
     name: "FINANCIAL CONCEPTS",
-    icon: <FaChartLine className="text-2xl text-blue-500" />,
+    icon: <BsBank className="text-2xl text-white" />,
     subtopics: [
       "Black-Scholes Model",
       "Binomial Models",
@@ -66,7 +71,7 @@ const categories = [
   },
   {
     name: "LOGICAL REASONING",
-    icon: <FaPuzzlePiece className="text-2xl text-purple-500" />,
+    icon: <LiaBrainSolid className="w-8 h-8 text-2xl text-white" />,
     subtopics: [
       "Deductive Reasoning",
       "Inductive Reasoning",
