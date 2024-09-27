@@ -80,11 +80,11 @@ const Home = React.memo(() => {
         {!lowDetailMode && <AnimatedGrid2 />}
         {/* Conditionally render AnimatedGrid2 */}
         <div className="relative z-10 flex flex-col justify-center max-w-screen-lg py-24 mx-auto">
-          <div className="text-3xl font-bold text-center text-transparent lg:text-left sm:text-4xl md:text-5xl animate-gradient gradient-text">
+          <div className="text-3xl font-black text-center text-transparent lg:text-left sm:text-4xl md:text-5xl animate-gradient gradient-text">
             <div className="h-14">
               <ReactTyped
                 strings={["Welcome Back!", "Start Practicing Now!"]}
-                typeSpeed={80}
+                typeSpeed={100}
                 backSpeed={60}
                 startDelay={500}
                 showCursor={false}
@@ -121,17 +121,24 @@ const Home = React.memo(() => {
               }}
               className="relative group lg:col-span-3"
             >
-              <div className="relative z-10 h-full p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+              <div
+                className={`relative z-10 h-full p-4 transition-all duration-200 transform ${
+                  isPro
+                    ? "border-2 hover:border-green-400 border-gray-400"
+                    : "border hover:border-gray-300 border-gray-400"
+                } rounded-lg shadow-lg bg-gray-900 group-hover:bg-gray-950 border-gray-500 sm:p-6 group-hover:shadow-2xl`}
+              >
+                {/* Rest of the component */}
                 <h2 className="text-xl font-semibold text-green-300 transition-all duration-200 sm:text-2xl group-hover:text-green-400">
-                  Practice Problems
+                  Problems
                 </h2>
-                <p className="mt-2 font-thin">
+                <p className="mt-2 font-light">
                   Access a variety of quant interview problems to improve your
                   skills.
                 </p>
                 <Link
                   to="/practice-problems"
-                  className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-green-500 shadow-sm hover:scale-105 hover:text-white hover:bg-green-400 rounded-xl hover:shadow-lg group/link"
+                  className="inline-block px-4 py-2 mt-4 font-bold text-green-400 bg-transparent border-2 border-green-400 rounded-lg shadow-sm hover:text-black hover:bg-green-400 hover:shadow-lg group/link"
                 >
                   Start Practicing
                   <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
@@ -146,11 +153,18 @@ const Home = React.memo(() => {
               }}
               className="relative group lg:col-span-2"
             >
-              <div className="relative z-10 p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+              <div
+                className={`relative z-10 h-full p-4 transition-all duration-200 transform ${
+                  isPro
+                    ? "border-2 hover:border-blue-400 border-gray-400"
+                    : "border hover:border-gray-300 border-gray-400"
+                } rounded-lg shadow-lg bg-gray-900 group-hover:bg-gray-950 border-gray-500 sm:p-6 group-hover:shadow-2xl`}
+              >
+                {" "}
                 <h2 className="text-xl font-semibold text-blue-400 transition-all duration-200 group-hover:text-blue-500 sm:text-2xl">
                   Progress Tracker
                 </h2>
-                <p className="mt-2 font-thin text-left">
+                <p className="mt-2 font-light text-left">
                   {problemsCompleted === 0 ? (
                     <span>
                       No problems completed yet. View practice problems to get
@@ -170,7 +184,7 @@ const Home = React.memo(() => {
                 </p>
                 <Link
                   to="/progress"
-                  className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-blue-500 shadow-sm hover:scale-105 hover:text-white hover:bg-blue-400 rounded-xl hover:shadow-lg group/link"
+                  className="inline-block px-4 py-2 mt-4 font-bold text-blue-400 bg-transparent border-2 border-blue-400 rounded-lg shadow-sm hover:text-black hover:bg-blue-400 hover:shadow-lg group/link"
                 >
                   View Progress
                   <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
@@ -186,16 +200,23 @@ const Home = React.memo(() => {
                 }}
                 className="relative group lg:col-span-2"
               >
-                <div className="relative z-10 p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+                <div
+                  className={`relative z-10 h-full p-4 transition-all duration-200 transform ${
+                    isPro
+                      ? "border-2 hover:border-purple-400 border-gray-400"
+                      : "border hover:border-gray-300 border-gray-400"
+                  } rounded-lg shadow-lg bg-gray-900 group-hover:bg-gray-950 border-gray-500 sm:p-6 group-hover:shadow-2xl`}
+                >
+                  {" "}
                   <h2 className="text-xl font-semibold text-purple-400 transition-all duration-200 sm:text-2xl group-hover:text-purple-500">
-                    Performance Analytics
+                    Analytics
                   </h2>
-                  <p className="mt-2 font-thin">
+                  <p className="mt-2 font-light">
                     Track your performance and identify areas for improvement.
                   </p>
                   <Link
                     to="/analytics"
-                    className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-purple-500 shadow-sm hover:scale-105 hover:text-white hover:bg-purple-400 rounded-xl hover:shadow-lg group/link"
+                    className="inline-block px-4 py-2 mt-4 font-bold text-purple-400 bg-transparent border-2 border-purple-400 rounded-lg shadow-sm hover:text-black hover:bg-purple-400 hover:shadow-lg group/link"
                   >
                     View Analytics
                     <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
@@ -212,17 +233,24 @@ const Home = React.memo(() => {
                 }}
                 className="relative group lg:col-span-3"
               >
-                <div className="relative z-10 h-full p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+                <div
+                  className={`relative z-10 h-full p-4 transition-all duration-200 transform ${
+                    isPro
+                      ? "border-2 hover:border-sky-400 border-gray-400"
+                      : "border hover:border-gray-300 border-gray-400"
+                  } rounded-lg shadow-lg bg-gray-900 group-hover:bg-gray-950 border-gray-500 sm:p-6 group-hover:shadow-2xl`}
+                >
+                  {" "}
                   <h2 className="text-xl font-semibold transition-all duration-200 text-sky-300 sm:text-2xl group-hover:text-sky-400">
-                    Application Tracker
+                    Applications
                   </h2>
-                  <p className="mt-2 font-thin">
+                  <p className="mt-2 font-light">
                     Keep track of your internship/job applications and upcoming
                     interviews.
                   </p>
                   <Link
                     to="/applications"
-                    className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 shadow-sm bg-sky-500 hover:scale-105 hover:text-white hover:bg-sky-400 rounded-xl hover:shadow-lg group/link"
+                    className="inline-block px-4 py-2 mt-4 font-bold bg-transparent border-2 rounded-lg shadow-sm text-sky-400 border-sky-400 hover:text-black hover:bg-sky-400 hover:shadow-lg group/link"
                   >
                     View Applications
                     <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />
@@ -238,16 +266,23 @@ const Home = React.memo(() => {
               }}
               className="relative group lg:col-span-5"
             >
-              <div className="relative z-10 p-4 transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 hover:border-gray-300 sm:p-6 group-hover:shadow-2xl">
+              <div
+                className={`relative z-10 h-full p-4 transition-all duration-200 transform ${
+                  isPro
+                    ? "border-2 hover:border-yellow-400 border-gray-400"
+                    : "border hover:border-gray-300 border-gray-400"
+                } rounded-lg shadow-lg bg-gray-900 group-hover:bg-gray-950 border-gray-500 sm:p-6 group-hover:shadow-2xl`}
+              >
+                {" "}
                 <h2 className="text-xl font-semibold text-yellow-400 transition-all duration-200 sm:text-2xl group-hover:text-yellow-500">
                   Profile Settings
                 </h2>
-                <p className="mt-2 font-thin">
+                <p className="mt-2 font-light">
                   Update your profile information and account settings.
                 </p>
                 <Link
                   to="/profile"
-                  className="inline-block px-4 py-2 mt-4 font-bold text-black transition-all duration-300 bg-yellow-500 shadow-sm hover:scale-105 hover:text-white hover:bg-yellow-400 rounded-xl hover:shadow-lg group/link"
+                  className="inline-block px-4 py-2 mt-4 font-bold text-yellow-500 bg-transparent border-2 border-yellow-500 rounded-lg shadow-sm hover:text-black hover:bg-yellow-500 hover:shadow-lg group/link"
                 >
                   View Profile
                   <FaArrowRightLong className="inline-block ml-2 group-hover:scale-110 group-hover:-rotate-45 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:rotate-45 arrow-animation" />

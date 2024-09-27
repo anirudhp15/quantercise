@@ -29,6 +29,9 @@ const categories = [
       "Combinatorics",
       "Multiple Integrals",
       "Differential Equations",
+      "Linear Algebra",
+      "Fourier Transforms",
+      "Stochastic Calculus",
     ],
   },
   {
@@ -48,6 +51,11 @@ const categories = [
       "Hash Tables",
       "Recursion",
       "BFS & DFS",
+      "Linked Lists",
+      "Stacks & Queues",
+      "Heaps",
+      "Tries",
+      "Segment Trees",
     ],
   },
   {
@@ -67,6 +75,9 @@ const categories = [
       "Options & Futures",
       "Derivatives Pricing",
       "Factor Investing",
+      "Risk Management",
+      "Financial Statements",
+      "Corporate Finance",
     ],
   },
   {
@@ -84,6 +95,12 @@ const categories = [
       "Arithmetic Progressions",
       "Geometric Progressions",
       "Game Theory",
+      "Puzzles",
+      "Riddles",
+      "Brain Teasers",
+      "Logic Gates",
+      "Boolean Algebra",
+      "Truth Tables",
     ],
   },
 ];
@@ -132,9 +149,9 @@ const Topics = React.memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={controls}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="relative pt-4 text-3xl font-bold text-transparent z-2 md:pb-8 sm:text-4xl md:text-5xl gradient-text animate-gradient"
+            className="relative pt-4 text-3xl font-black text-transparent z-2 md:pb-8 sm:text-4xl md:text-5xl gradient-text animate-gradient"
           >
-            Areas of Focus
+            <span className="font-bold text-white"> Areas of</span> Focus
           </motion.h2>
         </div>
         <motion.p
@@ -179,7 +196,7 @@ const Topics = React.memo(() => {
                           index % 2 === 0 ? "left-align" : "right-align"
                         }`}
                       >
-                        <p className="font-extralight">{subtopic}</p>
+                        <p className="font-thin">{subtopic}</p>
                       </div>
                     ))}
                 </div>

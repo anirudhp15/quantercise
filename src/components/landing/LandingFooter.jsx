@@ -67,32 +67,32 @@ const LandingFooter = ({ onJoinClick }) => {
       initial="hidden"
       animate="visible"
       variants={footerVariants}
-      className="relative bottom-0 z-10 w-full py-8 text-gray-300 border-t-4 border-gray-700 bg-gray-950"
+      className="relative bottom-0 z-10 w-full pt-8 pb-4 text-gray-300 transition-all duration-100 border-t-4 border-gray-700 bg-gray-950 xl:hover:border-green-400"
     >
       <div
         id="landingfooter"
-        className="flex flex-col items-center justify-between w-[90%] mx-auto space-y-8 lg:flex-row lg:space-y-0"
+        className="flex flex-col items-center justify-between mx-auto space-y-8 md:px-32 lg:flex-row lg:space-y-0"
       >
         <motion.div
           initial="hidden"
           animate="visible"
           variants={footerVariants}
-          className="flex flex-col items-center space-y-4 lg:items-start"
+          className="flex flex-col items-center space-y-6 lg:items-start"
         >
           <RouterLink
             to="/landing"
-            className="text-xl font-bold text-green-400 transition duration-300 hover:text-green-200"
+            className="text-xl font-black text-green-400 transition duration-100 hover:text-green-200"
           >
             Quantercise
           </RouterLink>
-          <p className="pb-4 text-sm text-gray-400">Stay Sharpe.</p>
+          <p className="text-sm text-gray-400">Stay Sharpe.</p>
           <div className="flex flex-row items-center mt-4 space-x-8 lg:items-start">
             <ScrollLink
               to="intro"
               smooth={true}
               duration={800}
               onJoinClick={onJoinClick}
-              className="text-sm text-gray-400 transition duration-300 hover:text-white hover:cursor-pointer"
+              className="p-1 text-sm font-normal text-gray-300 transition-all duration-100 rounded-lg hover:font-semibold hover:text-black hover:scale-105 hover:bg-gray-300 hover:cursor-pointer"
             >
               Join Now
             </ScrollLink>
@@ -100,7 +100,7 @@ const LandingFooter = ({ onJoinClick }) => {
               to="concepts"
               smooth={true}
               duration={800}
-              className="text-sm text-gray-400 transition duration-300 hover:text-white hover:cursor-pointer"
+              className="p-1 text-sm font-normal text-gray-300 transition-all duration-100 rounded-lg hover:font-semibold hover:text-black hover:scale-105 hover:bg-gray-300 hover:cursor-pointer"
             >
               Concepts
             </ScrollLink>
@@ -108,7 +108,7 @@ const LandingFooter = ({ onJoinClick }) => {
               to="pricing"
               smooth={true}
               duration={800}
-              className="text-sm text-gray-400 transition duration-300 hover:text-white hover:cursor-pointer"
+              className="p-1 text-sm font-normal text-gray-300 transition-all duration-100 rounded-lg hover:font-semibold hover:text-black hover:scale-105 hover:bg-gray-300 hover:cursor-pointer"
             >
               Pricing
             </ScrollLink>
@@ -130,7 +130,7 @@ const LandingFooter = ({ onJoinClick }) => {
                 href="https://github.com/anirudhp15"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition duration-200 text-github hover:text-github-hover"
+                className="hover:text-[#181717] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
               >
                 <FaGithub size={24} />
               </a>
@@ -138,7 +138,7 @@ const LandingFooter = ({ onJoinClick }) => {
                 href="https://www.linkedin.com/company/quantercise"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition duration-200 text-linkedin hover:text-linkedin-hover"
+                className="hover:text-[#0A66C2] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
               >
                 <FaLinkedin size={24} />
               </a>
@@ -146,7 +146,7 @@ const LandingFooter = ({ onJoinClick }) => {
                 href="https://www.youtube.com/channel/UCOgvBdaN7lrWmgbf_wD8zyw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition duration-200 text-youtube hover:text-youtube-hover"
+                className="hover:text-[#FF0000] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
               >
                 <FaYoutube size={24} />
               </a>
@@ -154,7 +154,7 @@ const LandingFooter = ({ onJoinClick }) => {
                 href="https://www.instagram.com/anirudhp15/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition duration-200 text-instagram hover:text-instagram-hover"
+                className="hover:text-[#E4405F] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
               >
                 <FaInstagram size={24} />
               </a>
@@ -162,7 +162,7 @@ const LandingFooter = ({ onJoinClick }) => {
                 href="https://x.com/quantercise"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition duration-200 text-twitter hover:text-twitter-hover"
+                className="hover:text-[#1DA1F2] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
               >
                 <FaXTwitter size={24} />
               </a>

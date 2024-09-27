@@ -29,11 +29,11 @@ const Profile = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`pt-6 text-4xl font-bold ${
+          className={`pt-6 text-4xl font-black ${
             isPro ? "text-blue-400" : "text-green-400"
           }`}
         >
-          My Profile
+          Profile
         </motion.h1>
         <motion.div
           initial={{ opacity: 0 }}
@@ -43,20 +43,21 @@ const Profile = () => {
         >
           <Link
             to="/home"
-            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
+            className={`flex items-center px-2 py-1 text-sm font-semibold group border-2 rounded-lg group hover:text-black ${
               isPro
                 ? "text-blue-400 border-blue-400 hover:bg-blue-400"
                 : "text-green-400 border-green-400 hover:bg-green-400"
             }`}
           >
-            <FaArrowLeftLong className="mr-2" /> Home
+            <FaArrowLeftLong className="mr-2 transition-all duration-200 group-hover:-translate-x-1" />{" "}
+            Home
           </Link>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
           className="p-8 transition-all duration-200 border-2 border-gray-700 rounded-lg shadow-lg bg-gray-950 hover:border-gray-500"
         >
           <div className="flex flex-col items-center space-y-6 sm:flex-row sm:space-x-6 sm:space-y-0">
