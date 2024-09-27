@@ -101,7 +101,7 @@ const PerformanceAnalytics = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`pt-6 text-4xl font-bold ${
+          className={`pt-6 text-4xl font-black ${
             isPro ? "text-blue-400" : "text-green-400"
           }`}
         >

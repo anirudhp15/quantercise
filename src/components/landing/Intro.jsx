@@ -139,7 +139,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 className="pt-32 text-3xl font-bold xl:pt-16 lg:pb-4 sm:text-5xl md:text-6xl"
               >
                 Welcome to{" "}
-                <span className="block text-5xl font-bold text-transparent sm:pt-12 gradient-text animate-gradient sm:inline md:text-7xl">
+                <span className="block text-5xl font-black text-transparent sm:pt-12 gradient-text animate-gradient sm:inline md:text-7xl">
                   Quantercise
                 </span>
               </motion.h1>
@@ -201,11 +201,11 @@ const Intro = React.memo(({ triggerBounce }) => {
                   />
                   <motion.button
                     type="submit"
-                    className={`w-auto px-6 py-2 text-lg font-bold text-black transition-all duration-200 bg-green-400  shadow-lg whitespace-nowrap lg:mt-0 ${
+                    className={`w-auto px-6 py-2 text-lg font-bold text-green-400 border-2 border-green-400 rounded-lg hover:bg-green-400 shadow-lg whitespace-nowrap lg:mt-0 ${
                       triggerBounce
                         ? "animate-bounce outline-2 outline outline-offset-4 outline-green-400"
                         : ""
-                    } hover:scale-105 group hover:bg-green-500 hover:text-white hover:shadow-xl`}
+                    } hover:scale-105 group hover:bg-green-500 hover:text-black hover:shadow-xl`}
                   >
                     Notify Me
                     <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -258,7 +258,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     animate={{ clipPath: "inset(0 0 0 0)" }}
                     transition={{ duration: 1.5, ease: "easeIn", delay: 2.5 }}
                   >
-                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-300 rotate-90 lg:block" />
+                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-400 rotate-90 lg:block" />
                   </motion.div>
                 </div>
                 <div className="flex items-start justify-center space-x-4 lg:justify-end">
@@ -267,7 +267,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     animate={{ clipPath: "inset(0 0 0 0)" }}
                     transition={{ duration: 1.5, delay: 2.7 }}
                   >
-                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-300 -rotate-90 lg:block" />
+                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-400 -rotate-90 lg:block" />
                   </motion.div>
 
                   <motion.div

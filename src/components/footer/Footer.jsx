@@ -1,12 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  FaGithub,
-  FaLinkedin,
-  FaYoutube,
-  FaInstagram,
-  FaXTwitter,
-} from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { useAuth } from "../../contexts/authContext";
 import { motion } from "framer-motion";
 
@@ -52,7 +47,7 @@ const Footer = () => {
             <motion.div variants={linkVariants}>
               <Link
                 to="/landing"
-                className={`text-xl font-bold transition duration-300 ${
+                className={`text-xl font-black transition duration-300 ${
                   isPro
                     ? "text-blue-400 hover:text-blue-200"
                     : "text-green-400 hover:text-green-200"
@@ -110,7 +105,7 @@ const Footer = () => {
               href="https://github.com/anirudhp15"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="hover:text-[#181717] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
             >
               <FaGithub size={24} />
             </a>
@@ -118,7 +113,7 @@ const Footer = () => {
               href="https://www.linkedin.com/in/anirudh-pottammal-01b186216/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="hover:text-[#0A66C2] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
             >
               <FaLinkedin size={24} />
             </a>
@@ -126,15 +121,15 @@ const Footer = () => {
               href="https://www.youtube.com/channel/UCOgvBdaN7lrWmgbf_wD8zyw"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="hover:text-[#FF0000] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
             >
               <FaYoutube size={24} />
             </a>
             <a
-              href="https://www.instagram.com/anirudhp15/"
+              href="https://www.instagram.com/quantercise/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="hover:text-[#E4405F] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
             >
               <FaInstagram size={24} />
             </a>
@@ -142,7 +137,7 @@ const Footer = () => {
               href="https://x.com/quantercise"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 transition duration-300 hover:text-white"
+              className="hover:text-[#1DA1F2] hover:bg-white rounded-lg p-1 transition-all duration-100 hover:scale-110"
             >
               <FaXTwitter size={24} />
             </a>

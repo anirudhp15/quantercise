@@ -251,7 +251,7 @@ const Applications = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`mb-6 ml-8 text-4xl font-bold text-left ${
+          className={`mb-6 ml-8 text-4xl font-black text-left ${
             isPro
               ? "text-blue-400 hover:text-blue-300"
               : "text-green-400 hover:text-green-300"

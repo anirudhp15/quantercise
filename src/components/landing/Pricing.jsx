@@ -25,13 +25,15 @@ const PriceCard = React.memo(
     return (
       <div
         className={`relative group w-full max-w-lg p-6 transition-all duration-300 border border-gray-500 bg-gray-950 rounded-md hover:border-gray-300 ${
-          isAnnual ? "scale-[1.01] shadow-lg" : ""
+          isAnnual ? "scale-[1.00] shadow-lg" : "scale-[0.99]"
         }`}
       >
         {badgeText && (
           <div
-            className={`absolute top-0 right-0 px-3 py-1 text-xs font-bold text-black transition-all duration-200 rounded-tr-sm group-hover:text-white rounded-bl-xl ${
-              title == "Pro" ? "bg-blue-400" : "bg-green-400"
+            className={`absolute top-0 right-0 px-3 py-1 text-xs font-semibold transition-all duration-200 rounded-tr-sm group-hover:text-black rounded-bl-xl ${
+              title == "Pro" || title == "Pro Yearly"
+                ? "group-hover:bg-blue-400 border border-t-0 border-r-0 border-gray-500 text-blue-400 group-hover:border-blue-400"
+                : "group-hover:bg-green-400 border border-t-0 border-r-0 border-gray-500 text-green-400 group-hover:border-green-400"
             }`}
           >
             {badgeText}
@@ -126,19 +128,25 @@ const Pricing = () => {
         className="relative min-h-screen p-16 my-auto text-gray-300 lg:p-32 lg:pb-48"
       >
         <div className="mx-auto text-center">
-          <h2 className="relative py-8 text-4xl font-bold text-transparent z-2 md:pb-12 md:text-5xl gradient-text animate-gradient">
-            Pricing Plans
+          <h2 className="relative py-8 text-4xl font-black text-transparent z-2 md:pb-12 md:text-5xl gradient-text animate-gradient">
+            Pricing
           </h2>
           <p className="relative max-w-screen-lg pb-8 mx-auto text-lg font-normal text-gray-300 z-2 sm:text-xl md:text-2xl">
             All users start with our{" "}
-            <span className="font-black text-white">Free Plan</span>, with 15
+            <span className="font-black text-white">Starter Plan</span>, with 15
             free questions. For more extensive practice, choose from one of our
             plans below.
           </p>
 
           {/* Sleek Toggle Switch for Monthly/Annual Pricing */}
-          <div className="relative z-10 flex items-center justify-center mt-8 font-bold">
-            <span className="mr-4 text-gray-300">Monthly</span>
+          <div className="relative z-10 flex items-center justify-center mt-8 font-light">
+            <span
+              className={`mr-4 transition-all duration-200 ${
+                !isAnnual ? "text-green-400 font-bold" : "text-gray-400"
+              }`}
+            >
+              Monthly
+            </span>
             <div
               className={`relative inline-block w-16 h-8 rounded-full outline-offset-4 outline outline-2 hover:cursor-pointer transition-all duration-300 ${
                 isAnnual
@@ -153,14 +161,20 @@ const Pricing = () => {
                 }`}
               />
             </div>
-            <span className="ml-4 text-gray-300">Annually</span>
+            <span
+              className={`ml-4 transition-all duration-200 ${
+                isAnnual ? "text-blue-400 font-bold" : "text-gray-400"
+              }`}
+            >
+              Annually
+            </span>
           </div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center justify-center w-auto gap-2 mt-8 lg:flex-row">
           {/* Starter Plan */}
           <PriceCard
-            title="Sharpe"
+            title={isAnnual ? "Sharpe Yearly" : "Sharpe"}
             price={isAnnual ? "$49.99" : "$4.99"}
             period={isAnnual ? "/ year" : "/ month"}
             features={[
@@ -182,7 +196,7 @@ const Pricing = () => {
 
           {/* Pro Plan */}
           <PriceCard
-            title="Pro"
+            title={isAnnual ? "Pro Yearly" : "Pro"}
             price={isAnnual ? "$99.99" : "$9.99"}
             period={isAnnual ? "/ year" : "/ month"}
             features={[

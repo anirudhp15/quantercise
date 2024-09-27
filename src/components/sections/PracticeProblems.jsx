@@ -7,19 +7,29 @@ import React, {
   useMemo,
 } from "react";
 import { Link } from "react-router-dom";
+import { SlLock } from "react-icons/sl";
 import {
-  FaCalculator,
-  FaCode,
   FaCheck,
-  FaChartLine,
-  FaPuzzlePiece,
-  FaBookmark,
   FaSyncAlt,
   FaLightbulb,
   FaTimes,
   FaListAlt,
   FaLock,
+  FaThList,
+  FaTh,
 } from "react-icons/fa";
+import {
+  MdBookmark,
+  MdBookmarkAdd,
+  MdBookmarkAdded,
+  MdBookmarks,
+} from "react-icons/md";
+import { ImSigma } from "react-icons/im";
+import { TbMathMaxMin } from "react-icons/tb";
+import { AiOutlineCode } from "react-icons/ai";
+import { BsBank } from "react-icons/bs";
+import { LiaBrainSolid } from "react-icons/lia";
+import { SiLeetcode } from "react-icons/si";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { ReactTyped } from "react-typed";
 import { motion } from "framer-motion";
@@ -34,29 +44,6 @@ const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 // const YOUR_DOMAIN = "http://localhost:4242";
 
 const { Option } = Select;
-
-const categories = [
-  {
-    name: "Critical Mathematical Foundations",
-    icon: <FaCalculator className="text-4xl text-blue-300" />,
-    description: "Fundamental math concepts for quant interviews.",
-  },
-  {
-    name: "Programming and Algorithmic Thinking",
-    icon: <FaCode className="text-4xl text-sky-400" />,
-    description: "Coding technicals and algorithmic problem solving.",
-  },
-  {
-    name: "Financial Concepts and Modeling",
-    icon: <FaChartLine className="text-4xl text-blue-500" />,
-    description: "Financial ideas, theories and quantitative modeling.",
-  },
-  {
-    name: "Brain Teasers and Logical Puzzles",
-    icon: <FaPuzzlePiece className="text-4xl text-purple-500" />,
-    description: "Puzzles and brain teasers to challenge your logic.",
-  },
-];
 
 const PracticeProblems = React.memo(() => {
   const { currentUser, isPro } = useContext(AuthContext);
@@ -77,6 +64,164 @@ const PracticeProblems = React.memo(() => {
   const [selectedLayout, setSelectedLayout] = useState("Layout");
 
   const containerRef = useRef(null);
+
+  const categories = [
+    {
+      name: (
+        <span className="transition-all duration-200 group-hover/link:text-gray-500">
+          <span
+            className={`font-bold ${
+              isPro
+                ? "group-hover/link:text-gray-100 transition-all duration-200"
+                : "group-hover/link:text-green-300 transition-all duration-200"
+            }`}
+          >
+            Mathematical
+          </span>{" "}
+          Mobility
+        </span>
+      ),
+      category: "Critical Mathematical Foundations",
+      icon: (
+        <ImSigma
+          className={`text-4xl text-gray-200 transition-all duration-200 ${
+            isPro
+              ? "group-hover/link:text-gray-300"
+              : "group-hover/link:text-green-300"
+          }`}
+        />
+      ),
+      description: (
+        <span>
+          Fundamental{" "}
+          <span className="font-normal text-blue-300 transition-all duration-200 group-hover/link:text-blue-200">
+            math
+          </span>{" "}
+          concepts for quant roles.
+        </span>
+      ),
+      isPro: false,
+    },
+    {
+      name: (
+        <span className="transition-all duration-200 group-hover/link:text-gray-500">
+          <span
+            className={`font-bold ${
+              isPro
+                ? "group-hover/link:text-gray-100 transition-all duration-200"
+                : "group-hover/link:text-green-300 transition-all duration-200"
+            }`}
+          >
+            Programming
+          </span>{" "}
+          Plyometrics
+        </span>
+      ),
+      category: "Programming and Algorithmic Thinking",
+      icon: (
+        <SiLeetcode
+          className={`text-4xl text-gray-200 transition-all duration-200 ${
+            isPro
+              ? "group-hover/link:text-gray-300"
+              : "group-hover/link:text-green-300"
+          }`}
+        />
+      ),
+      description: (
+        <span>
+          Coding{" "}
+          <span className="font-normal transition-all duration-200 text-sky-400 group-hover/link:text-sky-300">
+            technicals
+          </span>{" "}
+          and{" "}
+          <span className="font-normal transition-all duration-200 text-sky-400 group-hover/link:text-sky-300">
+            algorithmic
+          </span>{" "}
+          problem solving.
+        </span>
+      ),
+      isPro: true, // locked for non-pro users
+    },
+    {
+      name: (
+        <span className="transition-all duration-200 group-hover/link:text-gray-500">
+          <span
+            className={`font-bold ${
+              isPro
+                ? "group-hover/link:text-gray-100 transition-all duration-200"
+                : "group-hover/link:text-green-300 transition-all duration-200"
+            }`}
+          >
+            Financial
+          </span>{" "}
+          Fitness
+        </span>
+      ),
+      category: "Financial Concepts and Modeling",
+      icon: (
+        <BsBank
+          className={`text-4xl text-gray-200 transition-all duration-200 ${
+            isPro
+              ? "group-hover/link:text-gray-300"
+              : "group-hover/link:text-green-300"
+          }`}
+        />
+      ),
+      description: (
+        <span>
+          Financial{" "}
+          <span className="font-normal text-green-300 transition-all duration-200 group-hover/link:text-green-200">
+            derivatives
+          </span>{" "}
+          and{" "}
+          <span className="font-normal text-green-300 transition-all duration-200 group-hover/link:text-green-200">
+            portfolio theory
+          </span>
+          .
+        </span>
+      ),
+      isPro: false,
+    },
+    {
+      name: (
+        <span className="transition-all duration-200 group-hover/link:text-gray-500">
+          <span
+            className={`font-bold ${
+              isPro
+                ? "group-hover/link:text-gray-100 transition-all duration-200"
+                : "group-hover/link:text-green-300 transition-all duration-200"
+            }`}
+          >
+            Critical Thinking
+          </span>{" "}
+          Cardio
+        </span>
+      ),
+      category: "Brain Teasers and Logical Puzzles",
+      icon: (
+        <LiaBrainSolid
+          className={`text-4xl text-gray-200 transition-all duration-200 ${
+            isPro
+              ? "group-hover/link:text-gray-300"
+              : "group-hover/link:text-green-300"
+          }`}
+        />
+      ),
+      description: (
+        <span>
+          <span className="font-normal text-purple-300 transition-all duration-200 group-hover/link:text-purple-200">
+            Puzzles
+          </span>{" "}
+          and{" "}
+          <span className="font-normal text-purple-300 transition-all duration-200 group-hover/link:text-purple-200">
+            brain teasers
+          </span>{" "}
+          to challenge your logic.
+        </span>
+      ),
+      isPro: false,
+    },
+  ];
 
   // Fetch the MongoDB ID based on Firebase UID or Google ID
   useEffect(() => {
@@ -346,7 +491,7 @@ const PracticeProblems = React.memo(() => {
       >
         <Link
           to="/home"
-          className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black text-green-400 border-green-400 hover:bg-green-400`}
+          className={`flex items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group hover:text-black text-green-400 border-green-400 hover:bg-green-400`}
         >
           <FaArrowLeftLong className="ml-1 mr-2 transition-all duration-200 group-hover:-translate-x-1" />
           Home
@@ -354,20 +499,43 @@ const PracticeProblems = React.memo(() => {
       </motion.div>
       <div className="grid max-w-screen-lg grid-cols-1 gap-6 mx-auto md:grid-cols-2">
         {categories.map((category) => (
-          <div className="relative group" key={category.name}>
+          <div
+            className={`relative group ${
+              category.isPro ? "cursor-not-allowed" : ""
+            }`}
+            key={category.name}
+          >
             <button
-              className="relative z-10 w-full p-8 font-bold transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg sm:p-10 bg-gray-950 hover:border-gray-300 group-hover:shadow-2xl"
-              onClick={() => handleCategoryClick(category.name)}
+              className={`relative z-10 w-full p-8 font-bold transition-all duration-200 transform border-2 border-gray-500 rounded-lg shadow-lg bg-gray-950 sm:p-10 group-hover:shadow-2xl group/link ${
+                isPro && !category.isPro
+                  ? "hover:border-green-400"
+                  : "hover:border-gray-300"
+              }`}
+              onClick={() =>
+                category.isPro ? null : handleCategoryClick(category.category)
+              }
+              disabled={category.isPro}
             >
-              <div className="flex items-center justify-start space-x-4">
+              <div
+                className={`flex items-center text-center justify-center space-x-4 transition-all duration-200`}
+              >
                 {category.icon}
                 <div>
                   <h2 className="text-2xl">{category.name}</h2>
-                  <p className="mt-2 font-thin text-gray-300">
+                  <p className="mt-2 font-thin text-gray-300 text-md">
                     {category.description}
                   </p>
                 </div>
               </div>
+              {category.isPro && (
+                <div className="absolute inset-0 flex items-center justify-center transition-all duration-100 bg-black bg-opacity-50 rounded-lg group hover:bg-opacity-90">
+                  <SlLock className="block text-4xl text-white transition-all duration-200 shadow-xl group-hover:hidden" />
+                  <span className="absolute hidden font-semibold text-white transition-all duration-200 text-md group-hover:block">
+                    Coming Soon for{" "}
+                    <span className="font-black text-blue-400">Pro</span> users!
+                  </span>
+                </div>
+              )}
             </button>
           </div>
         ))}
@@ -379,24 +547,42 @@ const PracticeProblems = React.memo(() => {
       >
         <div className="flex flex-col justify-center w-1/2 mx-auto mt-8 space-y-4 text-center md:mx-0 md:w-full md:flex-row md:space-y-0 md:space-x-4">
           <button
-            className="h-full px-4 py-2 font-bold text-black transition-all duration-200 bg-green-500 rounded-lg hover:text-gray-300 hover:bg-green-400 hover:scale-105"
+            className="h-full px-4 py-2 font-bold text-green-400 border-2 border-green-400 rounded-lg group hover:text-black hover:bg-green-400"
             onClick={handleReviewAllClick}
           >
-            <FaListAlt className="inline-block mr-2" />
+            <>
+              <FaListAlt
+                className="inline-block mr-2 group-hover:hidden"
+                size={24}
+              />
+              <FaThList
+                className="hidden mr-2 group-hover:inline-block"
+                size={24}
+              />
+            </>
             All Problems
           </button>
           <button
-            className="h-full px-4 py-2 font-bold text-black transition-all duration-200 bg-blue-500 rounded-lg hover:text-gray-300 hover:bg-blue-400 hover:scale-105"
+            className="h-full px-4 py-2 font-bold text-blue-400 border-2 border-blue-400 rounded-lg group hover:text-black hover:bg-blue-400"
             onClick={handleBookmarkClick}
           >
-            <FaBookmark className="inline-block mr-2" />
+            <>
+              <MdBookmark
+                className="inline-block mr-2 group-hover:hidden"
+                size={24}
+              />
+              <MdBookmarks
+                className="hidden mr-2 group-hover:inline-block"
+                size={24}
+              />
+            </>
             Bookmarks
           </button>
           <button
-            className="h-full px-4 py-2 font-bold text-black transition-all duration-200 bg-purple-500 rounded-lg hover:text-gray-300 hover:bg-purple-400 hover:scale-105"
+            className="h-full px-4 py-2 font-bold text-purple-500 border-2 border-purple-500 rounded-lg hover:text-black hover:bg-purple-500 group"
             onClick={handleRefreshAllClick}
           >
-            <FaSyncAlt className="inline-block mr-2" />
+            <FaSyncAlt className="inline-block mr-2 transition-all duration-300 group-hover:rotate-180" />
             Refresh All Problems
           </button>
         </div>
@@ -414,7 +600,7 @@ const PracticeProblems = React.memo(() => {
         <div className="grid grid-cols-1 gap-6 pb-12 text-center">
           <div className="flex flex-row w-full max-w-screen-lg mx-auto my-4">
             <button
-              className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black`}
+              className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold border-2 rounded-lg group hover:text-black`}
               onClick={handleBackToCategories}
             >
               <FaArrowLeftLong className="ml-1 mr-1 transition-all duration-200 group-hover:-translate-x-2" />{" "}
@@ -514,7 +700,7 @@ const PracticeProblems = React.memo(() => {
       <div ref={containerRef}>
         <div className="flex flex-row max-w-screen-lg mx-auto my-4">
           <button
-            className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black`}
+            className={`flex items-center px-2 py-1 text-sm text-green-400 border-green-400 hover:bg-green-400 font-semibold border-2 rounded-lg group hover:text-black`}
             onClick={handleBackToCategories}
           >
             <FaArrowLeftLong className="ml-1 mr-1 transition-all duration-200 group-hover:-translate-x-2" />{" "}
@@ -616,7 +802,7 @@ const PracticeProblems = React.memo(() => {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
                   <span
-                    className={`px-2 py-1 text-xs text-black font-bold rounded ${
+                    className={`px-2 py-1 text-xs text-black font-black rounded-sm ${
                       problem.difficulty === "Easy"
                         ? "bg-green-500"
                         : problem.difficulty === "Medium"
@@ -631,7 +817,7 @@ const PracticeProblems = React.memo(() => {
                       {problem.tags.slice(0, 2).map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 text-xs font-bold text-black bg-gray-500 rounded-full whitespace-nowrap"
+                          className="px-2 py-1 text-xs font-medium text-black bg-gray-500 rounded-full whitespace-nowrap"
                         >
                           {tag}
                         </span>
@@ -650,17 +836,30 @@ const PracticeProblems = React.memo(() => {
                   )}
                 </div>
                 <button
-                  className={`p-1 rounded-full ${
+                  className={`p-1 rounded-full transition-transform duration-300 ease-in-out ${
                     bookmarkedProblems.includes(problem.id)
                       ? "text-yellow-500"
-                      : "text-gray-400"
-                  } hover:text-yellow-600 transition-all hover:scale-105 duration-300`}
+                      : "text-gray-400 hover:text-yellow-600"
+                  } hover:scale-105 group`}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleBookmarkProblem(problem.id);
                   }}
                 >
-                  <FaBookmark size={18} />
+                  {bookmarkedProblems.includes(problem.id) ? (
+                    <MdBookmarkAdded size={24} />
+                  ) : (
+                    <>
+                      <MdBookmark
+                        className="block group-hover:hidden text-24"
+                        size={24}
+                      />
+                      <MdBookmarkAdd
+                        className="hidden group-hover:block text-24"
+                        size={24}
+                      />
+                    </>
+                  )}
                 </button>
               </div>
               <div className="flex items-center justify-between">
@@ -668,11 +867,11 @@ const PracticeProblems = React.memo(() => {
                   {problem.title}
                 </h2>
                 <button
-                  className={`px-4 py-2 text-xs font-bold transition-all duration-200 ${
+                  className={`px-4 py-2 text-xs font-black ${
                     problem.completed
                       ? "bg-green-400 text-black"
                       : "bg-gray-950 text-green-400 border border-green-400 hover:bg-green-400 hover:text-black"
-                  } rounded-lg`}
+                  } rounded-md`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleSolveProblem(problem);
@@ -680,10 +879,10 @@ const PracticeProblems = React.memo(() => {
                 >
                   {problem.completed ? (
                     <span>
-                      Solved <FaCheck className="inline-block" />
+                      SOLVED <FaCheck className="inline-block" />
                     </span>
                   ) : (
-                    <span>Solve</span>
+                    <span>SOLVE</span>
                   )}
                 </button>
               </div>
@@ -934,7 +1133,7 @@ const PracticeProblems = React.memo(() => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`text-4xl max-w-screen-lg mx-auto font-bold text-green-400`}
+            className={`text-4xl max-w-screen-lg mx-auto font-black text-green-400`}
           >
             Practice Problems
             <ReactTyped

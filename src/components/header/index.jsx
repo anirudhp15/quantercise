@@ -46,6 +46,7 @@ const Header = ({ onJoinClick }) => {
   ];
 
   const landingPageLinks = [
+    { to: "problems", label: "Problems" },
     { to: "concepts", label: "Concepts" },
     { to: "pricing", label: "Pricing" },
     { to: "landingfooter", label: "Contact" },
@@ -59,11 +60,11 @@ const Header = ({ onJoinClick }) => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut", delay: 5 }}
-        className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 border-b-4 border-gray-700 shadow-2xl md:px-32 bg-gray-950"
+        className="fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 transition-all duration-100 border-b-4 border-gray-700 shadow-2xl xl:hover:border-green-400 md:px-32 bg-gray-950"
       >
         <div className="flex items-center space-x-4">
           <RouterLink
-            className={`z-10 text-xl font-bold transition duration-300 ${
+            className={`z-10 text-xl font-black transition duration-100 ${
               location.pathname === "/landing" || location.pathname === "/"
                 ? "text-green-400 hover:text-green-200"
                 : isPro
@@ -81,10 +82,10 @@ const Header = ({ onJoinClick }) => {
             landingPageLinks.map((link) => (
               <ScrollLink
                 key={link.to}
-                className={`text-sm font-semibold cursor-pointer transition duration-300 ${
+                className={`text-sm font-semibold cursor-pointer transition duration-100 ${
                   location.hash === `#${link.to}`
                     ? "text-white"
-                    : "text-gray-300 hover:text-gray-100"
+                    : "text-gray-400 hover:text-gray-100"
                 }`}
                 to={link.to}
                 smooth={true}
@@ -101,7 +102,7 @@ const Header = ({ onJoinClick }) => {
           location.pathname !== "/" ? (
             <div className="relative z-30">
               <button
-                className={`group flex rounded-lg hover:scale-105 items-center px-4 py-1 text-sm font-bold transition-all duration-200 transform border-2 ${
+                className={`group flex rounded-lg items-center px-4 py-1 text-sm font-bold transform border-2 ${
                   isPro
                     ? "border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black"
                     : "border-green-400 text-green-400 hover:bg-green-400 hover:text-black"
@@ -120,7 +121,7 @@ const Header = ({ onJoinClick }) => {
                     className={`fixed inset-0 z-50 flex flex-col items-center justify-center w-full h-full ${overlayColor}`}
                   >
                     <FaTimes
-                      className="absolute text-black cursor-pointer top-5 right-[5vw] md:right-[10vw] hover:text-gray-800"
+                      className="absolute text-black cursor-pointer top-5 right-[5vw] md:right-[10vw] hover:text-gray-700 hover:scale-105 transition-all duration-200"
                       size={30}
                       onClick={() => setProfileOpen(false)}
                     />
@@ -146,7 +147,7 @@ const Header = ({ onJoinClick }) => {
                     {/* Toggle Low Detail Mode inside settings */}
                     <div className="flex flex-row mt-4 space-x-4">
                       <button
-                        className={`flex items-center px-4 py-2 text-sm font-bold text-center transition-all duration-300 bg-gray-950 rounded-lg hover:bg-gray-700 ${
+                        className={`flex items-center px-4 py-2 text-sm font-bold text-center transition-all duration-200 bg-gray-950 rounded hover:bg-gray-700 ${
                           isPro ? "text-blue-400" : "text-green-400"
                         }`}
                         onClick={toggleLowDetailMode}
@@ -174,8 +175,8 @@ const Header = ({ onJoinClick }) => {
                           });
                           setProfileOpen(false);
                         }}
-                        className={`flex items-center px-4 py-2 text-sm font-bold text-center transition-all duration-300 bg-white rounded-lg hover:bg-gray-300 ${
-                          isPro ? "text-blue-400" : "text-green-400"
+                        className={`flex items-center px-4 py-2 text-sm text-black font-bold text-center transition-all duration-200 bg-white rounded hover:bg-gray-300 ${
+                          isPro ? "hover:text-blue-400" : "hover:text-green-400"
                         }`}
                       >
                         Logout
