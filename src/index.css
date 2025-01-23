@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
+body,
+html {
   overflow-x: hidden;
   background-color: black;
   margin: 0;
@@ -70,7 +71,6 @@ body, html {
 .auth-buttons:hover .login-button:hover + .register-button {
   background-color: #86efac; /* Tailwind color green-400 */
   color: #86efac;
-
 }
 
 .auth-buttons:hover .register-button:hover + .login-button {
@@ -97,17 +97,24 @@ body, html {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.1); /* Slightly translucent to see the blur effect */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Slightly translucent to see the blur effect */
   z-index: 11; /* Ensure it is above all content but below the settings menu */
   pointer-events: none; /* Allows clicks to pass through the overlay */
   backdrop-filter: blur(10px); /* Apply the blur effect */
 }
 
-
-
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
@@ -140,7 +147,15 @@ body, html {
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #4ade80, #0073ff, #835aff, #34D399, #0073ff, #835aff);
+  background: linear-gradient(
+    90deg,
+    #4ade80,
+    #0073ff,
+    #835aff,
+    #34d399,
+    #0073ff,
+    #835aff
+  );
   background-size: 300% 300%;
   background-clip: text;
 }
@@ -223,7 +238,6 @@ nav.w-0 {
 
 .wrapper {
   position: relative;
-  z-index: 10;
   margin-top: 5rem;
   overflow: hidden;
   mask-image: linear-gradient(
@@ -234,7 +248,7 @@ nav.w-0 {
     rgba(0, 0, 0, 0.4)
   );
   border-radius: 1.5rem;
-  border: 2px solid #6B7280;
+  border: 2px solid #6b7280;
 }
 
 .divider {
@@ -242,17 +256,202 @@ nav.w-0 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0));
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.5),
+    rgba(0, 0, 0, 0)
+  );
   margin-top: 20px;
 }
 
-/* The wrapper for the Home component */
-.home-wrapper {
-  min-height: calc(100vh - 200px); /* 100vh minus header and footer height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.custom-shape-divider-bottom-1733168517 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
   width: 100%;
- 
-  padding: 20px; /* Optional: Add some padding */
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1733168517 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 123px;
+}
+
+.custom-shape-divider-bottom-1733168517 .shape-fill {
+  fill: #1f2937;
+}
+
+.custom-shape-divider-top-1733168917 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1733168917 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 100px;
+}
+
+.custom-shape-divider-top-1733168917 .shape-fill {
+  fill: #1f2937;
+}
+
+.custom-shape-divider-top-1733341902 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1733341902 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 191px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1733341902 .shape-fill {
+  fill: #1f2937;
+}
+
+.custom-shape-divider-bottom-1733342128 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1733342128 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 150px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1733342128 .shape-fill {
+  fill: #111827;
+}
+
+.custom-shape-divider-top-1735112865 {
+  position: absolute;
+
+  z-index: 10;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1735112865 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 150px;
+}
+
+.custom-shape-divider-top-1735112865 .shape-fill {
+  fill: #111827;
+}
+
+.custom-shape-divider-bottom-1736546061 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1736546061 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 500px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1736546061 .shape-fill {
+  fill: #1f2937;
+}
+
+.custom-shape-divider-top-1736546609 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1736546609 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 500px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1736546609 .shape-fill {
+  fill: #374151;
+}
+
+.custom-shape-divider-bottom-1736546061x {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1736546061x svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 500px;
+}
+
+.custom-shape-divider-bottom-1736546061x .shape-fill {
+  fill: #1f2937;
+}
+
+.custom-shape-divider-top-1736546609x {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1736546609x svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 500px;
+}
+
+.custom-shape-divider-top-1736546609x .shape-fill {
+  fill: #374151;
 }

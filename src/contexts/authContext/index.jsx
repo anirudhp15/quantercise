@@ -1,15 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../../firebase/firebase";
-import {
-  onAuthStateChanged,
-  updateProfile as firebaseUpdateProfile,
-} from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
 
-// Define your domain
-const YOUR_DOMAIN = process.env.YOUR_DOMAIN || "http://localhost:4242";
-
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -17,98 +11,80 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [isEmailUser, setIsEmailUser] = useState(false);
-  const [isPro, setIsPro] = useState(false); // Track Pro status
+  const [isPro, setIsPro] = useState(false); // Track Pro status globally
   const [loading, setLoading] = useState(true);
+  const [registrationStep, setRegistrationStep] = useState("auth"); // "auth", "mongo", "plan"
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, initializeUser);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          // Fetch user data, including registrationStep, from your backend
+          const { data } = await axios.get(`/api/user/${user.uid}`);
+          setCurrentUser(user);
+          setRegistrationStep(data.registrationStep || "auth"); // Default to "auth" if not set
+          console.log("User data fetched:", data);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          setCurrentUser(null);
+          setRegistrationStep("auth");
+        }
+      } else {
+        setCurrentUser(null);
+        setRegistrationStep("auth");
+      }
+      setLoading(false);
+    });
+
     return unsubscribe;
   }, []);
 
-  async function initializeUser(user) {
-    if (user) {
-      setCurrentUser({ ...user });
+  const registerUserInMongoDB = async (firebaseUser, password) => {
+    try {
+      // Register user in MongoDB
+      const response = await axios.post(`/api/auth/register`, {
+        email: firebaseUser.email,
+        password,
+        displayName: firebaseUser.displayName,
+        firebaseUid: firebaseUser.uid,
+        profilePicture: firebaseUser.photoURL,
+        registrationStep: "mongo", // Move to the next step
+        isPro: false,
+        currentPlan: "free-plan-id", // Assign default free plan
+      });
 
-      const isEmail = user.providerData.some(
-        (provider) => provider.providerId === "password"
-      );
-      setIsEmailUser(isEmail);
-
-      try {
-        // Get the MongoDB ID based on the Firebase UID or Google ID
-        const { data: mongoIdResponse } = await axios.get(
-          `${YOUR_DOMAIN}/api/user/mongoId/${user.uid}`
-        );
-        const mongoId = mongoIdResponse.mongoId;
-
-        // Fetch user data from MongoDB using the MongoDB ID
-        const { data: userResponse } = await axios.get(
-          `${YOUR_DOMAIN}/api/user/${mongoId}`
-        );
-
-        // Set the Pro status based on the response
-        if (userResponse) {
-          setIsPro(userResponse.isPro || false);
-        } else {
-          // If the user doesn't exist in MongoDB, create a new entry
-          await axios.post(`${YOUR_DOMAIN}/api/user`, {
-            firebaseUid: user.uid,
-            email: user.email,
-            isPro: false,
-            signInCount: 1,
-          });
-        }
-
-        // Increment sign-in count in MongoDB
-        await axios.put(`${YOUR_DOMAIN}/api/user/${mongoId}/signin`);
-      } catch (error) {
-        console.error(
-          "Error fetching user data or incrementing sign-in count:",
-          error
-        );
-      }
-
-      setUserLoggedIn(true);
-    } else {
-      setCurrentUser(null);
-      setUserLoggedIn(false);
-      setIsPro(false);
-    }
-
-    setLoading(false);
-  }
-
-  const updateProfile = async ({ displayName, photoURL }) => {
-    if (auth.currentUser) {
-      await firebaseUpdateProfile(auth.currentUser, { displayName, photoURL });
-      setCurrentUser({ ...auth.currentUser, displayName, photoURL });
-
-      // Optionally update MongoDB with the new display name and photo URL
-      try {
-        const { data: mongoIdResponse } = await axios.get(
-          `${YOUR_DOMAIN}/api/user/mongoId/${auth.currentUser.uid}`
-        );
-        const mongoId = mongoIdResponse.mongoId;
-
-        await axios.put(`${YOUR_DOMAIN}/api/user/${mongoId}`, {
-          displayName,
-          photoURL,
-        });
-      } catch (error) {
-        console.error("Error updating profile in MongoDB:", error);
-      }
+      // Update currentUser and Pro status after registration
+      setCurrentUser((prev) => ({
+        ...prev,
+        ...response.data.user,
+      }));
+      setIsPro(false); // Default to free user after registration
+      setRegistrationStep("plan");
+    } catch (error) {
+      console.error("Error registering user in MongoDB:", error);
     }
   };
 
+  const logout = async () => {
+    await signOut(auth);
+    setCurrentUser(null);
+    setIsPro(false); // Reset Pro status on logout
+    setRegistrationStep("auth");
+  };
+
+  const isRegistrationComplete = () => registrationStep === "complete";
+
   const value = {
-    userLoggedIn,
-    isEmailUser,
     currentUser,
-    isPro,
     setCurrentUser,
-    updateProfile,
+    isPro,
+    setIsPro, // Allow dynamic updates to Pro status
+    registerUserInMongoDB,
+    logout,
+    isRegistrationComplete,
+    registrationStep,
+    setRegistrationStep,
+    userLoggedIn: !!currentUser,
   };
 
   return (

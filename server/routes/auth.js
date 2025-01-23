@@ -1,77 +1,60 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {
+  generateToken,
+  sendResetEmail,
+  findOrMergeUser,
+} = require("../utils/authUtils");
 const User = require("../models/User");
-const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const router = express.Router();
 
-// Helper function to generate JWT
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
-};
-
-// Helper function to find or create a user
-const findOrCreateUser = async ({
-  email,
-  googleId = null, // Provide default value
-  firebaseUid = null, // Provide default value
-  displayName,
-  profilePicture,
-  isPro = false,
-}) => {
-  let user;
-
-  console.log("Finding or creating user...");
-
-  if (googleId) {
-    console.log(`Looking for user with googleId: ${googleId}`);
-    user = await User.findOne({ googleId });
-  } else if (firebaseUid) {
-    console.log(`Looking for user with firebaseUid: ${firebaseUid}`);
-    user = await User.findOne({ firebaseUid });
-  } else {
-    console.log(`Looking for user with email: ${email}`);
-    user = await User.findOne({ email });
+// Forgot password endpoint
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      const resetToken = generateToken(user._id, "15m");
+      await sendResetEmail(email, resetToken);
+    }
+    res
+      .status(200)
+      .json({ message: "If the email exists, a reset link has been sent." });
+  } catch (error) {
+    console.error("Error in forgot password:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
+});
 
-  if (!user) {
-    console.log("User not found, creating a new user.");
-    user = new User({
-      email,
-      googleId,
-      firebaseUid,
-      displayName,
-      profilePicture,
-      signInCount: 1,
-      isPro,
-      lastLogin: Date.now(),
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
-  } else {
-    console.log("User found, updating user details.");
-    user.signInCount += 1;
-    user.lastLogin = Date.now();
-    user.updatedAt = Date.now();
+// Reset password endpoint
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
 
-    if (googleId && !user.googleId) user.googleId = googleId;
-    if (firebaseUid && !user.firebaseUid) user.firebaseUid = firebaseUid;
-    if (displayName && !user.displayName) user.displayName = displayName;
-    if (profilePicture && !user.profilePicture)
-      user.profilePicture = profilePicture;
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "Invalid token" });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error in reset password:", error);
+    const errorMessage =
+      error.name === "TokenExpiredError"
+        ? "Reset token has expired"
+        : "Internal server error";
+    res.status(500).json({ error: errorMessage });
   }
+});
 
-  await user.save();
-  console.log("User saved:", user);
-  return user;
-};
-
-// Google sign-in
-router.post("/google-login", async (req, res) => {
-  console.log("Received request to /google-login with data:", req.body);
-
+// Google and Firebase login
+router.post(["/google-login", "/firebase-login"], async (req, res) => {
   try {
     const { uid, email, displayName, profilePicture } = req.body;
 
@@ -79,108 +62,102 @@ router.post("/google-login", async (req, res) => {
       return res.status(400).json({ message: "Missing uid or email" });
     }
 
-    // Use the uid as googleId and handle the user creation or update
-    const user = await findOrCreateUser({
+    const user = await findOrMergeUser({
       email,
-      googleId: uid, // Treat the uid from Google as googleId in your database
+      googleId: req.path.includes("google") ? uid : null,
+      firebaseUid: req.path.includes("firebase") ? uid : null,
       displayName,
       profilePicture,
     });
 
     const token = generateToken(user._id);
     res.status(200).json({ token, user });
-    console.log("User login recorded successfully for user:", user);
   } catch (error) {
-    console.error("Error updating Google login in MongoDB", error);
+    console.error("Error during login:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Firebase login
-router.post("/firebase-login", async (req, res) => {
-  console.log("Received request to /firebase-login with data:", req.body);
-
-  try {
-    const { uid, email, displayName, profilePicture } = req.body;
-
-    if (!uid || !email) {
-      return res.status(400).json({ message: "Missing uid or email" });
-    }
-
-    const user = await findOrCreateUser({
-      email,
-      firebaseUid: uid,
-      displayName,
-      profilePicture,
-    });
-    const token = generateToken(user._id);
-    res.status(200).json({ token, user });
-    console.log("User login recorded successfully for user:", user);
-  } catch (error) {
-    console.error("Error updating user login in MongoDB:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// User registration (traditional email/password registration)
+// User registration
 router.post("/register", async (req, res) => {
-  const { email, password, session_id } = req.body;
+  const {
+    email,
+    password,
+    displayName,
+    firebaseUid,
+    googleId,
+    session_id,
+    profilePicture,
+    isPro,
+  } = req.body;
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(session_id);
-
-    if (session.payment_status !== "paid") {
-      return res
-        .status(400)
-        .json({ error: "Invalid session or payment not completed" });
-    }
-
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
+    // Check if the user already exists
+    let user = await User.findOne({ email });
+    if (user) {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Create new user and set isPro to true
-    const newUser = new User({
-      email,
-      password, // You should hash the password before saving
-      isPro: true,
-    });
+    // Optional: Validate payment status if session_id is provided
+    if (session_id) {
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+      if (session.payment_status !== "paid") {
+        return res.status(400).json({ error: "Payment not completed" });
+      }
+    }
 
-    await newUser.save();
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Log the user in (implement session or token-based login)
-    req.session.userId = newUser._id;
+    // Build the user object dynamically
+    const newUser = {
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      displayName: displayName || email.split("@")[0],
+      profilePicture: profilePicture || "",
+      isPro: !!isPro, // Default to non-pro
+      currentPlan: null,
+    };
 
-    // Redirect to home page
-    res.redirect(`${process.env.DOMAIN}/home`);
+    // Include googleId or firebaseUid only if they are provided
+    if (googleId) newUser.googleId = googleId;
+    if (firebaseUid) newUser.firebaseUid = firebaseUid;
+
+    // Create and save the user
+    user = new User(newUser);
+    await user.save();
+
+    // log user's mongoid to console
+    console.log("User's mongoId: ", user._id);
+
+    // Generate JWT for the user
+    const token = generateToken(user._id);
+
+    res
+      .status(201)
+      .json({ message: "User registered successfully", token, user });
   } catch (error) {
     console.error("Error during registration:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to register user" });
   }
 });
 
-// User login (traditional email/password login)
+// User login
 router.post("/login", async (req, res) => {
+  const { uid, email, displayName, profilePicture } = req.body;
+
   try {
-    const { uid, email, displayName, profilePicture } = req.body;
-
-    if (!uid || !email) {
-      return res.status(400).json({ message: "Missing uid or email" });
-    }
-
-    const user = await findOrCreateUser({
+    const user = await findOrMergeUser({
       email,
-      firebaseUid: uid,
+      googleId: uid,
       displayName,
       profilePicture,
     });
+
     const token = generateToken(user._id);
     res.status(200).json({ token, user });
-    console.log("User login recorded successfully for user:", user);
   } catch (error) {
-    console.error("Error updating user login in MongoDB:", error);
+    console.error("Error during login:", error);
     res.status(500).json({ error: error.message });
   }
 });

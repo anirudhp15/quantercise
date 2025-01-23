@@ -2,43 +2,19 @@ const express = require("express");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 const router = express.Router();
-
-// CREATE: Register a new user
-router.post("/register", async (req, res) => {
-  try {
-    const { email, password, displayName, profilePicture } = req.body;
-
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    user = new User({
-      email,
-      password,
-      displayName,
-      profilePicture,
-      signInCount: 0,
-    });
-
-    await user.save();
-    res.status(201).json({ message: "User registered successfully", user });
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
+const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
 // READ: Get user by ID
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
+    console.log("Fetching user with ID:", id);
 
-    const user = await User.findById(id);
+    const user = await User.findOne({
+      $or: [{ firebaseUid: id }, { googleId: id }],
+    });
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -56,11 +32,10 @@ router.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { displayName, profilePicture, email } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
+    const user = await User.findOne({
+      $or: [{ firebaseUid: id }, { googleId: id }],
+    });
 
-    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -271,6 +246,126 @@ router.put("/:id/signin", async (req, res) => {
   } catch (error) {
     console.error("Error incrementing sign-in count:", error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// UPDATE: Update user's profile color based on their UID
+router.put("/:uid/update-color", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const { profileColor } = req.body;
+
+    // Validate the color format (example for hex)
+    const isValidColor = /^#[0-9A-F]{6}$/i.test(profileColor);
+    if (!isValidColor) {
+      return res.status(400).json({ message: "Invalid color format" });
+    }
+
+    // Find user by firebaseUid or googleId
+    const user = await User.findOne({
+      $or: [{ firebaseUid: uid }, { googleId: uid }],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the profile color
+    user.profileColor = profileColor;
+    await user.save();
+
+    res.json({ message: "Profile color updated successfully", user });
+  } catch (error) {
+    console.error("Error updating profile color:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Backend route to update the registration step
+router.put("/:uid/registration-step", async (req, res) => {
+  const { uid } = req.params;
+  const { registrationStep } = req.body;
+
+  if (!["auth", "mongo", "plan", "complete"].includes(registrationStep)) {
+    return res.status(400).json({ error: "Invalid registration step." });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { firebaseUid: uid },
+      { registrationStep },
+      { new: true } // Return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "Registration step updated.", user });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update registration step." });
+  }
+});
+
+// Backend route to update the user's current plan linking it to Plan model
+router.put("/:uid/current-plan", async (req, res) => {
+  const { uid } = req.params;
+  const { currentPlan } = req.body;
+
+  try {
+    const user = await User.findOne({ firebaseUid: uid });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.currentPlan = currentPlan;
+    await user.save();
+
+    res.status(200).json({ message: "Current plan updated.", user });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update current plan." });
+  }
+});
+
+// CANCEL: Cancel user's membership
+router.post("/:uid/cancel-membership", async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    // Find the user by their Firebase UID
+    const user = await User.findOne({ firebaseUid: uid });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Check if the user has an active Stripe subscription
+    if (!user.subscriptionId) {
+      return res
+        .status(400)
+        .json({ message: "No active subscription found for this user." });
+    }
+
+    // Cancel the subscription in Stripe
+    const canceledSubscription = await stripe.subscriptions.del(
+      user.subscriptionId
+    );
+
+    // Update user fields to reflect cancellation
+    user.currentPlan = null; // Clear current plan
+    user.isPro = false; // Downgrade to free plan
+    user.subscriptionId = null; // Clear Stripe subscription ID
+    user.updatedAt = Date.now(); // Update the last modified timestamp
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Membership canceled successfully.",
+      canceledSubscription,
+    });
+  } catch (error) {
+    console.error("Error canceling membership:", error);
+    res.status(500).json({ error: "Failed to cancel membership." });
   }
 });
 

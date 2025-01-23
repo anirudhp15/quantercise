@@ -18,7 +18,7 @@ import { useAuth } from "../../contexts/authContext";
 import { useLowDetail } from "../../contexts/LowDetailContext";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
-import AnimatedGrid2 from "../landing/AnimatedGrid2"; // Import AnimatedGrid2
+import AnimatedGrid2 from "./landing/animatedGrid/AnimatedGrid2"; // Import AnimatedGrid2
 
 const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
@@ -117,8 +117,8 @@ const PerformanceAnalytics = () => {
             to="/home"
             className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
               isPro
-                ? "text-blue-400 border-blue-400 hover:bg-blue-400"
-                : "text-green-400 border-green-400 hover:bg-green-400"
+                ? "text-blue-400 border-blue-400 hover:bg-blue-300"
+                : "text-green-400 border-green-400 hover:bg-green-300"
             }`}
           >
             <FaArrowLeftLong className="mr-2" /> Home

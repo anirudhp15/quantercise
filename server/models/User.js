@@ -46,21 +46,12 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
   },
-  googleId: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  firebaseUid: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
+  googleId: { type: String },
+  firebaseUid: { type: String, required: true, unique: true },
   displayName: {
     type: String,
     default: "",
@@ -69,6 +60,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "../../assets/images/default_profile.jpg",
   },
+  registrationStep: {
+    type: String,
+    enum: ["auth", "mongo", "plan", "complete"], // Include all possible steps in the onboarding flow
+    default: "plan", // Default to "auth" when a new user is created
+    required: true, // Ensure it is always present
+  },
   signInCount: {
     type: Number,
     default: 0,
@@ -76,6 +73,11 @@ const userSchema = new mongoose.Schema({
   isPro: {
     type: Boolean,
     default: false,
+  },
+  currentPlan: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Plan", // Reference to the Plan model
+    default: null, // Default to null for free or no subscription
   },
   lastLogin: {
     type: Date,
@@ -89,9 +91,12 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  profileColor: { type: String, default: "#6B7280" }, // Default gray color
   progress: [problemProgressSchema], // Embed the Problem Progress sub-schema as an array
   applications: [applicationSchema], // Embed the Application sub-schema as an array
 });
+
+userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
 
 // Add a pre-save hook to update the `updatedAt` field before saving
 userSchema.pre("save", function (next) {

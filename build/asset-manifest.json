@@ -1,15 +1,22 @@
 {
   "files": {
-    "main.css": "https://quantercise.com/static/css/main.b46ab826.css",
-    "main.js": "https://quantercise.com/static/js/main.ab7011fe.js",
-    "static/media/practice_problems.jpg": "https://quantercise.com/static/media/practice_problems.bf931e889a43ff9c3580.jpg",
+    "main.css": "https://quantercise.com/static/css/main.c9022db8.css",
+    "main.js": "https://quantercise.com/static/js/main.6e30e04b.js",
+    "static/js/749.74886f5d.chunk.js": "https://quantercise.com/static/js/749.74886f5d.chunk.js",
+    "static/js/735.19949d8f.chunk.js": "https://quantercise.com/static/js/735.19949d8f.chunk.js",
+    "static/media/practice_problems.jpg": "https://quantercise.com/static/media/practice_problems.4d906da70ba6e7aad621.jpg",
+    "static/media/applications.jpg": "https://quantercise.com/static/media/applications.aa6ad15063fb38fabaaa.jpg",
     "static/media/progress.jpg": "https://quantercise.com/static/media/progress.101bc4611634f3e8f0e0.jpg",
+    "static/media/q.jpeg": "https://quantercise.com/static/media/q.46f8bc581f7ac21fd96a.jpeg",
+    "static/media/qpro.jpg": "https://quantercise.com/static/media/qpro.4dd85f9a19ff22d76d74.jpg",
     "index.html": "https://quantercise.com/index.html",
-    "main.b46ab826.css.map": "https://quantercise.com/static/css/main.b46ab826.css.map",
-    "main.ab7011fe.js.map": "https://quantercise.com/static/js/main.ab7011fe.js.map"
+    "main.c9022db8.css.map": "https://quantercise.com/static/css/main.c9022db8.css.map",
+    "main.6e30e04b.js.map": "https://quantercise.com/static/js/main.6e30e04b.js.map",
+    "749.74886f5d.chunk.js.map": "https://quantercise.com/static/js/749.74886f5d.chunk.js.map",
+    "735.19949d8f.chunk.js.map": "https://quantercise.com/static/js/735.19949d8f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b46ab826.css",
-    "static/js/main.ab7011fe.js"
+    "static/css/main.c9022db8.css",
+    "static/js/main.6e30e04b.js"
   ]
 }

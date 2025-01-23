@@ -24,6 +24,10 @@ const questionSchema = new Schema({
   averageTimeToSolve: { type: Number, default: 0 }, // Default to 0 for new questions
   interactiveSteps: { type: [String], default: [] }, // Array of strings for interactive steps
   isPro: { type: Boolean, default: false }, // Default to false
+
+  progressionId: { type: String, required: true }, // Group questions into progressions
+  progressionOrder: { type: Number, default: 0 }, // Position in the progression
+  progressionTitle: { type: String }, // Optional descriptive title for the progression
 });
 
 module.exports = mongoose.model("Question", questionSchema);

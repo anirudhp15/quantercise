@@ -2,6 +2,23 @@
 
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  safelist: [
+    "text-green-400",
+    "text-blue-400",
+    "text-purple-400",
+    "text-sky-400",
+    "text-yellow-400",
+    "bg-green-400",
+    "bg-blue-400",
+    "bg-purple-400",
+    "bg-sky-400",
+    "bg-yellow-400",
+    "border-green-400",
+    "border-blue-400",
+    "border-purple-400",
+    "border-sky-400",
+    "border-yellow-400",
+  ],
   theme: {
     extend: {
       colors: {
