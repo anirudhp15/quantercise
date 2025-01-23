@@ -99,7 +99,7 @@ const categories = [
 
 const Category = ({ name, icon, subtopics }) => (
   <div className="flex flex-col items-center px-2 text-center">
-    <div className="mb-8">{icon}</div>
+    <div className="my-8 lg:mt-0">{icon}</div>
     <h3 className="py-2 text-xl font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-5xl">
       {name}
     </h3>
@@ -115,7 +115,7 @@ const Topics = () => {
   return (
     <div
       id="concepts"
-      className="relative w-full min-h-[150vh] flex items-center justify-center bg-gradient-to-b from-black via-gray-800 to-black"
+      className="relative py-32 w-full min-h-[150vh] flex items-center justify-center bg-gradient-to-b from-black via-gray-800 to-black"
     >
       <div className="relative z-10 custom-shape-divider-top-1733168917">
         <svg
@@ -145,7 +145,7 @@ const Topics = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 mt-12 divide-y-2 lg:divide-x-2 lg:divide-y-0 lg:grid-cols-4">
+        <div className="grid grid-cols-1 mt-12 divide-y-4 divide-gray-500 gap-y-8 lg:divide-x-2 lg:divide-y-0 lg:grid-cols-4">
           {categories.map((category, index) => (
             <Category key={index} {...category} />
           ))}
