@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "https://quantercise-api.app.vercel.com",
+    "REACT_APP_ENV": "production"
+  }
+}
