@@ -100,7 +100,7 @@ const ComparisonTable = () => {
       </div>
       <div className="relative z-10 w-full px-6 mx-auto max-w-screen-2xl">
         <h2 className="py-8 ml-8 text-4xl font-black tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
-          Compare All Plans
+          <span className="text-gray-100/75"> Compare</span> All Plans
         </h2>
         <div className="overflow-x-auto">
           <div className="p-8 bg-gray-900 shadow-2xl bg-opacity-10 rounded-2xl backdrop-blur-sm">
@@ -112,16 +112,16 @@ const ComparisonTable = () => {
                   </th>
                   <th className="px-4 py-3 text-center border-b-4 border-r-4 border-gray-700">
                     <div>
-                      <span className="text-transparent bg-gradient-to-r from-green-500 to-green-300 bg-clip-text">
+                      <span className="text-transparent whitespace-nowrap bg-gradient-to-r from-green-500 to-green-300 bg-clip-text">
                         Sharpe (Monthly)
                       </span>
-                      <div className="flex flex-row items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400">
+                      <div className="flex flex-col items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400 md:flex-row">
                         <div className="text-sm font-medium text-gray-400">
                           {plans.Sharpe.monthlyPrice}
                         </div>
                         <button
                           onClick={redirectToRegister}
-                          className="px-4 py-2 text-sm font-bold text-black bg-green-400 rounded-lg shadow-lg hover:bg-black hover:text-green-400"
+                          className="px-4 py-2 text-sm font-bold text-black bg-green-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-black hover:text-green-400"
                         >
                           Choose Plan
                         </button>
@@ -130,16 +130,16 @@ const ComparisonTable = () => {
                   </th>
                   <th className="px-4 py-3 text-center border-b-4 border-r-4 border-gray-700">
                     <div>
-                      <span className="text-transparent bg-gradient-to-r from-green-500 to-green-300 bg-clip-text">
+                      <span className="text-transparent whitespace-nowrap bg-gradient-to-r from-green-500 to-green-300 bg-clip-text">
                         Sharpe (Yearly)
                       </span>
-                      <div className="flex flex-row items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400">
+                      <div className="flex flex-col items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400 md:flex-row">
                         <div className="text-sm font-medium text-gray-400">
                           {plans.Sharpe.yearlyPrice}
                         </div>
                         <button
                           onClick={redirectToRegister}
-                          className="px-4 py-2 text-sm font-bold text-black bg-green-400 rounded-lg shadow-lg hover:bg-black hover:text-green-400"
+                          className="px-4 py-2 text-sm font-bold text-black bg-green-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-black hover:text-green-400"
                         >
                           Choose Plan
                         </button>
@@ -155,13 +155,13 @@ const ComparisonTable = () => {
                         Most Popular
                         <FaStar className="w-4 h-4 text-black" />
                       </span>
-                      <div className="flex flex-row items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400">
+                      <div className="flex flex-col items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400 md:flex-row">
                         <div className="text-sm font-medium text-gray-400">
                           {plans.Pro.monthlyPrice}
                         </div>
                         <button
                           onClick={redirectToRegister}
-                          className="px-4 py-2 text-sm font-bold text-black bg-blue-400 rounded-lg shadow-lg hover:bg-black hover:text-blue-400"
+                          className="px-4 py-2 text-sm font-bold text-black bg-blue-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-black hover:text-blue-400"
                         >
                           Choose Plan
                         </button>
@@ -173,13 +173,13 @@ const ComparisonTable = () => {
                       <span className="text-transparent bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text">
                         Pro (Yearly)
                       </span>
-                      <div className="flex flex-row items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400">
+                      <div className="flex flex-col items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400 md:flex-row">
                         <div className="text-sm font-medium text-gray-400">
                           {plans.Pro.yearlyPrice}
                         </div>
                         <button
                           onClick={redirectToRegister}
-                          className="px-4 py-2 text-sm font-bold text-black bg-blue-400 rounded-lg shadow-lg hover:bg-black hover:text-blue-400"
+                          className="px-4 py-2 text-sm font-bold text-black bg-blue-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-black hover:text-blue-400"
                         >
                           Choose Plan
                         </button>
@@ -188,13 +188,16 @@ const ComparisonTable = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xs sm:text-base">
                 {features.map((feature, index) => (
-                  <tr key={index} className="even:bg-gray-850">
+                  <tr
+                    key={index}
+                    className="even:bg-gray-850 whitespace-nowrap "
+                  >
                     <td className="px-4 py-3 font-light tracking-wider border-b-4 border-r-4 border-gray-700">
                       {feature}
                     </td>
-                    <td className="px-4 py-3 text-center border-b-4 border-r-4 border-gray-700">
+                    <td className="px-4 py-3 text-xl text-center border-b-4 border-r-4 border-gray-700">
                       {plans.Sharpe.monthlyFeatures[index] ? (
                         <span className="flex justify-center font-bold text-green-400">
                           <TbCheck />
@@ -205,7 +208,7 @@ const ComparisonTable = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-center border-b-4 border-r-4 border-gray-700">
+                    <td className="px-4 py-3 text-xl text-center border-b-4 border-r-4 border-gray-700">
                       {plans.Sharpe.yearlyFeatures[index] ? (
                         <span className="flex justify-center font-bold text-green-400">
                           <TbCheck />
@@ -216,7 +219,7 @@ const ComparisonTable = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-center border-b-4 border-r-4 border-gray-700">
+                    <td className="px-4 py-3 text-xl text-center border-b-4 border-r-4 border-gray-700">
                       {plans.Pro.monthlyFeatures[index] ? (
                         <span className="flex justify-center font-bold text-green-400">
                           <TbCheck />
@@ -227,7 +230,7 @@ const ComparisonTable = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-center border-b-4 border-gray-700">
+                    <td className="px-4 py-3 text-xl text-center border-b-4 border-gray-700">
                       {plans.Pro.yearlyFeatures[index] ? (
                         <span className="flex justify-center font-bold text-green-400">
                           <TbCheck />

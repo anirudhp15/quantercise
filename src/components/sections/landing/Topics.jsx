@@ -136,10 +136,14 @@ const Topics = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl font-extrabold tracking-tighter text-transparent sm:text-4xl md:text-5xl gradient-text animate-gradient">
+          <h2 className="text-4xl font-extrabold tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
             Explore Topics
           </h2>
-          <p className="mt-4 text-lg font-medium text-gray-300 sm:text-xl md:text-2xl">
+          <p className="block mt-4 text-lg font-medium text-gray-300 sm:text-xl md:text-2xl lg:hidden">
+            Dive deep into the concepts essential for success in quant
+            interviews.
+          </p>
+          <p className="hidden mt-4 text-lg font-medium text-gray-300 sm:text-xl md:text-2xl lg:block">
             Dive deep into the foundational areas essential for success in quant
             finance interviews.
           </p>
