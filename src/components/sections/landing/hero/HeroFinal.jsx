@@ -165,45 +165,47 @@ const Intro = React.memo(({ triggerBounce }) => {
             className="relative z-[11] flex flex-col items-center justify-center h-full px-8 mx-auto max-w-screen-2xl xl:flex-row"
           >
             <div className="text-center xl:w-1/3 xl:text-left">
-              <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
-                className="pt-32 text-3xl font-extrabold tracking-tight text-gray-200 xl:pt-16 lg:pb-4 sm:text-4xl md:text-5xl"
-              >
-                Welcome to{" "}
-                <span className="block text-5xl font-black tracking-tighter text-transparent whitespace-nowrap sm:pt-12 gradient-text animate-gradient sm:inline md:text-6xl">
-                  Quantercise
-                </span>
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="hidden mt-6 text-lg font-normal tracking-wide text-center text-gray-400 xl:max-w-sm lg:text-left md:block sm:text-xl md:text-2xl"
-              >
-                A cutting-edge platform designed to elevate all of your
-                quantitative skills.
-              </motion.p>
-              <div className="flex flex-row justify-center gap-4 mb-4 xl:justify-normal">
-                <motion.button
+              <div className=" xl:mx-auto xl:w-2/3">
+                <motion.h1
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  className="px-4 py-3 mt-8 font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-green-400 hover:text-black"
+                  transition={{ duration: 1 }}
+                  className="pt-32 font-extrabold tracking-tight text-gray-200 whitespace-nowrap ext-3xl xl:pt-16 sm:text-4xl md:text-5xl"
                 >
-                  Create Account
-                  <TbUserEdit className="inline-block w-6 h-6 ml-2" />
-                </motion.button>
-                <motion.button
+                  Welcome to <br />
+                  <span className="block text-5xl font-black tracking-tighter text-transparent whitespace-nowrap sm:pt-12 gradient-text animate-gradient sm:inline md:text-6xl">
+                    Quantercise
+                  </span>
+                </motion.h1>
+                <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  className="px-4 py-3 mt-8 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-black hover:text-green-400"
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="hidden mt-4 text-lg font-normal tracking-wide text-center text-gray-400 xl:max-w-[400px] lg:text-left md:block sm:text-xl md:text-2xl"
                 >
-                  Join Newsletter
-                  <TbNews className="inline-block w-6 h-6 ml-2" />
-                </motion.button>
+                  A cutting-edge platform designed to elevate all of your
+                  quantitative skills.
+                </motion.p>
+                <div className="flex flex-row justify-center gap-4 mb-4 xl:justify-normal">
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 1 }}
+                    className="px-4 py-3 mt-8 font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-green-400 hover:text-black"
+                  >
+                    Create Account
+                    <TbUserEdit className="inline-block w-6 h-6 ml-2" />
+                  </motion.button>
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 1 }}
+                    className="px-4 py-3 mt-8 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-black hover:text-green-400"
+                  >
+                    Join Newsletter
+                    <TbNews className="inline-block w-6 h-6 ml-2" />
+                  </motion.button>
+                </div>
               </div>
             </div>
             <motion.div

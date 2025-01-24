@@ -179,9 +179,9 @@ const LandingFooter = ({ onJoinClick }) => {
           </div>
         </motion.div>
       </div>
-      <div className="flex flex-col items-center justify-center px-4 py-6 rounded-lg">
+      <div className="flex flex-col items-center justify-center w-2/3 px-4 py-6 mx-auto rounded-lg">
         <h2 className="text-lg font-semibold text-center text-white">
-          Have suggestions for features? Let us know!
+          Have suggestions for features? We value your feedback!
         </h2>
         <form
           ref={form}
@@ -193,8 +193,8 @@ const LandingFooter = ({ onJoinClick }) => {
             name="from_name"
             value={feedback.from_name}
             onChange={handleChange}
-            placeholder="Your Name"
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            placeholder="Name"
+            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <input
@@ -202,21 +202,21 @@ const LandingFooter = ({ onJoinClick }) => {
             name="user_email"
             value={feedback.user_email}
             onChange={handleChange}
-            placeholder="Your Email"
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            placeholder="Email"
+            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <textarea
             name="message"
             value={feedback.message}
             onChange={handleChange}
-            placeholder="Your Feedback (We are still in development, so any ideas are appreciated!)"
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            placeholder="Share your thoughts or suggestions here."
+            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <button
             type="submit"
-            className="inline-block px-4 py-2 mt-6 font-bold text-green-400 border-2 border-green-400 rounded-lg hover:bg-green-400 hover:cursor-pointer hover:text-black hover:shadow-lg group"
+            className="inline-block px-4 py-2 mt-6 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg hover:text-green-400 hover:bg-black hover:cursor-pointer hover:shadow-lg group"
           >
             Send Feedback
             <FaArrowRightLong className="inline-block ml-2 transition-transform duration-200 group-hover/footer:-rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />

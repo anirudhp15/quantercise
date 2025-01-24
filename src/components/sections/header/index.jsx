@@ -60,7 +60,7 @@ const Header = ({ onJoinClick }) => {
   // Memoize landing page links
   const landingPageLinks = useMemo(
     () => [
-      { to: "problems", label: "Problems" },
+      // { to: "problems", label: "Problems" },
       { to: "concepts", label: "Concepts" },
       { to: "pricing", label: "Pricing" },
       { to: "landingfooter", label: "Contact" },

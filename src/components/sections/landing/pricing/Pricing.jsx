@@ -27,7 +27,7 @@ const Pricing = () => {
     <Elements stripe={stripePromise}>
       <div
         id="pricing"
-        className="relative z-10 flex items-center justify-center py-32 text-gray-300 bg-gray-900"
+        className="relative z-10 flex items-center justify-center py-16 text-gray-300 bg-gray-900"
       >
         <div className="absolute inset-0 z-20 pointer-events-none opacity-30"></div>
 

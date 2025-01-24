@@ -63,40 +63,6 @@ const PracticeProblems = React.memo(() => {
   const { problems, loading, error } = useFetchProgress(mongoId);
   const updateProblemProgress = useUpdateProblemProgress();
 
-  const categories = [
-    {
-      name: "Math Skills",
-      category: "Critical Mathematical Foundations",
-      icon: <ImSigma />,
-      description: "Fundamental math concepts for quantitative roles",
-      isPro: false,
-    },
-
-    {
-      name: "Finance Fundamentals",
-      category: "Financial Concepts and Modeling",
-      icon: <BsBank />,
-      description:
-        "Financial derivatives, portfolio theory, and valuation models",
-      isPro: false,
-    },
-    {
-      name: "Logic and Reasoning",
-      category: "Brain Teasers and Logical Puzzles",
-      icon: <LuBrainCircuit />,
-      description:
-        "Puzzles and brain teasers to challenge your logic and intuition",
-      isPro: false,
-    },
-    {
-      name: "Programming Questions",
-      category: "Programming and Algorithmic Thinking",
-      icon: <SiLeetcode />,
-      description: "Coding technicals and algorithmic problem solving",
-      isPro: true,
-    },
-  ];
-
   // Handlers
   const handleCategoryClick = useCallback((category) => {
     setSelectedCategory(category);
@@ -267,7 +233,7 @@ const PracticeProblems = React.memo(() => {
 
   // Render categories and problems
   const renderCategories = useRenderCategories(
-    categories,
+    problems,
     handleCategoryClick,
     handleReviewAllClick,
     handleBookmarkClick,
@@ -278,7 +244,7 @@ const PracticeProblems = React.memo(() => {
   return (
     <div className="relative w-full text-gray-300 bg-gradient-to-b from-black via-gray-900 to-black">
       <div className="relative z-10 flex flex-col justify-start min-h-screen py-24 mx-auto max-w-screen-2xl lg:py-32">
-        <div className="w-full px-8 mx-auto lg:px-4 max-w-screen-2xl ">
+        <div className="w-full px-4 mx-auto max-w-screen-2xl ">
           <Link
             to="/home"
             className={`flex w-min hover:cursor-pointer items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group text-black hover:text-green-400 border-green-400 hover:bg-black bg-green-400`}
@@ -302,7 +268,7 @@ const PracticeProblems = React.memo(() => {
               backSpeed={60}
               startDelay={500}
               showCursor={false}
-              className="text-2xl font-light tracking-wide text-gray-300 lg:ml-8"
+              className="h-8 text-2xl font-light tracking-wide text-gray-300 lg:ml-8"
             />
           </motion.h1>
         )}

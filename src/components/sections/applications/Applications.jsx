@@ -285,7 +285,7 @@ const Applications = () => {
         >
           Applications
         </motion.h1>
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between gap-2 mb-6">
           <div className="relative flex items-center w-full max-w-md bg-gray-800 border-4 border-gray-700 rounded-lg">
             <Input
               className="flex w-full h-min"
@@ -296,7 +296,7 @@ const Applications = () => {
               onChange={handleSearch}
               style={{
                 maxHeight: 40,
-                height: 36,
+                height: 32,
                 border: "2px solid #9ca3af",
               }}
             />
@@ -304,7 +304,7 @@ const Applications = () => {
           </div>
           <button
             onClick={handleFormToggle}
-            className="flex items-center px-3 py-1 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg"
+            className="flex items-center px-3 py-1 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm whitespace-nowrap hover:text-green-400 hover:bg-black hover:shadow-lg"
           >
             <FaPlus className="mr-2" /> Add Application
           </button>
@@ -561,7 +561,7 @@ const Applications = () => {
                         (heading) => (
                           <th
                             key={heading}
-                            className="px-6 py-3 text-sm font-medium text-left"
+                            className="p-4 text-sm font-medium text-left whitespace-nowrap"
                           >
                             {heading}
                           </th>
@@ -570,7 +570,7 @@ const Applications = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {applications.map((application) => (
+                    {filteredApplications.map((application) => (
                       <React.Fragment key={application.id}>
                         <tr className="border-t border-gray-700">
                           <td className="px-6 py-4 text-sm font-medium text-gray-300">
@@ -579,8 +579,14 @@ const Applications = () => {
                           <td className="px-6 py-4 text-sm font-medium text-gray-300">
                             {application.position}
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-300">
-                            {application.status}
+                          <td className="px-6 py-4 text-sm font-semibold text-center text-black border-r border-gray-700 last:border-r-0">
+                            <div
+                              className={`p-2 rounded-md ${getStatusColor(
+                                application.status
+                              )}`}
+                            >
+                              {application.status}
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-gray-300">
                             <button

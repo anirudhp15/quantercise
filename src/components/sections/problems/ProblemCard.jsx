@@ -25,6 +25,13 @@ const ProblemCard = ({
 
   const { feedback, feedbackCategory, fetchFeedback } = useFeedback();
 
+  const extractFeedbackExplanation = (feedback) => {
+    if (!feedback) return "No explanation available";
+
+    const match = feedback.match(/Explanation:(.*)/); // Captures everything after "Explanation:"
+    return match && match[1] ? match[1] : "No explanation provided";
+  };
+
   const categorizeFeedback = (feedbackText) => {
     if (!feedbackText || feedbackText === "") {
       return {
@@ -35,6 +42,7 @@ const ProblemCard = ({
     }
 
     const lowerText = feedbackText.toLowerCase();
+
     if (lowerText.includes("strongly wrong")) {
       return {
         heading: "STRONGLY INCORRECT",
@@ -250,9 +258,7 @@ const ProblemCard = ({
             >
               <SiOpentofu className="inline-block mr-4 text-4xl text-blue-400" />
               <ReactTyped
-                strings={[
-                  feedback.replace(feedbackCategory.heading, "").trim(),
-                ]}
+                strings={[extractFeedbackExplanation(feedback)]}
                 typeSpeed={1}
                 className="mt-2 text-sm leading-[3rem] text-gray-300"
                 loop={false}
