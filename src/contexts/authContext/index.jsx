@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
         ...response.data.user,
       }));
       setIsPro(false); // Default to free user after registration
-      setRegistrationStep("plan");
+      setRegistrationStep("mongo");
     } catch (error) {
       console.error("Error registering user in MongoDB:", error);
     }

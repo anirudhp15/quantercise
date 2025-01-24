@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { OpenAI } = require("openai");
 
@@ -5,8 +6,7 @@ const router = express.Router();
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey:
-    "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",
+  apiKey: process.env.OPENAI_API_KEY,
   organization: "org-ilo1smhJbfXlKQ2MpMScq3lR", // Optional: Add your organization ID if applicable
 });
 

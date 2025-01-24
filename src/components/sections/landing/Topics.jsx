@@ -100,10 +100,10 @@ const categories = [
 const Category = ({ name, icon, subtopics }) => (
   <div className="flex flex-col items-center px-2 text-center">
     <div className="my-8 lg:mt-0">{icon}</div>
-    <h3 className="py-2 text-xl font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-5xl">
+    <h3 className="py-2 text-xl font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-4xl w-[80%]">
       {name}
     </h3>
-    <div className="mt-8 space-y-4 text-sm leading-relaxed tracking-wider text-gray-400 sm:text-lg">
+    <div className="mt-8 space-y-4 text-sm leading-relaxed tracking-wide text-gray-400 sm:text-lg">
       {subtopics.map((subtopic, index) => (
         <p key={index}>{subtopic}</p>
       ))}
@@ -130,7 +130,7 @@ const Topics = () => {
           ></path>
         </svg>
       </div>
-      <div className="relative px-6 mx-auto text-center max-w-screen-2xl">
+      <div className="relative px-8 mx-auto text-center max-w-screen-2xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -149,7 +149,7 @@ const Topics = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 mt-12 divide-y-4 divide-gray-500 gap-y-8 lg:divide-x-2 lg:divide-y-0 lg:grid-cols-4">
+        <div className="grid grid-cols-1 mt-12 divide-y-4 divide-gray-500 gap-y-8 lg:divide-x-4 lg:divide-y-0 lg:grid-cols-4">
           {categories.map((category, index) => (
             <Category key={index} {...category} />
           ))}

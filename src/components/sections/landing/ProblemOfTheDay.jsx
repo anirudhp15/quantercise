@@ -69,7 +69,7 @@ const ProblemOfTheDay = () => {
   return (
     <div
       id="problems"
-      className="relative z-10 flex flex-col-reverse lg:flex-row items-start justify-center min-h-[50vh] py-12 px-6 lg:px-24 text-gray-300 bg-gray-800"
+      className="relative z-10 flex flex-col-reverse lg:flex-row items-start justify-center min-h-[50vh] py-12 px-8 lg:px-24 text-gray-300 bg-gray-800"
     >
       {/* Problem Demo Section */}
       <div className="w-full lg:w-2/3">

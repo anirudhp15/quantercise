@@ -20,7 +20,7 @@ const Filters = ({
 
   return (
     <div className="grid grid-cols-1 gap-6 px-4 text-center">
-      <div className="flex flex-row w-full mx-auto my-4 max-w-screen-2xl">
+      <div className="flex flex-row w-full mx-auto mb-4 max-w-screen-2xl">
         {/* Back to Categories Button */}
         <button
           className={`flex w-min items-center hover:cursor-pointer px-2 py-1 text-sm text-black border-gray-400 hover:bg-black bg-gray-400 font-semibold border-2 rounded-lg group hover:text-gray-400`}

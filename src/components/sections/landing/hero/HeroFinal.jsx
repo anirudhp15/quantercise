@@ -6,8 +6,9 @@ import { TbUserEdit, TbNews } from "react-icons/tb";
 
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
-import backgroundImage from "../../../../assets/images/practice_problems.jpg";
+import backgroundImage from "../../../../assets/images/mac.png";
 import trackingImage from "../../../../assets/images/applications.jpg";
+import demo from "../../../../assets/videos/demo_v1.mov";
 import AnimatedGrid from "../animatedGrid/AnimatedGrid";
 import "../../../../index.css";
 
@@ -83,7 +84,7 @@ const Intro = React.memo(({ triggerBounce }) => {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center w-full min-h-[110vh] text-gray-300 bg-center bg-cover bg-gradient-to-b from-gray-800 to-black">
+    <div className="relative flex items-center justify-center w-full min-h-[100vh] text-gray-300 bg-center bg-cover bg-gradient-to-b from-gray-800 to-black">
       <AnimatePresence>
         {showQuote && (
           <motion.div
@@ -121,7 +122,7 @@ const Intro = React.memo(({ triggerBounce }) => {
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
               onClick={() => setShowQuote(false)}
-              className="fixed z-15 px-6 py-3 font-black text-white border-2 border-white rounded-md bottom-[45vh] hover:text-black hover:bg-green-500 hover:border-black focus:outline-none"
+              className="fixed z-50 px-4 py-2 font-normal text-white border-4 border-white rounded bottom-[45vh] hover:text-black hover:bg-green-500 hover:border-black focus:outline-none"
             >
               SKIP
             </motion.button>
@@ -132,19 +133,27 @@ const Intro = React.memo(({ triggerBounce }) => {
       {!showQuote && (
         <>
           <div className="absolute top-0 left-0 w-full h-full z-9">
-            {/* <AnimatedGrid /> */}
             <div className="fixed top-0 z-10 left-4 transform-gpu">
               <ReactTyped
                 strings={[
                   "quantercise",
                   "quantercise quantercise",
                   "quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
+                  "quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise quantercise",
                 ]}
                 typeSpeed={10}
                 backSpeed={50}
                 backDelay={800}
                 loop
-                className="text-3xl font-bold opacity-[0.04] text-gray-300 sm:text-5xl md:text-[20rem]"
+                className="font-bold opacity-[0.03] text-gray-300 text-[18vw] leading-none text-center"
               />
             </div>
           </div>
@@ -153,17 +162,17 @@ const Intro = React.memo(({ triggerBounce }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="relative z-10 flex flex-col items-center justify-center h-full max-w-screen-xl mx-auto lg:flex-row"
+            className="relative z-[11] flex flex-col items-center justify-center h-full px-8 mx-auto max-w-screen-2xl xl:flex-row"
           >
-            <div className="px-12 text-center lg:w-1/2 lg:pr-8 lg:text-left">
+            <div className="text-center xl:w-1/3 xl:text-left">
               <motion.h1
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
-                className="pt-32 text-3xl font-bold  xl:pt-16 lg:pb-4 sm:text-5xl md:text-6xl"
+                className="pt-32 text-3xl font-extrabold tracking-tight text-gray-200 xl:pt-16 lg:pb-4 sm:text-4xl md:text-5xl"
               >
                 Welcome to{" "}
-                <span className="block text-5xl font-black tracking-tighter text-transparent sm:pt-12 gradient-text animate-gradient sm:inline md:text-7xl">
+                <span className="block text-5xl font-black tracking-tighter text-transparent whitespace-nowrap sm:pt-12 gradient-text animate-gradient sm:inline md:text-6xl">
                   Quantercise
                 </span>
               </motion.h1>
@@ -171,17 +180,17 @@ const Intro = React.memo(({ triggerBounce }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="hidden mt-6 text-lg font-normal text-gray-300 md:block sm:text-xl md:text-2xl"
+                className="hidden mt-6 text-lg font-normal tracking-wide text-center text-gray-400 xl:max-w-sm lg:text-left md:block sm:text-xl md:text-2xl"
               >
                 A cutting-edge platform designed to elevate all of your
                 quantitative skills.
               </motion.p>
-              <div className="flex flex-row justify-center gap-6 mb-4 lg:justify-normal">
+              <div className="flex flex-row justify-center gap-4 mb-4 xl:justify-normal">
                 <motion.button
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1, delay: 1 }}
-                  className="px-4 py-3 mt-8 text-lg font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-green-400 hover:text-black"
+                  className="px-4 py-3 mt-8 font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-green-400 hover:text-black"
                 >
                   Create Account
                   <TbUserEdit className="inline-block w-6 h-6 ml-2" />
@@ -190,7 +199,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1, delay: 1 }}
-                  className="px-4 py-3 mt-8 text-lg font-bold text-black bg-green-400 border-2 border-black border-green-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-black hover:text-green-400"
+                  className="px-4 py-3 mt-8 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-black hover:text-green-400"
                 >
                   Join Newsletter
                   <TbNews className="inline-block w-6 h-6 ml-2" />
@@ -201,72 +210,32 @@ const Intro = React.memo(({ triggerBounce }) => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 2.5, delay: 0.3 }}
-              className="relative z-10 max-w-screen-xl mx-auto mt-4 lg:mt-0 lg:w-1/2"
+              className="relative z-10 mx-auto mt-4 lg:max-w-screen-lg xl:mt-0 xl:w-2/3"
             >
-              <div className="relative flex flex-col">
-                <div className="flex items-end justify-start space-x-4">
-                  <motion.div
-                    initial={{ opacity: 0, x: 15, y: 15 }}
-                    animate={{ opacity: 1, x: 0, y: 0 }}
-                    transition={{ duration: 1.5, delay: 0.5 }}
-                    className="relative max-w-sm mb-4 overflow-hidden transition-all duration-150 border-4 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
-                  >
-                    <img
-                      src={backgroundImage}
-                      alt="Quantitative Finance Illustration"
-                      className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
-                      loading="lazy"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center w-full h-full px-4 py-2 transition-opacity duration-150 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
-                      <p className="text-sm font-thin text-center text-white md:text-lg">
-                        Access our extensive knowledgebase of interview
-                        questions, tagged by specific concepts and subjects to
-                        focus on in probability, statistics, programming,
-                        finance, and general logical reasoning. Perfect for
-                        undergraduates in STEM, graduate students, PhD
-                        candidates, and early career quant professionals.
-                      </p>
-                    </div>
-                  </motion.div>
-                  <motion.div
-                    initial={{ clipPath: "inset(0 0 100% 0)" }}
-                    animate={{ clipPath: "inset(0 0 0 0)" }}
-                    transition={{ duration: 1.5, ease: "easeIn", delay: 2.5 }}
-                  >
-                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-400 rotate-90 lg:block" />
-                  </motion.div>
-                </div>
-                <div className="flex items-start justify-center space-x-4 lg:justify-end">
-                  <motion.div
-                    initial={{ clipPath: "inset(100% 0 0 0)" }}
-                    animate={{ clipPath: "inset(0 0 0 0)" }}
-                    transition={{ duration: 1.5, delay: 2.7 }}
-                  >
-                    <PiArrowArcRightThin className="hidden w-16 h-16 text-green-400 -rotate-90 lg:block" />
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: -15, y: -15 }}
-                    animate={{ opacity: 1, x: 0, y: 0 }}
-                    transition={{ duration: 1.5, delay: 0.7 }}
-                    className="relative max-w-sm mt-4 overflow-hidden transition-all duration-150 border-4 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
-                  >
-                    <img
-                      src={trackingImage}
-                      alt="Applications Tracking Page"
-                      className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
-                      loading="lazy"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center w-full h-full px-4 py-2 transition-opacity duration-150 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
-                      <p className="text-sm font-thin text-center text-white md:text-lg">
-                        Manage your internship and job applications directly
-                        from our platform. Track deadlines, statuses, and more
-                        with our integrated application tracking system.
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
+              {/* Right MacBook Mockup */}
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 2.5, delay: 0.3 }}
+                className="relative flex items-center justify-center w-full"
+              >
+                <img
+                  src={backgroundImage}
+                  alt="Quantercise MacBook Mockup"
+                  className="w-[80%] relative z-20"
+                  loading="lazy"
+                />
+                {/* <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  src={demo}
+                  className="absolute w-[85%]"
+                >
+                  {" "}
+                </video> */}
+              </motion.div>
             </motion.div>
           </motion.div>
         </>

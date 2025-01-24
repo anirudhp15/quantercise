@@ -46,7 +46,7 @@ const SuccessPage = () => {
           );
           setSubscriptionDetails(response.data.subscriptionDetails);
           // Update user's currentPlan in MongoDB
-          await axios.put(`/api/user/${currentUser.uid}`, {
+          await axios.put(`/api/user/${currentUser.uid}/current-plan`, {
             currentPlan: response.data.planObject, // Pass the plan object from the response
           });
 

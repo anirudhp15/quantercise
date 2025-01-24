@@ -35,7 +35,10 @@ import { path } from "animejs";
 import axios from "axios";
 import { UserProvider } from "./contexts/userContext";
 
-axios.defaults.baseURL = "http://localhost:4242";
+axios.defaults.baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
 axios.defaults.withCredentials = true;
 
 function RouteComponent() {

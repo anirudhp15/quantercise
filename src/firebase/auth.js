@@ -59,7 +59,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
       user.photoURL || "../../assets/images/default_profile.jpg";
 
     // Send user info to your Express.js server to update MongoDB
-    await axios.post(`http://localhost:4242/api/auth/login`, {
+    await axios.post(`/api/auth/login`, {
       googleId: user.uid,
       email: user.email,
       displayName,

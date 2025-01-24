@@ -43,7 +43,7 @@ const EditProfile = () => {
       await updateProfile({ displayName, photoURL });
 
       // Update MongoDB profile
-      await axios.put(`http://localhost:4242/api/user/${currentUser.uid}`, {
+      await axios.put(`/api/user/${currentUser.uid}`, {
         displayName,
         email,
         photoURL,

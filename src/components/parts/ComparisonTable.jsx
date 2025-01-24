@@ -98,7 +98,7 @@ const ComparisonTable = () => {
           ></path>
         </svg>
       </div>
-      <div className="relative z-10 w-full px-6 mx-auto max-w-screen-2xl">
+      <div className="relative z-10 w-full px-8 mx-auto max-w-screen-2xl">
         <h2 className="py-8 ml-8 text-4xl font-black tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
           <span className="text-gray-100/75"> Compare</span> All Plans
         </h2>

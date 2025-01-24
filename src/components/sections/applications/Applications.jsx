@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { FaPlus, FaTrash, FaTimes } from "react-icons/fa";
+import { FaPlus, FaTrash, FaTimes, FaSearch } from "react-icons/fa";
 import { TbNotes, TbNotesOff } from "react-icons/tb";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { Input } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -21,6 +22,7 @@ const YOUR_DOMAIN =
 const Applications = () => {
   const { currentUser, isPro } = useContext(AuthContext);
   const [applications, setApplications] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [form, setForm] = useState({
     company: "",
     position: "",
@@ -205,6 +207,31 @@ const Applications = () => {
     return "bg-green-400 text-black"; // Safe
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
+
+  const filteredApplications = applications.filter((application) => {
+    const searchFields = [
+      application.company?.toLowerCase() || "",
+      application.position?.toLowerCase() || "",
+      application.status?.toLowerCase() || "",
+      application.field?.toLowerCase() || "",
+      application.location?.toLowerCase() || "",
+      application.notes?.toLowerCase() || "",
+      application.coverLetter?.toLowerCase() || "",
+      application.dateOfSubmission
+        ? dayjs(application.dateOfSubmission)
+            .format("MMM D, YYYY")
+            .toLowerCase()
+        : "",
+      application.deadlineDate
+        ? dayjs(application.deadlineDate).format("MMM D, YYYY").toLowerCase()
+        : "",
+    ];
+    return searchFields.some((field) => field.includes(searchTerm));
+  });
+
   return (
     <div className="relative flex min-h-screen text-gray-300 bg-gray-900">
       <div className="absolute inset-0 bg-black z-5 bg-opacity-90" />
@@ -258,6 +285,31 @@ const Applications = () => {
         >
           Applications
         </motion.h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="relative flex items-center w-full max-w-md bg-gray-800 border-4 border-gray-700 rounded-lg">
+            <Input
+              className="flex w-full h-min"
+              placeholder="Search your applications..."
+              variant="outlined"
+              allowClear
+              enterButton
+              onChange={handleSearch}
+              style={{
+                maxHeight: 40,
+                height: 36,
+                border: "2px solid #9ca3af",
+              }}
+            />
+            <FaSearch className="absolute text-gray-500 right-4" />
+          </div>
+          <button
+            onClick={handleFormToggle}
+            className="flex items-center px-3 py-1 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg"
+          >
+            <FaPlus className="mr-2" /> Add Application
+          </button>
+        </div>
+
         {isFormOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -375,7 +427,7 @@ const Applications = () => {
           </motion.div>
         )}
         <div className="flex justify-center mt-6">
-          {applications.length === 0 ? (
+          {filteredApplications.length === 0 ? (
             <div className="text-center text-gray-400">
               No applications submitted yet. Go apply to an internship now!
             </div>
@@ -407,7 +459,7 @@ const Applications = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {applications.map((application) => (
+                    {filteredApplications.map((application) => (
                       <React.Fragment key={application.id}>
                         <tr className="border-t border-gray-700">
                           <td className="px-6 py-4 text-sm font-medium text-gray-300 border-r border-gray-700 last:border-r-0">

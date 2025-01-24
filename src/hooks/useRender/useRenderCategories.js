@@ -47,7 +47,7 @@ export const useRenderCategories = (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2, ease: "easeOut" }}
-        className="flex flex-col items-center justify-between p-4 mx-auto max-w-screen-2xl lg:flex-row"
+        className="flex flex-col items-center justify-between px-4 pb-2 mx-auto max-w-screen-2xl lg:flex-row"
       >
         {/* Left-aligned Topics of Practice */}
         <div className="mb-4 text-2xl font-bold text-center text-gray-300/75 lg:text-xl lg:text-left lg:mb-0">
@@ -93,7 +93,7 @@ export const useRenderCategories = (
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="grid w-full grid-cols-1 gap-8 px-4 mx-auto max-w-screen-2xl xl:px-0 lg:grid-cols-4"
+        className="grid w-full grid-cols-1 gap-8 px-4 mx-auto max-w-screen-2xl lg:grid-cols-4"
       >
         {categories.map((category, index) => (
           //  display category name
@@ -106,7 +106,7 @@ export const useRenderCategories = (
             }`}
           >
             <button
-              className="relative z-10 w-full min-h-[400px] p-8 font-bold transition-all duration-200 transform rounded-md shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 hover:bg-gray-950 group-hover:shadow-2xl"
+              className="relative z-10 w-full min-h-auto lg:min-h-[500px] p-8 font-bold transition-all duration-200 transform rounded-md shadow-lg bg-gray-800 group-hover:shadow-2xl"
               onClick={() =>
                 category.isPro ? null : handleCategoryClick(category.category)
               }
@@ -116,7 +116,7 @@ export const useRenderCategories = (
                 {/* {category.icon} */}
                 <div>
                   <div className="flex flex-col items-center justify-between">
-                    <div className="pb-2 text-6xl rounded-lg w-max h-max">
+                    <div className="pb-2 rounded-lg text-7xl w-max h-max">
                       {category.icon}
                     </div>
                     <h2 className="p-2 text-2xl transition-all duration-200 group-hover/link:text-center">
@@ -126,7 +126,7 @@ export const useRenderCategories = (
 
                   <div className="w-full py-2 border-b-4 border-gray-500 opacity-70"></div>
                   <div className="flex flex-col items-center justify-center space-x-4">
-                    <p className="mt-2 font-thin text-gray-300 text-md">
+                    <p className="mt-2 font-light text-gray-300 text-md">
                       {category.description}
                     </p>
                     <button
@@ -136,10 +136,9 @@ export const useRenderCategories = (
                           : handleCategoryClick(category.category)
                       }
                       disabled={category.isPro}
-                      className="flex items-center px-3 py-1 mt-4 font-bold text-black bg-gray-400 border-2 border-gray-400 rounded-md whitespace-nowrap group hover:text-gray-400 hover:bg-black"
+                      className="flex items-center px-3 py-1 mt-4 font-bold text-black bg-green-400 border-2 border-green-400 rounded-md whitespace-nowrap group hover:text-green-400 hover:bg-black"
                     >
-                      Practice {category.name.split(" ")[0]}
-                      <span className="ml-2">{category.icon}</span>
+                      Practice <FaArrowRightLong className="ml-2" />
                     </button>
                   </div>
                 </div>

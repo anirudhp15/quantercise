@@ -42,27 +42,30 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
   return (
     <aside className="relative z-10 hidden h-screen lg:flex">
       <nav
-        className={`flex flex-col h-full bg-black border-r shadow-md transition-all duration-300 ${
+        className={`flex flex-col h-full bg-black border-r-2 border-gray-400 shadow-md transition-all duration-300 ${
           expanded ? "w-64" : "w-16"
         }`}
       >
         {/* Logo and Toggle */}
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center">
-            <img
+            {/* <img
               src={logo}
               alt="Logo"
               className={`w-8 h-8 mr-2 ${!expanded && "hidden"}`}
-            />
+            /> */}
             {expanded && (
-              <span className={`text-2xl font-black ${colorClass}`}>
+              <Link
+                to="/landing"
+                className={`text-2xl tracking-tighter font-black ${colorClass}`}
+              >
                 Quantercise
-              </span>
+              </Link>
             )}
           </div>
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700"
+            className="p-1 bg-gray-800 rounded-lg hover:bg-gray-700"
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
@@ -74,11 +77,13 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             <li key={index} className="relative">
               <Link
                 to={item.link}
-                className={`flex items-center py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors ${colorClass}`}
+                className={`flex items-center py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
               >
                 <span className="text-xl">{item.icon}</span>
                 {expanded && (
-                  <span className="ml-4 text-sm font-medium">{item.text}</span>
+                  <span className="ml-4 text-sm font-semibold">
+                    {item.text}
+                  </span>
                 )}
               </Link>
             </li>
@@ -86,7 +91,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
         </ul>
 
         {/* User Profile and Sign Out */}
-        <div className="mt-auto border-t border-gray-700">
+        <div className="mt-auto border-t-2 border-gray-700">
           <div className="flex flex-col items-center p-4">
             {currentUser && (
               <div className="flex items-center w-full">
@@ -109,7 +114,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             )}
             <button
               onClick={handleSignOut}
-              className={`flex items-center w-full px-3 py-2 mt-4 text-sm font-medium text-center rounded-lg shadow ${bgColorClass}`}
+              className={`flex text-black items-center w-full px-3 py-2 mt-4 text-sm font-medium text-center rounded-lg shadow ${bgColorClass}`}
             >
               <FaSignOutAlt className="mr-2" />
               {expanded ? "Sign Out" : null}

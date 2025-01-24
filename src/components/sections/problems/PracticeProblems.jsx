@@ -278,7 +278,7 @@ const PracticeProblems = React.memo(() => {
   return (
     <div className="relative w-full text-gray-300 bg-gradient-to-b from-black via-gray-900 to-black">
       <div className="relative z-10 flex flex-col justify-start min-h-screen py-24 mx-auto max-w-screen-2xl lg:py-32">
-        <div className="w-full px-8 mx-auto max-w-screen-2xl ">
+        <div className="w-full px-8 mx-auto lg:px-4 max-w-screen-2xl ">
           <Link
             to="/home"
             className={`flex w-min hover:cursor-pointer items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group text-black hover:text-green-400 border-green-400 hover:bg-black bg-green-400`}

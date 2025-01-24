@@ -23,28 +23,6 @@ const Pricing = () => {
     navigate("/register");
   };
 
-  // const handleCheckout = useCallback(async (priceId) => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-
-  //     const response = await axios.post(
-  //       `http://localhost:4242/api/stripe/create-checkout-session`,
-  //       { priceId }
-  //     );
-  //     if (response.data.url) {
-  //       window.location.href = response.data.url;
-  //     } else {
-  //       throw new Error("No URL returned from Stripe");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating checkout session:", error);
-  //     setError("Failed to initiate checkout. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
   return (
     <Elements stripe={stripePromise}>
       <div
@@ -53,7 +31,7 @@ const Pricing = () => {
       >
         <div className="absolute inset-0 z-20 pointer-events-none opacity-30"></div>
 
-        <div className="w-full max-w-6xl px-6 text-center">
+        <div className="w-full max-w-6xl px-8 text-center">
           <h2 className="py-8 text-4xl font-black tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
             Pricing
           </h2>

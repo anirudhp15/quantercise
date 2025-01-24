@@ -90,46 +90,39 @@ const PerformanceAnalytics = () => {
   }));
 
   return (
-    <div className="relative py-16 text-gray-300">
+    <div className="relative text-gray-300">
       {!lowDetailMode && <AnimatedGrid2 />}
 
       <div
-        className="relative z-10 items-center max-w-screen-lg mx-auto"
+        className="relative z-10 flex flex-col justify-center min-h-screen mx-auto max-w-screen-2xl"
         ref={containerRef}
       >
+        <Link
+          to="/home"
+          className={`flex items-center w-min px-2 py-1 text-black hover:bg-black text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
+            isPro
+              ? "hover:text-blue-400 border-blue-400 bg-blue-400"
+              : "hover:text-green-400 border-green-400 bg-green-400"
+          }`}
+        >
+          <FaArrowLeftLong className="mr-2" /> Home
+        </Link>
         <motion.h1
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`pt-6 text-4xl font-black ${
+          className={`py-4 text-4xl font-black ${
             isPro ? "text-blue-400" : "text-green-400"
           }`}
         >
           Performance Analytics
         </motion.h1>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2, ease: "easeOut" }}
-          className="flex justify-start py-4"
-        >
-          <Link
-            to="/home"
-            className={`flex items-center px-2 py-1 text-sm font-semibold transition-all duration-150 border-2 rounded-lg group hover:text-black ${
-              isPro
-                ? "text-blue-400 border-blue-400 hover:bg-blue-300"
-                : "text-green-400 border-green-400 hover:bg-green-300"
-            }`}
-          >
-            <FaArrowLeftLong className="mr-2" /> Home
-          </Link>
-        </motion.div>
 
         {/* Bento board style layout */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+          <div className="p-4 bg-gray-800 rounded-lg shadow-lg">
             <h2
-              className={`text-2xl text-center ${
+              className={`text-2xl font-semibold text-center ${
                 isPro ? "text-blue-400" : "text-green-400"
               }`}
             >
@@ -159,9 +152,9 @@ const PerformanceAnalytics = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+          <div className="p-4 bg-gray-800 rounded-lg shadow-lg">
             <h2
-              className={`text-2xl text-center ${
+              className={`text-2xl font-semibold text-center ${
                 isPro ? "text-blue-400" : "text-green-400"
               }`}
             >
@@ -189,9 +182,9 @@ const PerformanceAnalytics = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="p-4 border rounded-lg shadow-lg bg-gray-950">
+          <div className="p-4 bg-gray-800 rounded-lg shadow-lg">
             <h2
-              className={`text-2xl text-center ${
+              className={`text-2xl font-semibold text-center ${
                 isPro ? "text-blue-400" : "text-green-400"
               }`}
             >

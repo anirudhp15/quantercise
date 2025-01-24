@@ -1,9 +1,5 @@
 import axios from "axios";
 
-// Define the base API URL (use an environment variable or hardcoded for now)
-const API_BASE_STRIPE_URL = "http://localhost:4242/api/stripe";
-const API_BASE_PAYMENTS_URL = "http://localhost:4242/api/payment";
-
 /**
  * Initiates a Stripe checkout session and redirects the user to the Stripe payment page.
  *
@@ -21,7 +17,7 @@ export const handleCheckout = async (priceId, userId = null) => {
 
     // Call the backend API to create the checkout session
     const response = await axios.post(
-      `${API_BASE_STRIPE_URL}/create-checkout-session`,
+      `/api/stripe/create-checkout-session`,
       payload
     );
 
@@ -46,13 +42,10 @@ export const handleCheckout = async (priceId, userId = null) => {
 
 export const handleFreePlan = async (planId, userId) => {
   try {
-    const response = await axios.post(
-      `${API_BASE_PAYMENTS_URL}/plans/subscribe`,
-      {
-        userId,
-        planId,
-      }
-    );
+    const response = await axios.post(`/api/payment/plans/subscribe`, {
+      userId,
+      planId,
+    });
     alert(response.data.message);
     window.location.href = "/home";
   } catch (error) {
