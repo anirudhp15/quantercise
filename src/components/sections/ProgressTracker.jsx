@@ -80,7 +80,7 @@ const ProgressTracker = () => {
   return (
     <div className="relative w-full mx-auto text-gray-300 max-w-screen-2xl z-1">
       <div
-        className="relative z-10 flex flex-col justify-center min-h-screen mx-auto max-w-screen-2xl"
+        className="relative z-10 flex flex-col justify-center min-h-screen px-4 mx-auto max-w-screen-2xl"
         ref={containerRef}
       >
         <Link
