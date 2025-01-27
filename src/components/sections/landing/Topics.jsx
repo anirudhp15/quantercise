@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { TbMathMax } from "react-icons/tb";
 import { AiOutlineCode } from "react-icons/ai";
 import { BsBank } from "react-icons/bs";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { LiaBrainSolid } from "react-icons/lia";
 import { motion } from "framer-motion";
 import "../../../index.css";
@@ -97,19 +98,63 @@ const categories = [
   },
 ];
 
-const Category = ({ name, icon, subtopics }) => (
-  <div className="flex flex-col items-center px-2 text-center">
-    <div className="my-8 lg:mt-0">{icon}</div>
-    <h3 className="py-2 text-xl font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-4xl w-[80%]">
-      {name}
-    </h3>
-    <div className="mt-8 space-y-4 text-sm leading-relaxed tracking-wide text-gray-400 sm:text-lg">
-      {subtopics.map((subtopic, index) => (
-        <p key={index}>{subtopic}</p>
-      ))}
+const Category = ({ name, icon, subtopics }) => {
+  const [isOpen, setIsOpen] = useState(false); // State to toggle subtopics
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div className="relative z-10 flex flex-col items-center px-2 text-center">
+      <div className="hidden my-8 lg:block lg:mt-0">{icon}</div>
+      <h3 className="py-2 hidden lg:block text-xl font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-4xl w-[80%]">
+        {name}
+      </h3>
+      <div className="hidden mt-8 space-y-3 text-sm leading-relaxed tracking-wide text-gray-400 lg:block sm:text-lg">
+        {subtopics.map((subtopic, index) => (
+          <p key={index}>{subtopic}</p>
+        ))}
+      </div>
+      <div className="block my-8 lg:hidden">{icon}</div>
+
+      {/* Category Name */}
+      <button
+        onClick={handleToggle}
+        className="py-2 text-xl block lg:hidden hover:cursor-pointer font-extrabold tracking-tight text-gray-200 sm:text-2xl md:text-3xl xl:text-4xl w-[80%] focus:outline-none"
+      >
+        {name}
+        <p className="flex flex-row items-center justify-center gap-2 text-sm font-normal text-gray-500">
+          {isOpen ? (
+            <>
+              Collapse <FaAngleUp />
+            </>
+          ) : (
+            <>
+              Expand <FaAngleDown />
+            </>
+          )}
+        </p>
+      </button>
+
+      {/* Subtopics with animation */}
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={
+          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }
+        }
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="block mt-4 overflow-hidden text-sm leading-relaxed tracking-wide text-gray-400 lg:hidden sm:text-lg"
+      >
+        {subtopics.map((subtopic, index) => (
+          <p key={index} className="mt-2">
+            {subtopic}
+          </p>
+        ))}
+      </motion.div>
     </div>
-  </div>
-);
+  );
+};
 
 const Topics = () => {
   return (
@@ -149,7 +194,7 @@ const Topics = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 mt-12 divide-y-4 divide-gray-500 gap-y-8 lg:divide-x-4 lg:divide-y-0 lg:grid-cols-4">
+        <div className="grid w-2/3 grid-cols-1 mx-auto mt-12 divide-y-4 divide-gray-500 lg:mx-auto lg:w-full gap-y-8 lg:divide-x-4 lg:divide-y-0 lg:grid-cols-4">
           {categories.map((category, index) => (
             <Category key={index} {...category} />
           ))}

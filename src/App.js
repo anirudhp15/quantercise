@@ -23,7 +23,7 @@ import Waitlist from "./components/sections/Waitlist";
 import Pricing from "./components/sections/landing/pricing/Pricing";
 import StripeCheckout from "./components/sections/landing/tba/StripeCheckout";
 import SuccessPage from "./components/sections/auth/onboarding/SuccessPage";
-import OnboardingTutorial from "./components/sections/auth/onboarding/OnboardingTutorial";
+import Onboarding from "./components/sections/auth/onboarding/Onboarding";
 import { Analytics } from "@vercel/analytics/react";
 import AnimatedGrid from "./components/sections/landing/animatedGrid/AnimatedGrid";
 import ResetPage from "./components/parts/ResetPage";
@@ -108,7 +108,7 @@ function RouteComponent() {
     { path: "/pricing", element: <Pricing /> },
     { path: "/checkout", element: <StripeCheckout /> },
     { path: "/success", element: <SuccessPage /> },
-    { path: "/onboarding", element: <OnboardingTutorial /> },
+    { path: "/onboarding", element: <Onboarding /> },
     { path: "*", element: <Navigate to="/register" replace /> },
   ];
 
@@ -126,6 +126,7 @@ function RouteComponent() {
   const isOnboardingPage =
     location.pathname === "/register" ||
     location.pathname === "/success" ||
+    location.pathname === "/onboarding" ||
     location.pathname === "/login";
 
   return (

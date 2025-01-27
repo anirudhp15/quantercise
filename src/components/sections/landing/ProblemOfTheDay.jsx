@@ -85,31 +85,35 @@ const ProblemOfTheDay = () => {
           showNotes={showNotes}
           fetchNewProblem={fetchNewProblem}
         />
+        <button className="block px-6 py-2 mx-auto my-8 font-bold text-white bg-blue-500 rounded-lg lg:hidden group hover:bg-blue-600">
+          Explore More
+          <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
+        </button>
       </div>
       {/* Text Section */}
-      <div className="w-full leading-loose text-center lg:w-1/3 lg:text-left lg:ml-12">
+      <div className="w-5/6 pb-8 mx-auto leading-loose text-left lg:my-auto lg:w-1/3 lg:ml-12">
         <motion.h2
           id="concepts-words"
-          className="relative pt-2 pb-4 text-4xl font-black tracking-tighter text-transparent md:pb-8 sm:text-5xl md:text-6xl gradient-text animate-gradient"
+          className="relative pt-2 pb-4 text-4xl font-black tracking-tighter text-center text-transparent lg:text-left md:pb-8 sm:text-5xl md:text-6xl gradient-text animate-gradient"
         >
           150+ Problems
         </motion.h2>
         <p className="mt-4 text-xl font-bold">
           <SiOpentofu className="inline-block mb-[2px] ml-[-2px] mr-2 text-blue-400" />
-          Get personalized feedback on your solutions to learn from your
-          mistakes and build confidence
+          Get personalized feedback on your solutions to learn from your common
+          mistakes
         </p>
-        <p className="mt-4 text-lg font-normal ">
+        <p className="mt-4 text-lg font-medium ">
           <FaTrophy className="inline-block mb-[2px] mr-2 text-yellow-400" />
           Simulate high-pressure challenges inspired by real quant interviews to
-          sharpen your problem-solving skills
+          sharpen your problem-solving
         </p>
         <p className="mt-4 font-light text-md">
           <FaCheckCircle className="inline-block mb-[2px] mr-2 text-green-400" />
           Track your progress and master essential concepts with tailored
           feedback for continuous improvement
         </p>
-        <button className="px-6 py-2 my-8 font-bold text-white bg-blue-500 rounded-lg group hover:bg-blue-600">
+        <button className="hidden px-6 py-2 my-8 font-bold text-white bg-blue-500 rounded-lg lg:block group hover:bg-blue-600">
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
         </button>

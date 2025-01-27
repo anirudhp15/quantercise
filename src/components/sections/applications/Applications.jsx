@@ -4,6 +4,7 @@ import { TbNotes, TbNotesOff } from "react-icons/tb";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Input } from "antd";
+import { FaCog, FaChartBar } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -50,9 +51,7 @@ const Applications = () => {
     console.log("User:", currentUser);
     if (currentUser && currentUser.email) {
       axios
-        .get(
-          `https://quantercise-api.vercel.app/api/applications/user-applications/${currentUser.email}`
-        )
+        .get(`/api/applications/user-applications/${currentUser.email}`)
         .then((response) => {
           setApplications(response.data.applications); // Set the applications data from MongoDB
           setLoading(false);
@@ -76,19 +75,16 @@ const Applications = () => {
     const newApplication = { ...form, dateOfSubmission: new Date() };
 
     if (!currentUser || !currentUser.email) {
-      console.error("User is not logged in or email is missing.");
+      console.error("User is not logged in or email is missing.", currentUser);
       setError("User is not logged in or email is missing.");
       return;
     }
 
     axios
-      .post(
-        "https://quantercise-api.vercel.app/api/applications/add-application",
-        {
-          email: currentUser.email,
-          application: newApplication,
-        }
-      )
+      .post("/api/applications/add-application", {
+        email: currentUser.email,
+        application: newApplication,
+      })
       .then((response) => {
         setApplications(response.data.applications); // Update local state
         setForm({
@@ -121,13 +117,10 @@ const Applications = () => {
   // Delete application from MongoDB
   const handleDelete = (id) => {
     axios
-      .post(
-        "https://quantercise-api.vercel.app/api/applications/delete-application",
-        {
-          id,
-          email: currentUser.email,
-        }
-      )
+      .post("/api/applications/delete-application", {
+        id,
+        email: currentUser.email,
+      })
       .then((response) => {
         setApplications(response.data.applications); // Update state
       })
@@ -205,6 +198,50 @@ const Applications = () => {
     if (diff < 0) return "bg-red-500 text-white"; // Overdue
     if (diff <= 7) return "bg-yellow-400 text-black"; // Due soon
     return "bg-green-400 text-black"; // Safe
+  };
+
+  const fieldColors = {
+    Trading: "bg-green-400 text-black",
+    Research: "bg-blue-400 text-white",
+    SWE: "bg-yellow-400 text-black",
+    "Data Analysis": "bg-purple-400 text-black",
+    Engineering: "bg-red-400 text-black",
+    Other: "bg-gray-400 text-black",
+    Default: "bg-gray-700 text-white",
+  };
+
+  const fieldIcons = {
+    Trading: <Activity className="w-4 h-4" />,
+    Research: <BookOpen className="w-4 h-4" />,
+    SWE: <FaCog className="w-4 h-4" />,
+    "Data Analysis": <BarChart className="w-4 h-4" />,
+    Engineering: <FaChartBar className="w-4 h-4" />,
+    Other: <TbNotes className="w-4 h-4" />,
+    Default: <TbNotesOff className="w-4 h-4" />,
+  };
+
+  const getFieldColor = (field) => fieldColors[field] || fieldColors.Default;
+  const getFieldIcon = (field) => fieldIcons[field] || fieldIcons.Default;
+
+  const simplifyCoverLetter = (coverLetter) => {
+    const mappings = {
+      "No Cover Letter": "None",
+      "Cover Letter Submitted": "Submitted",
+      "In Progress": "In Progress",
+    };
+    return mappings[coverLetter] || "N/A";
+  };
+
+  const coverLetterColors = {
+    None: "text-red-400", // No cover letter
+    Submitted: "text-green-400", // Submitted
+    "In Progress": "text-yellow-400", // In progress
+    Default: "text-gray-300", // Fallback color
+  };
+
+  const getCoverLetterColor = (coverLetter) => {
+    const simplified = simplifyCoverLetter(coverLetter);
+    return coverLetterColors[simplified] || coverLetterColors.Default;
   };
 
   const handleSearch = (e) => {
@@ -318,14 +355,14 @@ const Applications = () => {
           >
             <form
               onSubmit={handleSubmit}
-              className="relative z-10 px-4 py-2 space-y-4 border-2 border-gray-700 rounded-md shadow-lg bg-gray-950"
+              className="relative z-10 px-4 py-2 space-y-4 bg-gray-800 rounded-md shadow-lg"
             >
               <button
                 type="button"
                 onClick={handleFormClose}
                 className="absolute top-0 right-0 p-4 text-gray-400 hover:text-red-600"
               >
-                <FaTimes />
+                <FaTimes className="text-xl" />
               </button>
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:grid-cols-2">
                 {[
@@ -347,7 +384,7 @@ const Applications = () => {
                   },
                 ].map((field) => (
                   <div key={field.name}>
-                    <label className="block text-sm font-medium text-gray-300">
+                    <label className="block text-sm font-medium text-gray-400">
                       {field.label}
                     </label>
                     {field.type === "select" ? (
@@ -355,7 +392,7 @@ const Applications = () => {
                         name={field.name}
                         value={form[field.name]}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 border border-gray-600 rounded-lg shadow-sm bg-gray-950 focus:outline-none focus:border-green-500"
+                        className="w-full px-3 py-2 mt-1 text-green-400 rounded-lg shadow-sm bg-gray-950 focus:outline-none focus:border-green-500"
                       >
                         <option value="">Select {field.label}</option>
 
@@ -383,7 +420,7 @@ const Applications = () => {
                               No Cover Letter
                             </option>
                             <option value="Cover Letter Submitted">
-                              Cover Letter Submitted
+                              Submitted
                             </option>
                             <option value="In Progress">In Progress</option>
                           </>
@@ -395,7 +432,7 @@ const Applications = () => {
                         name={field.name}
                         value={form[field.name]}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:border-green-500 focus:bg-gray-950"
+                        className="w-full px-3 py-2 mt-1 text-green-400 rounded-lg shadow-sm bg-gray-950 focus:outline-none focus:border-green-500 focus:bg-gray-950"
                       />
                     )}
                   </div>
@@ -411,13 +448,13 @@ const Applications = () => {
                   onChange={handleInputChange}
                   rows="2"
                   placeholder="This is where you can note the department, any network/people you know associated with the role, interview process, etc."
-                  className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                  className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                 />
               </div>
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="inline-flex items-center px-6 py-2 my-4 font-bold text-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:bg-green-400 hover:text-black hover:shadow-lg group"
+                  className="inline-flex items-center px-6 py-2 my-4 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg group"
                 >
                   <FaPlus className="mr-2 transition-all duration-500 group-hover:-rotate-180" />{" "}
                   {editMode ? "Save Changes" : "Add Application"}
@@ -493,14 +530,27 @@ const Applications = () => {
                               )}
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-center text-gray-300 border-r border-gray-700 last:border-r-0">
-                            {application.field}
+                          <td className="px-6 py-4 text-sm font-medium text-center border-r border-gray-700 last:border-r-0">
+                            <div
+                              className={`inline-flex items-center whitespace-nowrap px-2 py-1 rounded-md ${getFieldColor(
+                                application.field
+                              )}`}
+                            >
+                              {getFieldIcon(application.field)}
+                              <span className="ml-2">
+                                {application.field || "N/A"}
+                              </span>
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-center text-gray-300 border-r border-gray-700 last:border-r-0">
                             {application.location}
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-center text-gray-300 border-r border-gray-700 last:border-r-0">
-                            {application.coverLetter}
+                          <td
+                            className={`px-6 py-4 text-sm font-medium text-center border-r border-gray-700 last:border-r-0 ${getCoverLetterColor(
+                              application.coverLetter
+                            )}`}
+                          >
+                            {simplifyCoverLetter(application.coverLetter)}
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-gray-300 last:border-r-0">
                             <div className="flex justify-center space-x-2">
@@ -636,7 +686,7 @@ const Applications = () => {
                                   <span className="font-semibold">
                                     Cover Letter:
                                   </span>{" "}
-                                  {application.coverLetter}
+                                  {simplifyCoverLetter(application.coverLetter)}
                                 </p>
                                 <p>
                                   <span className="font-semibold">Notes:</span>{" "}

@@ -101,7 +101,7 @@ const Header = ({ onJoinClick }) => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut", delay: 5 }}
-      className={`fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 transition-all duration-100 border-b-4 border-gray-700 shadow-2xl group md:px-32 bg-gradient-to-r from-gray-900 via-black to-gray-900 ${
+      className={`fixed top-0 left-0 z-20 flex items-center justify-between w-full h-16 px-6 transition-all duration-100 border-b-4 border-gray-700 shadow-2xl group lg:px-32 bg-gradient-to-r from-gray-900 via-black to-gray-900 ${
         isPro && !isLandingPage
           ? "xl:hover:border-blue-300"
           : "xl:hover:border-green-300"

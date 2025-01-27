@@ -170,9 +170,9 @@ const Intro = React.memo(({ triggerBounce }) => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1 }}
-                  className="pt-32 font-extrabold tracking-tight text-gray-200 whitespace-nowrap ext-3xl xl:pt-16 sm:text-4xl md:text-5xl"
+                  className="text-3xl font-extrabold tracking-tight text-gray-200 whitespace-nowrap xl:pt-16 sm:text-4xl md:text-5xl"
                 >
-                  Welcome to <br />
+                  <span className="text-gray-100/75">Welcome to</span> <br />
                   <span className="block text-5xl font-black tracking-tighter text-transparent whitespace-nowrap sm:pt-12 gradient-text animate-gradient sm:inline md:text-6xl">
                     Quantercise
                   </span>
@@ -191,19 +191,19 @@ const Intro = React.memo(({ triggerBounce }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
-                    className="px-4 py-3 mt-8 font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-green-400 hover:text-black"
+                    className="px-4 py-2 mt-8 text-xs font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-green-400 hover:text-black"
                   >
                     Create Account
-                    <TbUserEdit className="inline-block w-6 h-6 ml-2" />
+                    <TbUserEdit className="inline-block w-4 h-4 ml-2 lg:w-4 lg:h-6" />
                   </motion.button>
                   <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
-                    className="px-4 py-3 mt-8 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg text-md whitespace-nowrap hover:bg-black hover:text-green-400"
+                    className="px-4 py-2 mt-8 text-xs font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-black hover:text-green-400"
                   >
                     Join Newsletter
-                    <TbNews className="inline-block w-6 h-6 ml-2" />
+                    <TbNews className="inline-block w-4 h-4 ml-2 lg:w-4 lg:h-6" />
                   </motion.button>
                 </div>
               </div>

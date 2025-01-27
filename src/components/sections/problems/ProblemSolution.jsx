@@ -43,6 +43,13 @@ const ProblemSolution = ({
 
   const { fetchFeedback } = useFeedback();
 
+  const extractFeedbackExplanation = (feedback) => {
+    if (!feedback) return "No explanation available";
+
+    const match = feedback.match(/Explanation:(.*)/); // Captures everything after "Explanation:"
+    return match && match[1] ? match[1] : "No explanation provided";
+  };
+
   const categorizeFeedback = (feedbackText) => {
     if (!feedbackText || feedbackText === "") {
       return {
@@ -93,12 +100,11 @@ const ProblemSolution = ({
     setShowSolution(true);
 
     if (!userAnswer || userAnswer.trim() === "") {
-      setFeedback("No solution was given");
-      setFeedbackCategory({
-        heading: "NO SOLUTION",
-        color: "text-gray-400",
-        replace: "",
-      });
+      fetchFeedback(
+        selectedProblem.description,
+        "No solution provided",
+        categorizeFeedback
+      );
       return;
     }
 
@@ -123,9 +129,9 @@ const ProblemSolution = ({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex items-center justify-center p-8"
+      className="flex items-center justify-center"
     >
-      <div className="relative w-full p-8 bg-gray-800 rounded-lg shadow-2xl max-w-screen-4xl">
+      <div className="relative w-full p-8 mx-8 mt-8 bg-gray-800 rounded-lg shadow-2xl max-w-screen-4xl">
         {/* Title and Timer */}
         <button
           onClick={handleCloseModal}
@@ -238,10 +244,8 @@ const ProblemSolution = ({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col justify-between h-full pb-4">
-                <p className="text-gray-500">
-                  Hints are hidden. Click "Show Hint" to reveal them.
-                </p>
+              <div className="flex flex-col justify-between h-full pb-8">
+                <p className="text-gray-500">Hints are hidden.</p>
                 {!hintsVisible && (
                   <button
                     className="px-4 py-2 font-bold text-black transition-colors duration-300 rounded-lg shadow-md bg-green-400/85 hover:bg-green-300"
@@ -291,10 +295,8 @@ const ProblemSolution = ({
                 </div>
               </>
             ) : (
-              <div className="flex flex-col justify-between h-full pb-4">
-                <p className="text-gray-500">
-                  Notes are hidden. Click "Show Notes" to reveal them.
-                </p>
+              <div className="flex flex-col justify-between h-full pb-8">
+                <p className="text-gray-500">Notes are hidden.</p>
                 {!showNotes && (
                   <button
                     className="px-4 py-2 font-bold text-white transition-colors duration-300 bg-gray-700 rounded-lg shadow-md hover:bg-gray-600"
@@ -309,7 +311,7 @@ const ProblemSolution = ({
         </div>
 
         {/* User Input */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 my-8">
           <input
             type="text"
             value={userAnswer}
@@ -326,51 +328,68 @@ const ProblemSolution = ({
         </div>
 
         {/* Feedback Section */}
-        {showSolution && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4 }}
-            className="p-8 mt-8 -mx-8 -mb-8 bg-gray-900 rounded-b-lg shadow-md"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="p-8 pt-4 -mx-8 -mb-8 bg-gray-900 rounded-b-lg shadow-md"
+        >
+          {showSolution && (
             <h2 className={`text-lg py-2 font-bold ${feedbackCategory.color}`}>
               {feedbackCategory.heading}
             </h2>
-            {loadingFeedback ? (
-              <p className="p-4 mt-4 text-blue-300 animate-pulse">
-                <SiOpentofu
-                  style={{ color: currentUser.profileColor }}
-                  className="inline-block mr-2 text-4xl shadow-lg animate-bounce"
-                />
-                Fetching feedback...
-              </p>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-                className="p-4 mt-4 bg-gray-800 rounded-lg shadow-md"
-              >
-                <SiOpentofu
-                  style={{ color: currentUser.profileColor }}
-                  className="inline-block mr-4 text-4xl "
-                />
+          )}
+
+          {loadingFeedback ? (
+            <p className="p-4 mt-4 text-blue-300 animate-pulse">
+              <SiOpentofu className="inline-block mr-2 text-4xl text-blue-400 shadow-lg animate-bounce" />
+              Fetching feedback...
+            </p>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+              className="p-4 mt-4 bg-gray-700 rounded-lg shadow-md"
+            >
+              <SiOpentofu
+                className={`inline-block mr-4 text-4xl ${
+                  timeoutOccurred
+                    ? "text-red-400"
+                    : currentUser
+                    ? currentUser.profileColor ?? "text-gray-400"
+                    : "text-blue-400"
+                }`}
+              />
+              {!showSolution && !loadingFeedback ? (
                 <ReactTyped
-                  strings={[
-                    feedback
-                      .replace(feedbackCategory.heading.toLowerCase(), "")
-                      .trim(),
-                  ]}
+                  strings={["Press Submit to view feedback"]}
                   typeSpeed={1}
-                  className="mt-2 text-sm text-gray-300"
+                  className="mt-2 text-sm leading-[3rem] text-gray-300"
                   loop={false}
                 />
-              </motion.div>
-            )}
-          </motion.div>
-        )}
+              ) : timeoutOccurred ? (
+                <ReactTyped
+                  strings={[
+                    "Time's up! Press Reset Question to try another one",
+                  ]}
+                  typeSpeed={1}
+                  className="mt-2 text-sm leading-[3rem] text-red-400"
+                  loop={false}
+                />
+              ) : (
+                <ReactTyped
+                  strings={[extractFeedbackExplanation(feedback)]}
+                  typeSpeed={1}
+                  className="mt-2 text-sm leading-[3rem] text-gray-300"
+                  loop={false}
+                />
+              )}
+            </motion.div>
+          )}
+        </motion.div>
       </div>
     </motion.div>
   );

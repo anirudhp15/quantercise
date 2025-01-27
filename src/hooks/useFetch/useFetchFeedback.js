@@ -9,6 +9,7 @@ export const useFeedback = () => {
   const fetchFeedback = async (
     problemDescription,
     userSolution,
+    isPro,
     categorizeFeedback
   ) => {
     setLoading(true);
@@ -16,6 +17,7 @@ export const useFeedback = () => {
       const response = await axios.post(`/api/feedback/solution`, {
         problemDescription,
         userSolution,
+        isPro,
       });
 
       const feedbackText = response.data.feedback; // Extract feedback

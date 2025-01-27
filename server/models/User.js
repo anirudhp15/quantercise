@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   googleId: { type: String },
-  firebaseUid: { type: String, required: true, unique: true },
+  firebaseUid: { type: String },
   displayName: {
     type: String,
     default: "",
@@ -72,7 +72,7 @@ const userSchema = new mongoose.Schema({
   },
   isPro: {
     type: Boolean,
-    default: false,
+    default: null, // Default to null for free or no subscription
   },
   currentPlan: {
     type: mongoose.Schema.Types.ObjectId,

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ReactTyped } from "react-typed";
 import { SiOpentofu } from "react-icons/si";
 import { useFeedback } from "../../../hooks/useFetch/useFetchFeedback";
+import { useAuth } from "../../../contexts/authContext";
 
 const ProblemCard = ({
   problem,
@@ -22,6 +23,8 @@ const ProblemCard = ({
   const [showSolution, setShowSolution] = useState(false);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
   const [timeoutOccurred, setTimeoutOccurred] = useState(false); // Track timeout state
+  const { currentUser } = useAuth();
+  console.log("currentUser", currentUser);
 
   const { feedback, feedbackCategory, fetchFeedback } = useFeedback();
 
@@ -232,41 +235,66 @@ const ProblemCard = ({
       )}
 
       {/* Feedback Section */}
-      {showSolution && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4 }}
-          className="p-8 pt-4 -mx-8 bg-gray-900 rounded-b-lg shadow-md"
-        >
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.4 }}
+        className="p-8 pt-4 -mx-8 bg-gray-900 rounded-b-lg shadow-md"
+      >
+        {showSolution && (
           <h2 className={`text-lg py-2 font-bold ${feedbackCategory.color}`}>
             {feedbackCategory.heading}
           </h2>
-          {loadingFeedback ? (
-            <p className="p-4 mt-4 text-blue-300 animate-pulse">
-              <SiOpentofu className="inline-block mr-2 text-4xl text-blue-400 shadow-lg animate-bounce" />
-              Fetching feedback...
-            </p>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
-              className="p-4 mt-4 bg-gray-700 rounded-lg shadow-md"
-            >
-              <SiOpentofu className="inline-block mr-4 text-4xl text-blue-400" />
+        )}
+
+        {loadingFeedback ? (
+          <p className="p-4 mt-4 text-blue-300 animate-pulse">
+            <SiOpentofu className="inline-block mr-2 text-4xl text-blue-400 shadow-lg animate-bounce" />
+            Fetching feedback...
+          </p>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4 }}
+            className="p-4 mt-4 bg-gray-700 rounded-lg shadow-md"
+          >
+            <SiOpentofu
+              className={`inline-block mr-4 text-4xl ${
+                timeoutOccurred
+                  ? "text-red-400"
+                  : currentUser
+                  ? currentUser.profileColor ?? "text-gray-400"
+                  : "text-blue-400"
+              }`}
+            />
+            {!showSolution && !loadingFeedback ? (
+              <ReactTyped
+                strings={["Press Submit to view feedback"]}
+                typeSpeed={1}
+                className="mt-2 text-sm leading-[3rem] text-gray-300"
+                loop={false}
+              />
+            ) : timeoutOccurred ? (
+              <ReactTyped
+                strings={["Time's up! Press Reset Question to try another one"]}
+                typeSpeed={1}
+                className="mt-2 text-sm leading-[3rem] text-red-400"
+                loop={false}
+              />
+            ) : (
               <ReactTyped
                 strings={[extractFeedbackExplanation(feedback)]}
                 typeSpeed={1}
                 className="mt-2 text-sm leading-[3rem] text-gray-300"
                 loop={false}
               />
-            </motion.div>
-          )}
-        </motion.div>
-      )}
+            )}
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 };

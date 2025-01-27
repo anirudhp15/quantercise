@@ -40,7 +40,7 @@ export const handleCheckout = async (priceId, userId = null) => {
  * @returns {Promise<void>}
  */
 
-export const handleFreePlan = async (planId, userId) => {
+export const handleFreePlan = async (planId, userId = null) => {
   try {
     const response = await axios.post(`/api/payment/plans/subscribe`, {
       userId,

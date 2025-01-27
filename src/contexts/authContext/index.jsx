@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
+import { useUser } from "../userContext";
 
 const AuthContext = createContext();
 
@@ -50,7 +51,7 @@ export function AuthProvider({ children }) {
         profilePicture: firebaseUser.photoURL,
         registrationStep: "mongo", // Move to the next step
         isPro: false,
-        currentPlan: "free-plan-id", // Assign default free plan
+        currentPlan: null, // Assign default free plan
       });
 
       // Update currentUser and Pro status after registration

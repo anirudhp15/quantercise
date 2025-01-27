@@ -11,13 +11,24 @@ import "../../../index.css";
 import { useLowDetail } from "../../../contexts/LowDetailContext";
 import useFetchUserData from "../../../hooks/useFetch/useFetchUserData";
 import SectionCard from "./SectionCard";
+import { useUser } from "../../../contexts/userContext";
+import {
+  FaClipboardList,
+  FaChartBar,
+  FaSignOutAlt,
+  FaCog,
+} from "react-icons/fa";
+import { RiPlayListAddFill } from "react-icons/ri";
+import { TbHome } from "react-icons/tb";
+import { TbProgressCheck } from "react-icons/tb";
 
 const Home = React.memo(() => {
   const { currentUser } = useAuth();
   const { lowDetailMode } = useLowDetail();
 
   const [showOverlay, setShowOverlay] = useState(false);
-  const { isPro, problemsCompleted } = useFetchUserData(currentUser);
+  const { problemsCompleted } = useFetchUserData(currentUser);
+  const { isPro } = useUser();
 
   console.log("Problems completed:", problemsCompleted);
   console.log("Is Pro:", isPro);
@@ -53,26 +64,77 @@ const Home = React.memo(() => {
       <div className="relative flex items-center justify-center w-full h-auto min-h-screen px-4 text-gray-300 bg-gradient-to-b from-black via-gray-900 to-black">
         {!lowDetailMode && <AnimatedGrid2 />}
         <div className="relative z-10 flex flex-col justify-center py-24 mx-auto max-w-screen-2xl">
-          <div className="text-3xl font-black text-center text-transparent lg:text-left sm:text-4xl md:text-5xl animate-gradient gradient-text">
-            <div className="h-14">
-              <ReactTyped
-                strings={["lets quantercise!"]}
-                typeSpeed={100}
-                backSpeed={60}
-                startDelay={500}
-                showCursor={false}
-              />
+          <div className="flex flex-col items-center justify-center lg:flex-row">
+            <div className="w-3/4">
+              <div className="text-3xl font-black text-center text-transparent lg:text-left sm:text-4xl md:text-5xl animate-gradient gradient-text">
+                <div className="h-14">
+                  <ReactTyped
+                    strings={["lets quantercise!"]}
+                    typeSpeed={100}
+                    backSpeed={60}
+                    startDelay={500}
+                    showCursor={false}
+                  />
+                </div>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 1 }}
+              >
+                <p className="mt-2 text-lg font-light text-center lg:text-left">
+                  {getIntroMessage()}
+                </p>
+              </motion.div>
+            </div>
+            <div className="w-full lg:w-1/2">
+              <motion.h2
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 1 }}
+                className="text-xl font-normal text-left text-gray-400"
+              >
+                <div className="py-2">
+                  <ReactTyped
+                    strings={["Quick Actions"]}
+                    typeSpeed={100}
+                    backSpeed={60}
+                    startDelay={2500}
+                    showCursor={false}
+                  />
+                </div>
+              </motion.h2>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 2 }}
+                className="flex flex-row w-full gap-2 text-xs text-black lg:flex-col sm:w-min"
+              >
+                <Link
+                  to="/practice-problems"
+                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-green-400 to-green-700 whitespace-nowrap hover:text-green-400 hover:from-gray-950 hover:to-black"
+                >
+                  Practice Math
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+                <Link
+                  to="/applications"
+                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-blue-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
+                >
+                  Add Application
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+                <Link
+                  to="/profile"
+                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-gray-400 to-gray-700 whitespace-nowrap hover:text-gray-400 hover:bg-black hover:from-gray-950 hover:to-black"
+                >
+                  Edit Membership
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+              </motion.div>
             </div>
           </div>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut", delay: 1 }}
-          >
-            <p className="mt-2 text-lg font-light text-center lg:text-left">
-              {getIntroMessage()}
-            </p>
-          </motion.div>
           <motion.div
             initial="hidden"
             animate="visible"
@@ -85,10 +147,11 @@ const Home = React.memo(() => {
                 },
               },
             }}
-            className="grid grid-cols-1 gap-4 my-8 lg:grid-cols-5 sm:gap-6"
+            className="grid grid-cols-1 gap-4 my-4 lg:my-8 lg:grid-cols-5 sm:gap-6"
           >
             <SectionCard
               title="Problems"
+              icon={<RiPlayListAddFill />}
               description="Access a variety of quant interview problems to improve your skills."
               buttonText="Start Practicing"
               link="/practice-problems"
@@ -100,6 +163,7 @@ const Home = React.memo(() => {
             />
             <SectionCard
               title="Track Progress"
+              icon={<TbProgressCheck />}
               description={
                 problemsCompleted === 0 ? (
                   <span>
@@ -130,6 +194,7 @@ const Home = React.memo(() => {
             {isPro && (
               <SectionCard
                 title="Analytics"
+                icon={<FaChartBar />}
                 description="Track your performance and identify areas for improvement."
                 buttonText="View Analytics"
                 link="/analytics"
@@ -143,6 +208,7 @@ const Home = React.memo(() => {
             {isPro && (
               <SectionCard
                 title="Applications"
+                icon={<FaClipboardList />}
                 description="Keep track of your internship/job applications and upcoming interviews."
                 buttonText="View Applications"
                 link="/applications"
@@ -155,6 +221,7 @@ const Home = React.memo(() => {
             )}
             <SectionCard
               title="Profile Settings"
+              icon={<FaCog />}
               description="Update your profile information and account settings."
               buttonText="View Profile"
               link="/profile"

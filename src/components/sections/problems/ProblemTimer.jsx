@@ -6,6 +6,7 @@ import {
   FaCheckCircle,
   FaQuestion,
 } from "react-icons/fa";
+import { FaC } from "react-icons/fa6";
 
 const ProblemTimer = ({ difficulty, onTimeout, feedbackCategory }) => {
   const maxTime =
@@ -88,7 +89,8 @@ const ProblemTimer = ({ difficulty, onTimeout, feedbackCategory }) => {
         aria-valuemax={maxTime}
         value={state.timeLeft}
         maxValue={maxTime}
-        text={formatTime(state.timeLeft)}
+        // Hide the text when the timer reaches 0
+        text={state.timeLeft > 0 ? formatTime(state.timeLeft) : ""}
         styles={buildStyles({
           textColor: feedbackCategory
             ? "#ffffff"
@@ -104,7 +106,11 @@ const ProblemTimer = ({ difficulty, onTimeout, feedbackCategory }) => {
         })}
       />
       <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full">
-        {feedbackIcons[feedbackCategory] || null}
+        {state.timeLeft === 0 ? (
+          <FaExclamationTriangle className="text-4xl text-yellow-500" />
+        ) : (
+          feedbackIcons[feedbackCategory] || null
+        )}
       </div>
     </div>
   );

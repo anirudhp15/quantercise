@@ -115,37 +115,31 @@ export const useRenderCategories = (
         className="flex flex-col items-center justify-between px-8 pb-2 mx-auto max-w-screen-2xl lg:flex-row"
       >
         {/* Left-aligned Topics of Practice */}
-        <div className="mb-2 -mt-10 text-xl font-bold text-center lg:mt-0 text-gray-300/75 lg:text-left lg:mb-0">
+        <div className="mb-2 text-xl font-bold text-center lg:mt-0 text-gray-300/75 lg:text-left lg:-mb-2">
           Topics of Practice
         </div>
 
         {/* Right-aligned Buttons */}
-        <div className="flex flex-row items-center gap-2 lg:gap-4 ">
+        <div className="flex flex-row items-center gap-2 text-sm lg:gap-4 ">
           <button
-            className="h-full px-2 py-1 mb-1 font-semibold text-black bg-gray-400 border-2 border-gray-400 rounded-md whitespace-nowrap group hover:text-gray-400 hover:bg-black"
+            className="h-full px-2 py-1 font-semibold text-black bg-gray-400 border-2 border-gray-400 rounded-md whitespace-nowrap group hover:text-gray-400 hover:bg-black"
             onClick={handleRefreshAllClick}
           >
             <FaSyncAlt className="inline-block mr-2 transition-all duration-300 group-hover:rotate-180" />
             Refresh Problems
           </button>
           <button
-            className="h-full px-2 py-1 mb-1 font-semibold text-black bg-yellow-400 border-2 border-yellow-400 rounded-md whitespace-nowrap group hover:text-yellow-400 hover:bg-black"
+            className="h-full px-2 py-1 font-semibold text-black bg-yellow-400 border-2 border-yellow-400 rounded-md whitespace-nowrap group hover:text-yellow-400 hover:bg-black"
             onClick={handleBookmarkClick}
           >
             <>
-              <MdBookmark
-                className="inline-block mr-2 group-hover:hidden"
-                size={24}
-              />
-              <MdBookmarks
-                className="hidden mr-2 group-hover:inline-block"
-                size={24}
-              />
+              <MdBookmark className="inline-block mr-2 text-sm group-hover:hidden" />
+              <MdBookmarks className="hidden mr-2 text-sm group-hover:inline-block" />
             </>
             Bookmarks
           </button>
           <button
-            className="flex items-center px-2 py-1 mb-1 font-semibold text-black bg-green-400 border-2 border-green-400 rounded-md whitespace-nowrap group hover:text-green-400 hover:bg-black"
+            className="flex items-center h-full px-2 py-1 font-semibold text-black bg-green-400 border-2 border-green-400 rounded-md whitespace-nowrap group hover:text-green-400 hover:bg-black"
             onClick={handleReviewAllClick}
           >
             All Problems
@@ -158,7 +152,7 @@ export const useRenderCategories = (
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="grid w-full grid-cols-1 gap-8 px-4 mx-auto max-w-screen-2xl lg:grid-cols-2 xl:grid-cols-4"
+        className="grid w-full grid-cols-1 gap-8 px-4 mx-auto mt-2 lg:mt-0 max-w-screen-2xl lg:grid-cols-2 xl:grid-cols-4"
       >
         {categories.map((category, index) => (
           //  display category name

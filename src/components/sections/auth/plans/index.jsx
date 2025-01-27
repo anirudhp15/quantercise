@@ -5,40 +5,46 @@ import useFetchPlans from "../../../../hooks/useFetch/useFetchPlans";
 import { useAuth } from "../../../../contexts/authContext";
 import { useUser } from "../../../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
-import { handleCheckout, handleFreePlan } from "../../../../utils/stripe";
+import axios from "axios";
 
 const PlanSelection = () => {
-  const { registrationStep, setRegistrationStep } = useAuth(); // Registration flow control
-  const { isPro, setIsPro, setProfileColor } = useUser(); // User-specific updates
+  const { currentUser } = useAuth(); // Current user details
+  const {
+    isPro,
+    setIsPro,
+    currentPlan,
+    setCurrentPlan,
+    mongoId,
+    setProfileColor,
+    handlePlanChange,
+  } = useUser(); // User-specific updates
   const { plans } = useFetchPlans(); // Fetch available plans
   const navigate = useNavigate();
 
   const onPlanSelect = async (plan) => {
+    console.log("Selected plan:", plan);
+    console.log("Current user:", currentUser);
     try {
-      const isProPlan = plan.price > 0;
+      if (plan.price > 0) {
+        // Redirect to Stripe checkout page for paid plans
+        const response = await axios.post("/api/payment/plans/select", {
+          userId: mongoId,
+          planId: plan._id,
+        });
 
-      if (isProPlan) {
-        // Handle Stripe checkout for paid plans
-        await handleCheckout(plan.priceId);
-
-        // Update user-specific state
-        setIsPro(true);
+        if (response.data.checkoutUrl) {
+          window.location.href = response.data.checkoutUrl;
+        } else {
+          throw new Error("Failed to generate checkout URL.");
+        }
       } else {
         // Handle free plan selection
-        await handleFreePlan();
-
-        // Update user-specific state
-        setIsPro(false);
+        await handlePlanChange(plan._id); // Update the user context
+        navigate("/home"); // Redirect to home
       }
-
-      // Set a default profile color after plan selection (optional)
-      setProfileColor("#6B7280");
-
-      // Complete registration step
-      setRegistrationStep("complete");
-      console.log(`Plan selected: ${plan.name}`);
     } catch (error) {
-      console.error("Error during plan selection:", error);
+      console.error("Error selecting plan:", error);
+      alert("Failed to select plan. Please try again.");
     }
   };
 
@@ -67,7 +73,7 @@ const PlanSelection = () => {
           Start with a{" "}
           <span
             onClick={() => onPlanSelect(freePlan)}
-            className="font-bold text-green-400 hover:text-green-200 hover:cursor-pointer"
+            className="font-bold text-gray-400 hover:text-gray-300 hover:cursor-pointer"
           >
             free plan
           </span>

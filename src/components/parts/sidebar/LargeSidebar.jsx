@@ -1,14 +1,18 @@
 import React, { useState, useContext } from "react";
 import {
-  FaHome,
   FaClipboardList,
   FaChartBar,
   FaSignOutAlt,
   FaCog,
 } from "react-icons/fa";
+import { RiPlayListAddFill } from "react-icons/ri";
+import { TbHome } from "react-icons/tb";
+import { TbProgressCheck } from "react-icons/tb";
+
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { doSignOut } from "../../../firebase/auth";
 import AuthContext from "../../../contexts/authContext";
 import Logo from "../../../assets/images/q.jpeg";
 import ProLogo from "../../../assets/images/qpro.jpg";
@@ -28,21 +32,29 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
   const logo = isPro ? ProLogo : Logo;
 
   const handleSignOut = () => {
-    // Implement sign-out logic
-    navigate("/login");
+    doSignOut().then(() => navigate("/login"));
   };
 
   const menuItems = [
-    { icon: <FaHome />, text: "Home", link: "/home" },
+    { icon: <TbHome />, text: "Home", link: "/home" },
+    {
+      icon: <RiPlayListAddFill />,
+      text: "Problems",
+      link: "/practice-problems",
+    },
+    {
+      icon: <TbProgressCheck />,
+      text: "Progress",
+      link: "/progress",
+    },
     { icon: <FaClipboardList />, text: "Applications", link: "/applications" },
     { icon: <FaChartBar />, text: "Analytics", link: "/analytics" },
-    { icon: <FaCog />, text: "Settings", link: "/settings" },
   ];
 
   return (
     <aside className="relative z-10 hidden h-screen lg:flex">
       <nav
-        className={`flex flex-col h-full bg-black border-r-2 border-gray-400 shadow-md transition-all duration-300 ${
+        className={`flex flex-col h-full bg-black border-r-4 border-gray-500 shadow-md transition-all duration-300 ${
           expanded ? "w-64" : "w-16"
         }`}
       >
@@ -72,22 +84,35 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
         </div>
 
         {/* Navigation Menu */}
-        <ul className="flex-1 px-3 space-y-2">
-          {menuItems.map((item, index) => (
-            <li key={index} className="relative">
-              <Link
-                to={item.link}
-                className={`flex items-center py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
-              >
-                <span className="text-xl">{item.icon}</span>
-                {expanded && (
-                  <span className="ml-4 text-sm font-semibold">
-                    {item.text}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
+        <ul className="flex flex-col justify-between h-full px-3 ">
+          <div className="space-y-2">
+            {menuItems.map((item, index) => (
+              <li key={index} className="relative ">
+                <Link
+                  to={item.link}
+                  className={`flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
+                >
+                  <span className="text-xl">{item.icon}</span>
+                  {expanded && (
+                    <span className="ml-4 text-sm font-semibold">
+                      {item.text}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </div>
+          <Link
+            to="\settings"
+            className={`flex items-center p-2 mb-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
+          >
+            <span className="text-xl">
+              <FaCog />
+            </span>
+            {expanded && (
+              <span className="ml-4 text-sm font-semibold">Settings</span>
+            )}
+          </Link>
         </ul>
 
         {/* User Profile and Sign Out */}
@@ -98,7 +123,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
                 <img
                   src={currentUser.photoURL || logo}
                   alt="Profile"
-                  className="w-10 h-10 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
                 {expanded && (
                   <div className="ml-4">
@@ -114,9 +139,9 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             )}
             <button
               onClick={handleSignOut}
-              className={`flex text-black items-center w-full px-3 py-2 mt-4 text-sm font-medium text-center rounded-lg shadow ${bgColorClass}`}
+              className={`flex gap-2 text-black items-center w-full p-2 mt-4 text-sm font-medium text-center whitespace-nowrap rounded-lg shadow ${bgColorClass}`}
             >
-              <FaSignOutAlt className="mr-2" />
+              <FaSignOutAlt className="relative z-10 text-black" />
               {expanded ? "Sign Out" : null}
             </button>
           </div>

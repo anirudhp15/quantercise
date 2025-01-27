@@ -1,7 +1,9 @@
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
+const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
 // JWT token generation
 const generateToken = (userId, expiresIn = "1h") => {
@@ -64,8 +66,27 @@ const findOrMergeUser = async ({
   return user;
 };
 
+async function createStripeCheckoutSession(priceId, userId) {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    mode: "subscription",
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    metadata: { userId },
+    success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `http://localhost:3000/pricing`,
+  });
+
+  return session.url;
+}
+
 module.exports = {
   generateToken,
   sendResetEmail,
   findOrMergeUser,
+  createStripeCheckoutSession,
 };

@@ -10,17 +10,27 @@ import { motion } from "framer-motion";
 import { VscEdit } from "react-icons/vsc";
 import "../../../../index.css";
 import axios from "axios";
+import { set } from "mongoose";
 
 const Profile = () => {
   const { currentUser } = useAuth();
-  const { profileColor, setProfileColor, isPro, currentPlan, setCurrentPlan } =
-    useUser();
+  const {
+    profileColor,
+    setProfileColor,
+    isPro,
+    setIsPro,
+    currentPlan,
+    setCurrentPlan,
+  } = useUser();
   const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
 
   // Set the selected color to the current profileColor initially
   const [selectedColor, setSelectedColor] = useState(profileColor);
 
   useEffect(() => {
+    console.log("Profile color:", profileColor);
+    console.log("Current plan:", currentPlan);
+    console.log("Is Pro:", isPro);
     // Sync selectedColor with profileColor
     setSelectedColor(profileColor);
   }, [profileColor]);
@@ -39,7 +49,8 @@ const Profile = () => {
   const handleCancelMembership = async () => {
     try {
       await axios.post(`/api/user/${currentUser.uid}/cancel-membership`);
-      setCurrentPlan("free"); // Set to free plan after cancellation
+      setCurrentPlan(null); // Set to free plan after cancellation
+      setIsPro(null); // Set to free plan after cancellation
       console.log("Membership canceled successfully!");
     } catch (error) {
       console.error("Failed to cancel membership:", error);
@@ -160,34 +171,42 @@ const Profile = () => {
               <div className="w-full">
                 <strong className="font-normal text-gray-400">
                   Member Status
-                </strong>{" "}
+                </strong>
                 <div className="w-full p-4 mt-1 rounded-lg shadow-lg bg-gradient-to-r from-gray-900 to-black">
                   <div className="flex flex-row items-center">
                     <p
                       className={`text-xl flex tracking-tighter items-center font-bold ${
-                        isPro ? "text-blue-300" : "text-green-300"
+                        isPro === null
+                          ? "text-gray-300"
+                          : isPro === false
+                          ? "text-green-400"
+                          : "text-blue-400"
                       }`}
                     >
-                      {isPro ? "PRO MEMBER" : "FREE MEMBER"}
+                      {isPro === null
+                        ? "FREE MEMBER"
+                        : isPro === false
+                        ? "SHARPE MEMBER"
+                        : "PRO MEMBER"}
                     </p>
                     <div className="flex gap-2 ml-auto">
-                      {currentPlan !== "pro" &&
-                        currentPlan !== "pro-yearly" && (
-                          <Link
-                            onClick={handleUpgradePlan}
-                            to="/plan-selection"
-                            className="px-3 py-1 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600"
-                          >
-                            Upgrade Plan
-                          </Link>
-                        )}
-
-                      <button
-                        onClick={handleCancelMembership}
-                        className="px-3 py-1 font-bold text-white bg-red-500 rounded-lg hover:bg-red-600"
-                      >
-                        Cancel Membership
-                      </button>
+                      {isPro !== true && (
+                        <Link
+                          onClick={handleUpgradePlan}
+                          to="/plan-selection"
+                          className="px-3 py-1 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600"
+                        >
+                          Upgrade Plan
+                        </Link>
+                      )}
+                      {isPro !== null && (
+                        <button
+                          onClick={handleCancelMembership}
+                          className="px-3 py-1 font-bold text-white bg-red-500 rounded-lg hover:bg-red-600"
+                        >
+                          Cancel Membership
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="my-2 border-t-2 border-gray-500"></div>

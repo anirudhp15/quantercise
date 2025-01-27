@@ -6,7 +6,7 @@ const LowDetailContext = createContext();
 export const useLowDetail = () => useContext(LowDetailContext);
 
 export const LowDetailProvider = ({ children }) => {
-  const [lowDetailMode, setLowDetailMode] = useState(false);
+  const [lowDetailMode, setLowDetailMode] = useState(true);
 
   const toggleLowDetailMode = () => {
     setLowDetailMode((prevMode) => !prevMode);

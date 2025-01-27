@@ -332,8 +332,10 @@ router.post("/:uid/cancel-membership", async (req, res) => {
   const { uid } = req.params;
 
   try {
-    // Find the user by their Firebase UID
-    const user = await User.findOne({ firebaseUid: uid });
+    // Find the user by their Firebase UID or Google ID
+    const user = await User.findOne({
+      $or: [{ firebaseUid: uid }, { googleId: uid }],
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
@@ -346,21 +348,25 @@ router.post("/:uid/cancel-membership", async (req, res) => {
         .json({ message: "No active subscription found for this user." });
     }
 
-    // Cancel the subscription in Stripe
-    const canceledSubscription = await stripe.subscriptions.del(
-      user.subscriptionId
+    // Cancel the subscription in Stripe with a fair approach
+    const canceledSubscription = await stripe.subscriptions.update(
+      user.subscriptionId,
+      {
+        cancel_at_period_end: true, // Allows the user to retain benefits until the end of the billing cycle
+      }
     );
 
-    // Update user fields to reflect cancellation
-    user.currentPlan = null; // Clear current plan
-    user.isPro = false; // Downgrade to free plan
-    user.subscriptionId = null; // Clear Stripe subscription ID
+    // Update user fields to reflect cancellation but maintain active benefits until the period ends
+    user.currentPlan = null; // Reset to free plan
+    user.isPro = null; // Set to free status
     user.updatedAt = Date.now(); // Update the last modified timestamp
 
+    // Retain subscriptionId until the end of the billing cycle
     await user.save();
 
     res.status(200).json({
-      message: "Membership canceled successfully.",
+      message:
+        "Membership cancellation scheduled. You will retain benefits until the end of your billing period.",
       canceledSubscription,
     });
   } catch (error) {
