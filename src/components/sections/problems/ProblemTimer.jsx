@@ -81,7 +81,7 @@ const ProblemTimer = ({ difficulty, onTimeout, feedbackCategory }) => {
     ).padStart(2, "0")}`;
 
   return (
-    <div className="relative w-20 h-20">
+    <div className="relative w-32 aspect-square">
       <CircularProgressbar
         role="progressbar"
         aria-valuenow={state.timeLeft}

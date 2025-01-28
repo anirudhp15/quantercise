@@ -49,7 +49,7 @@ const Filters = ({
         <select
           value={selectedTag}
           onChange={handleTagChange}
-          className="hidden w-auto px-2 py-1 ml-4 text-black border-2 border-gray-400 rounded-lg md:block"
+          className="hidden w-auto px-2 py-1 ml-4 text-black border-2 border-gray-400 rounded-lg sm:block"
         >
           <option value="All Tags">All Tags</option>
           {allTags.map((tag) => (
@@ -63,7 +63,7 @@ const Filters = ({
         <select
           value={selectedDifficulty}
           onChange={handleDifficultyChange}
-          className="hidden w-auto px-2 py-1 ml-4 text-black border-2 border-gray-400 rounded-lg lg:block"
+          className="hidden w-auto px-2 py-1 ml-4 text-black border-2 border-gray-400 rounded-lg sm:block"
         >
           <option value="Any Difficulty">Any Difficulty</option>
           <option value="Easy">Easy</option>
@@ -72,7 +72,7 @@ const Filters = ({
         </select>
 
         {/* Layout Tabs */}
-        <div className="flex items-center justify-center gap-4 ml-4">
+        <div className="items-center justify-center hidden gap-4 ml-4 md:flex">
           {/* Tab 1 */}
           <button
             onClick={() => handleLayoutChange("1 Column")}

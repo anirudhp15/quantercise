@@ -1,5 +1,10 @@
 import axios from "axios";
 
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+
 /**
  * Initiates a Stripe checkout session and redirects the user to the Stripe payment page.
  *
@@ -17,7 +22,7 @@ export const handleCheckout = async (priceId, userId = null) => {
 
     // Call the backend API to create the checkout session
     const response = await axios.post(
-      `/api/stripe/create-checkout-session`,
+      `${BACKEND_DOMAIN}/api/stripe/create-checkout-session`,
       payload
     );
 

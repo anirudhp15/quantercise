@@ -12,10 +12,10 @@ const openai = new OpenAI({
 
 // Endpoint to get feedback for a solution
 router.post("/solution", async (req, res) => {
-  const { problemDescription, userSolution, isPaid } = req.body;
+  const { problemDescription, userSolution, isPro } = req.body;
 
   // Determine the model to use based on user plan
-  const model = isPaid ? "gpt-4o-mini" : "gpt-3.5-turbo";
+  const model = isPro ? "gpt-4o-mini" : "gpt-3.5-turbo";
 
   // Construct the prompt
   const prompt = `
@@ -35,6 +35,7 @@ router.post("/solution", async (req, res) => {
     const response = await openai.chat.completions.create({
       model: model,
       messages: [{ role: "user", content: prompt }],
+      stream: true,
     });
 
     console.log("OpenAI Response:", response);

@@ -1,14 +1,11 @@
 export const useProblemHandlers = (mongoId, problems, setProblems) => {
   const updateProblemProgress = async (updatePayload) => {
     try {
-      await fetch(
-        "https://quantercise-api.vercel.app/api/user/update-progress",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatePayload),
-        }
-      );
+      await fetch("/api/user/update-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatePayload),
+      });
     } catch (error) {
       console.error("Failed to update progress:", error);
     }

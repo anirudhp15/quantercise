@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 export const useFetchProgress = (mongoId) => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const BACKEND_DOMAIN =
+    process.env.NODE_ENV === "production"
+      ? "https://quantercise-api.vercel.app"
+      : "http://localhost:4242";
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const fetchProblemsAndProgress = async () => {
@@ -14,10 +21,8 @@ export const useFetchProgress = (mongoId) => {
 
       try {
         const [problemsResponse, progressResponse] = await Promise.all([
-          fetch(`https://quantercise-api.vercel.app/api/questions`),
-          fetch(
-            `https://quantercise-api.vercel.app/api/user/progress/${mongoId}`
-          ),
+          fetch(`${BACKEND_DOMAIN}/api/questions`),
+          fetch(`${BACKEND_DOMAIN}/api/user/progress/${mongoId}`),
         ]);
         if (!problemsResponse.ok || !progressResponse.ok)
           throw new Error("Failed to fetch data");

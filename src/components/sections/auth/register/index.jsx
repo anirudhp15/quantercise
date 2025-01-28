@@ -148,7 +148,7 @@ const Register = () => {
           className="relative z-10 flex flex-col items-center w-full px-8 py-12 lg:w-1/2 lg:px-12 lg:py-24"
         >
           <h1 className="w-full max-w-sm text-5xl font-black tracking-tighter text-center text-transparent lg:text-left lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
-            <span className="text-3xl italic font-semibold tracking-normal text-gray-300">
+            <span className="text-3xl font-semibold tracking-normal text-gray-300">
               Welcome to{" "}
             </span>{" "}
             Quantercise.

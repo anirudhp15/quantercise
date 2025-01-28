@@ -81,7 +81,7 @@ const Profile = () => {
   return (
     <div className="relative z-10 w-full max-w-screen-xl mx-auto text-gray-300">
       {!lowDetailMode && <AnimatedGrid2 />}
-      <div className="relative z-10 flex flex-col justify-center max-w-screen-xl min-h-screen px-4 mx-auto xl:px-0">
+      <div className="relative z-10 flex flex-col justify-center max-w-screen-xl min-h-screen px-4 py-24 mx-auto xl:px-0">
         {/* Back Home Button */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -91,11 +91,8 @@ const Profile = () => {
         >
           <Link
             to="/home"
-            className={`flex w-min items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group text-black ${
-              isPro
-                ? "hover:text-blue-400 border-blue-400 bg-blue-400 hover:bg-black"
-                : "hover:text-green-400 border-green-400 bg-green-400 hover:bg-black"
-            }`}
+            className={`flex w-min items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group text-black hover:text-green-400 border-green-400 bg-green-400 hover:bg-black
+            `}
           >
             <FaArrowLeftLong className="mr-2 transition-all duration-200 group-hover:-translate-x-1" />{" "}
             Home
@@ -106,9 +103,7 @@ const Profile = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`text-4xl py-4 max-w-screen-xl w-full text-left mx-auto font-black ${
-            isPro ? "text-blue-400" : "text-green-400"
-          }`}
+          className={`text-4xl py-4 max-w-screen-xl w-full text-left mx-auto font-black text-green-400`}
         >
           Your Profile
         </motion.h1>
@@ -118,7 +113,7 @@ const Profile = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="p-16 transition-all duration-200 rounded-lg shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-500"
+          className="p-8 transition-all duration-200 rounded-lg shadow-lg lg:p-16 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-500"
         >
           <div className="flex flex-col items-center space-y-6 md:flex-row md:space-x-6 md:space-y-0">
             {/* User Image */}
@@ -146,7 +141,10 @@ const Profile = () => {
             </div>
 
             {/* User Info */}
-            <div className="flex flex-row justify-center w-full pl-4 space-x-4 border-l-4 border-green-400 rounded-md sm:justify-start">
+            <div
+              style={{ borderColor: selectedColor || "#6B7280" }}
+              className="flex flex-col justify-center w-full pl-4 space-y-4 border-l-4 rounded-md lg:space-y-0 lg:space-x-4 lg:flex-row sm:justify-start"
+            >
               <div className="font-semibold text-left">
                 <strong className="font-normal text-gray-400">Name</strong>{" "}
                 <div className="p-2 mt-1 mb-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-900 to-black">
@@ -158,11 +156,8 @@ const Profile = () => {
                 </div>
                 <Link
                   to="/edit-profile"
-                  className={`flex mt-6 group w-min whitespace-nowrap flex-row px-3 py-1 font-bold text-black border-2 rounded-lg shadow-lg ${
-                    isPro
-                      ? "bg-blue-400 hover:bg-black border-blue-400 hover:text-blue-400"
-                      : "bg-green-400 hover:bg-black border-green-400 hover:text-green-400"
-                  }`}
+                  className={`flex mt-6 group w-min whitespace-nowrap flex-row px-3 py-1 font-bold text-black border-2 rounded-lg shadow-lg bg-green-400 hover:bg-black border-green-400 hover:text-green-400
+                  `}
                 >
                   Edit Profile
                   <VscEdit className="w-5 h-5 mt-[2px] ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
@@ -173,7 +168,7 @@ const Profile = () => {
                   Member Status
                 </strong>
                 <div className="w-full p-4 mt-1 rounded-lg shadow-lg bg-gradient-to-r from-gray-900 to-black">
-                  <div className="flex flex-row items-center">
+                  <div className="flex flex-col sm:items-center sm:flex-row">
                     <p
                       className={`text-xl flex tracking-tighter items-center font-bold ${
                         isPro === null
@@ -189,7 +184,7 @@ const Profile = () => {
                         ? "SHARPE MEMBER"
                         : "PRO MEMBER"}
                     </p>
-                    <div className="flex gap-2 ml-auto">
+                    <div className="mt-2 sm:flex sm:gap-2 sm:ml-auto sm:mt-0">
                       {isPro !== true && (
                         <Link
                           onClick={handleUpgradePlan}

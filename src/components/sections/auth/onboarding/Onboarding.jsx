@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../../../contexts/authContext";
 import backgroundImage from "../../../../assets/images/practice_problems.jpg";
 import backgroundImage2 from "../../../../assets/images/applications.jpg";
-import backgroundVideo from "../../../../assets/videos/demo_v2.mov";
+import backgroundVideo from "../../../../assets/videos/demo_v2.mp4";
 import { TbCheck } from "react-icons/tb";
 import { SiOpentofu } from "react-icons/si";
 import axios from "axios";

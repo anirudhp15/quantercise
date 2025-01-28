@@ -1,5 +1,12 @@
 // src/hooks/useFetchMongoId.js
+import axios from "axios";
 import { useEffect } from "react";
+
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+axios.defaults.withCredentials = true;
 
 export const useFetchMongoId = (currentUser, setMongoId) => {
   useEffect(() => {
@@ -8,7 +15,7 @@ export const useFetchMongoId = (currentUser, setMongoId) => {
     const fetchMongoId = async () => {
       try {
         const response = await fetch(
-          `https://quantercise-api.vercel.app/api/user/mongoId/${currentUser.uid}`
+          `${BACKEND_DOMAIN}/api/user/mongoId/${currentUser.uid}`
         );
 
         if (!response.ok) {

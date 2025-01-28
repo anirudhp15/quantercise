@@ -94,7 +94,7 @@ const PerformanceAnalytics = () => {
       {!lowDetailMode && <AnimatedGrid2 />}
 
       <div
-        className="relative z-10 flex flex-col justify-center min-h-screen mx-auto max-w-screen-2xl"
+        className="relative z-10 flex flex-col justify-center min-h-screen px-4 py-24 mx-auto max-w-screen-2xl"
         ref={containerRef}
       >
         <Link
@@ -111,7 +111,7 @@ const PerformanceAnalytics = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`py-4 text-4xl font-black ${
+          className={`py-4 text-3xl lg:text-4xl font-black ${
             isPro ? "text-blue-400" : "text-green-400"
           }`}
         >

@@ -4,6 +4,8 @@ import {
   FaChartBar,
   FaSignOutAlt,
   FaCog,
+  FaToggleOn,
+  FaToggleOff,
 } from "react-icons/fa";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { TbHome } from "react-icons/tb";
@@ -16,10 +18,12 @@ import { doSignOut } from "../../../firebase/auth";
 import AuthContext from "../../../contexts/authContext";
 import Logo from "../../../assets/images/q.jpeg";
 import ProLogo from "../../../assets/images/qpro.jpg";
+import { useLowDetail } from "../../../contexts/LowDetailContext";
 import "../../../index.css";
 
 const LargeSidebar = ({ expanded, setExpanded }) => {
   const { currentUser, isPro } = useContext(AuthContext);
+  const { lowDetailMode, toggleLowDetailMode } = useLowDetail();
   const navigate = useNavigate();
 
   const colorClass = isPro
@@ -52,7 +56,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
   ];
 
   return (
-    <aside className="relative z-10 hidden h-screen lg:flex">
+    <aside className="relative z-20 hidden h-screen lg:flex">
       <nav
         className={`flex flex-col h-full bg-black border-r-4 border-gray-500 shadow-md transition-all duration-300 ${
           expanded ? "w-64" : "w-16"
@@ -75,6 +79,16 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
               </Link>
             )}
           </div>
+          <button
+            onClick={toggleLowDetailMode}
+            className={`p-2 rounded-lg shadow-lg transition duration-300 flex justify-center items-center ${
+              lowDetailMode
+                ? "bg-gray-800 text-green-400 hover:bg-gray-700"
+                : "bg-gray-800 text-red-400 hover:bg-gray-700"
+            } ${!expanded ? "hidden" : ""}`}
+          >
+            {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
+          </button>
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1 bg-gray-800 rounded-lg hover:bg-gray-700"
@@ -102,17 +116,31 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
               </li>
             ))}
           </div>
-          <Link
-            to="\settings"
-            className={`flex items-center p-2 mb-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
-          >
-            <span className="text-xl">
-              <FaCog />
-            </span>
-            {expanded && (
-              <span className="ml-4 text-sm font-semibold">Settings</span>
-            )}
-          </Link>
+          <div className={` ${!expanded ? "border-t-2 border-gray-700" : ""}`}>
+            <button
+              onClick={toggleLowDetailMode}
+              className={`p-2 mt-4 rounded-lg shadow-lg transition duration-300 ${
+                expanded ? "hidden" : ""
+              } flex justify-center items-center ${
+                lowDetailMode
+                  ? "bg-gray-800 text-green-400 hover:bg-gray-700"
+                  : "bg-gray-800 text-red-400 hover:bg-gray-700"
+              }`}
+            >
+              {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
+            </button>
+            <Link
+              to="\settings"
+              className={`flex items-center p-2 my-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
+            >
+              <span className="text-xl">
+                <FaCog />
+              </span>
+              {expanded && (
+                <span className="ml-4 text-sm font-semibold">Settings</span>
+              )}
+            </Link>
+          </div>
         </ul>
 
         {/* User Profile and Sign Out */}

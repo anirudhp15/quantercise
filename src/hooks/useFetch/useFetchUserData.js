@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+
 const useFetchUserData = (currentUser) => {
   const [isPro, setIsPro] = useState(false);
   const [problemsCompleted, setProblemsCompleted] = useState(0);
@@ -13,7 +18,7 @@ const useFetchUserData = (currentUser) => {
         console.log("Fetching user data for:", currentUser);
 
         const userDataResponse = await axios.get(
-          `/api/user/${currentUser.uid}`
+          `${BACKEND_DOMAIN}/api/user/${currentUser.uid}`
         );
 
         console.log("User data response:", userDataResponse.data);

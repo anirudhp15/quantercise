@@ -1,11 +1,18 @@
 import { useCallback } from "react";
+import axios from "axios";
+
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+axios.defaults.withCredentials = true;
 
 export const useUpdateProblemProgress = () => {
   const updateProblemProgress = useCallback(
     async ({ userId, questionId, progress }) => {
       try {
         const response = await fetch(
-          "https://quantercise-api.vercel.app/api/user/update-progress",
+          `${BACKEND_DOMAIN}/api/user/update-progress`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+
 export const useFeedback = () => {
   const [feedback, setFeedback] = useState("");
   const [feedbackCategory, setFeedbackCategory] = useState("");
@@ -14,11 +19,14 @@ export const useFeedback = () => {
   ) => {
     setLoading(true);
     try {
-      const response = await axios.post(`/api/feedback/solution`, {
-        problemDescription,
-        userSolution,
-        isPro,
-      });
+      const response = await axios.post(
+        `${BACKEND_DOMAIN}/api/feedback/solution`,
+        {
+          problemDescription,
+          userSolution,
+          isPro,
+        }
+      );
 
       const feedbackText = response.data.feedback; // Extract feedback
       const category = categorizeFeedback(feedbackText); // Categorize feedback

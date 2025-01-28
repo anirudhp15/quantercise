@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
 
   // Fetch user-specific data when currentUser changes
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && currentUser.uid) {
       fetchUserProfile();
     }
   }, [currentUser]);
@@ -27,7 +27,9 @@ export const UserProvider = ({ children }) => {
       // Fetch user profile from the API
       const userResponse = await axios.get(`/api/user/${currentUser.uid}`);
       const userData = userResponse.data;
+      console.log("User data:", userData);
       setProfileColor(userData.profileColor || "#6B7280");
+      setIsPro(userData.isPro);
       setCurrentPlan(userData.currentPlan); // MongoDB ID of the user's plan
       setMongoId(userData._id);
 

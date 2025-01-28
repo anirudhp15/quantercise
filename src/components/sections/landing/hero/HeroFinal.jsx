@@ -8,7 +8,6 @@ import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
 import backgroundImage from "../../../../assets/images/mac.png";
 import trackingImage from "../../../../assets/images/applications.jpg";
-import demo from "../../../../assets/videos/demo_v1.mov";
 import AnimatedGrid from "../animatedGrid/AnimatedGrid";
 import "../../../../index.css";
 

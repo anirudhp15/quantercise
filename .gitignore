@@ -10,6 +10,8 @@
 /build
 /data
 
+/src/assets/videos
+
 # misc
 .DS_Store
 .env.local

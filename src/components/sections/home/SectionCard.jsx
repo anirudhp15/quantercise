@@ -39,7 +39,7 @@ const SectionCard = ({
           </div>
         </div>
         <div className="my-2 border-t-2 border-gray-500 lg:my-4"></div>
-        <div className="flex flex-row items-center justify-between gap-8 lg:block ">
+        <div className="flex flex-row items-center justify-between gap-4 text-xs sm:text-sm lg:text-xl lg:block ">
           <p className="font-light lg:mt-2">{description}</p>
           <Link
             to={link}

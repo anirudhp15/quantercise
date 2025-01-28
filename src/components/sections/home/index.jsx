@@ -65,7 +65,7 @@ const Home = React.memo(() => {
         {!lowDetailMode && <AnimatedGrid2 />}
         <div className="relative z-10 flex flex-col justify-center py-24 mx-auto max-w-screen-2xl">
           <div className="flex flex-col items-center justify-center lg:flex-row">
-            <div className="w-3/4">
+            <div className="w-full lg:w-2/5 xl:w-full">
               <div className="text-3xl font-black text-center text-transparent lg:text-left sm:text-4xl md:text-5xl animate-gradient gradient-text">
                 <div className="h-14">
                   <ReactTyped
@@ -86,8 +86,53 @@ const Home = React.memo(() => {
                   {getIntroMessage()}
                 </p>
               </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 2 }}
+                className="flex-row hidden gap-2 mt-2 text-xs font-normal text-black xl:flex sm:w-min"
+              >
+                <Link
+                  to="/practice-problems"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-lime-400 to-green-700 whitespace-nowrap hover:text-green-400 hover:from-gray-950 hover:to-black"
+                >
+                  Practice Math
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+                <Link
+                  to="/applications"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-sky-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
+                >
+                  Add Application
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+                <Link
+                  to="/profile"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-gray-300 to-gray-600 whitespace-nowrap hover:text-gray-400 hover:bg-black hover:from-gray-950 hover:to-black"
+                >
+                  Edit Membership
+                  <FaArrowRightLong className="ml-2" />
+                </Link>
+                <motion.h2
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1.5, ease: "easeOut", delay: 1 }}
+                  className="flex items-center mr-2 font-normal text-left text-gray-400 text-md whitespace-nowrap"
+                >
+                  <div className="">
+                    <ReactTyped
+                      strings={["Quick Actions"]}
+                      typeSpeed={100}
+                      backSpeed={60}
+                      startDelay={2500}
+                      showCursor={false}
+                    />
+                  </div>
+                </motion.h2>
+              </motion.div>
             </div>
-            <div className="w-full lg:w-1/2">
+            <div className="block w-full xl:hidden lg:p-4 lg:w-3/5">
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -109,25 +154,25 @@ const Home = React.memo(() => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 2 }}
-                className="flex flex-row w-full gap-2 text-xs text-black lg:flex-col sm:w-min"
+                className="flex flex-row gap-2 text-xs font-normal text-black lg:flex-col sm:w-min"
               >
                 <Link
                   to="/practice-problems"
-                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-green-400 to-green-700 whitespace-nowrap hover:text-green-400 hover:from-gray-950 hover:to-black"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-lime-400 to-green-700 whitespace-nowrap hover:text-green-400 hover:from-gray-950 hover:to-black"
                 >
                   Practice Math
                   <FaArrowRightLong className="ml-2" />
                 </Link>
                 <Link
                   to="/applications"
-                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-blue-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-sky-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
                 >
                   Add Application
                   <FaArrowRightLong className="ml-2" />
                 </Link>
                 <Link
                   to="/profile"
-                  className="flex items-center justify-center w-full px-3 py-1 font-semibold rounded bg-gradient-to-br from-gray-400 to-gray-700 whitespace-nowrap hover:text-gray-400 hover:bg-black hover:from-gray-950 hover:to-black"
+                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-gray-300 to-gray-600 whitespace-nowrap hover:text-gray-400 hover:bg-black hover:from-gray-950 hover:to-black"
                 >
                   Edit Membership
                   <FaArrowRightLong className="ml-2" />
@@ -161,7 +206,7 @@ const Home = React.memo(() => {
               buttonBorderColor={"border-green-400"}
               columnSpan={"lg:col-span-2"}
             />
-            <SectionCard
+            {/* <SectionCard
               title="Track Progress"
               icon={<TbProgressCheck />}
               description={
@@ -189,9 +234,9 @@ const Home = React.memo(() => {
               hoverColor={"hover:text-blue-400"}
               buttonBorderColor={"border-blue-400"}
               columnSpan={"lg:col-span-3"}
-            />
+            /> */}
 
-            {isPro && (
+            {/* {isPro && (
               <SectionCard
                 title="Analytics"
                 icon={<FaChartBar />}
@@ -204,7 +249,7 @@ const Home = React.memo(() => {
                 buttonBorderColor={"border-purple-400"}
                 columnSpan={"lg:col-span-3"}
               />
-            )}
+            )} */}
             {isPro && (
               <SectionCard
                 title="Applications"
@@ -216,7 +261,7 @@ const Home = React.memo(() => {
                 bgColor={"bg-sky-400"}
                 hoverColor={"hover:text-sky-400"}
                 buttonBorderColor={"border-sky-400"}
-                columnSpan={"lg:col-span-2"}
+                columnSpan={"lg:col-span-3"}
               />
             )}
             <SectionCard

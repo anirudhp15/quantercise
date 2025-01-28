@@ -86,6 +86,14 @@ const Login = () => {
         Quantercise
       </Link>
       <div className="flex flex-col items-center justify-center w-full max-w-screen-xl lg:flex-row">
+        <h1 className="relative z-20 block w-full max-w-lg pb-8 text-5xl font-black tracking-tighter text-center text-transparent lg:hidden lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
+          <span className="inline lg:block">Code. </span>
+          {"  "}
+          <span className="inline lg:block">Analyze. </span>
+          {"  "}
+          <span className="inline lg:block">Conquer. </span>
+          {"  "}
+        </h1>
         <main
           ref={loginRef}
           className="relative z-10 w-full max-w-md p-8 mx-auto space-y-8 bg-gray-900 border-4 border-gray-800 shadow-2xl lg:w-1/2 rounded-xl"
@@ -243,7 +251,7 @@ const Login = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative z-10 flex flex-col items-center w-full lg:w-1/2 "
         >
-          <h1 className="w-full max-w-lg pt-8 text-5xl font-black tracking-tighter text-center text-transparent lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
+          <h1 className="hidden w-full max-w-lg pt-8 text-5xl font-black tracking-tighter text-center text-transparent lg:block lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
             <span className="inline lg:block">Code. </span>
             {"  "}
             <span className="inline lg:block">Analyze. </span>

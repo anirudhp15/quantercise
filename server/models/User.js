@@ -10,6 +10,11 @@ const applicationSchema = new mongoose.Schema({
   field: { type: String, required: true },
   coverLetter: { type: String, default: "No Cover Letter" },
   location: { type: String },
+  workMode: {
+    type: String,
+    enum: ["In-person", "Hybrid", "Remote"], // Only allow these 3
+    default: "In-person", // or you can omit the default
+  },
 });
 
 // Define the Problem Progress sub-schema
