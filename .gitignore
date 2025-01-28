@@ -10,7 +10,7 @@
 /build
 /data
 
-/src/assets/videos
+/src/assets/videos/demo_v2.mp4
 
 # misc
 .DS_Store
