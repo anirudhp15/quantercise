@@ -14,17 +14,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useAuth } from "../../contexts/authContext";
 import { useLowDetail } from "../../contexts/LowDetailContext";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import AnimatedGrid2 from "./landing/animatedGrid/AnimatedGrid2"; // Import AnimatedGrid2
+import { useUser } from "../../contexts/userContext";
 
 const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
 const PerformanceAnalytics = () => {
   const [problems, setProblems] = useState([]);
-  const { isPro } = useAuth();
+  const { isPro } = useUser();
   const lowDetailMode = useLowDetail().lowDetailMode;
   const containerRef = useRef(null);
 

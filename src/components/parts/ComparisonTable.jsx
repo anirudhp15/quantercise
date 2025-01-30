@@ -151,10 +151,10 @@ const ComparisonTable = () => {
                       <span className="text-transparent bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text">
                         Pro (Monthly)
                       </span>
-                      <span className="absolute flex items-center whitespace-nowrap gap-2 top-[-24px] left-1/2 transform -translate-x-1/2 px-3 py-1 text-xs font-semibold text-black bg-gradient-to-r from-yellow-300 to-yellow-600 rounded-full">
+                      {/* <span className="absolute flex items-center whitespace-nowrap gap-2 top-[-24px] left-1/2 transform -translate-x-1/2 px-3 py-1 text-xs font-semibold text-black bg-gradient-to-r from-yellow-300 to-yellow-600 rounded-full">
                         Most Popular
                         <FaStar className="w-4 h-4 text-black" />
-                      </span>
+                      </span> */}
                       <div className="flex flex-col items-center justify-center gap-4 mt-4 text-sm font-medium text-gray-400 md:flex-row">
                         <div className="text-sm font-medium text-gray-400">
                           {plans.Pro.monthlyPrice}

@@ -6,6 +6,7 @@ import axios from "axios";
 import PriceCard from "./PriceCard"; // Import the PriceCard component
 import { handleCheckout } from "../../../../utils/stripe"; // Import utility function
 import { useNavigate } from "react-router-dom";
+import { ReactTyped } from "react-typed";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -35,6 +36,7 @@ const Pricing = () => {
           <h2 className="py-8 text-4xl font-black tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
             Pricing
           </h2>
+
           <p className="max-w-screen-md mx-auto text-lg">
             Start with{" "}
             <span className="font-bold text-white">15 free questions.</span>{" "}
@@ -117,11 +119,20 @@ const Pricing = () => {
               isAnnual={isAnnual}
             />
           </div>
-
-          <p className="mt-8 text-sm text-gray-400">
-            *Prices are in USD. All plans come with a 30-day money-back
-            guarantee. No hidden fees. Cancel anytime.
-          </p>
+          <div className="w-[250px] mx-auto mt-8 text-xs text-left text-gray-400 lg:whitespace-nowrap md:w-max ">
+            <ReactTyped
+              strings={[
+                `*Prices are in USD. All plans come with a 30-day money-back
+            guarantee. No hidden fees. Cancel anytime.`,
+              ]}
+              typeSpeed={20}
+              backSpeed={60}
+              startWhenVisible={true}
+              startDelay={100}
+              showCursor={false}
+              smartBackspace={true}
+            />
+          </div>
 
           {loading && (
             <div className="flex justify-center mt-8">

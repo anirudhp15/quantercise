@@ -38,8 +38,8 @@ router.post("/plans/subscribe", async (req, res) => {
   const { userId, planId } = req.body;
 
   try {
-    // If planId is null or undefined, the user is selecting a free plan
-    if (!planId) {
+    // If planId is "free-plan-price-id", subscribe to the free plan
+    if (planId === "free-plan-id") {
       await User.findByIdAndUpdate(userId, {
         currentPlan: null,
         isPro: null,

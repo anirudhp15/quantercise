@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { useAuth } from "../../../contexts/authContext";
 import { motion } from "framer-motion";
+import { useUser } from "../../../contexts/userContext";
 
 const Footer = () => {
-  const { isPro } = useAuth();
+  const { isPro } = useUser();
 
   // Variants for staggered animation
   const linkVariants = {

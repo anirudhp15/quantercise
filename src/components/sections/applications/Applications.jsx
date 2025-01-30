@@ -24,9 +24,11 @@ import SmallSidebar from "../../parts/sidebar/SmallSidebar";
 import LargeSidebar from "../../parts/sidebar/LargeSidebar";
 import AuthContext from "../../../contexts/authContext";
 import { GrVirtualMachine } from "react-icons/gr";
+import { useUser } from "../../../contexts/userContext";
 
 const Applications = () => {
-  const { currentUser, isPro } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+  const { isPro } = useUser();
 
   // State: List of all applications
   const [applications, setApplications] = useState([]);
@@ -64,6 +66,12 @@ const Applications = () => {
   // Loading and error
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // ---------------------------
+  // Pagination State
+  // ---------------------------
+  const [currentPage, setCurrentPage] = useState(1);
+  const applicationsPerPage = 10;
 
   // Fetch applications on load
   useEffect(() => {
@@ -278,6 +286,35 @@ const Applications = () => {
     .filter((app) => (fieldFilter ? app.field === fieldFilter : true));
 
   // ---------------------------
+  // Pagination Logic
+  // ---------------------------
+  const totalPages = Math.ceil(
+    filteredApplications.length / applicationsPerPage
+  );
+  const indexOfLastApplication = currentPage * applicationsPerPage;
+  const indexOfFirstApplication = indexOfLastApplication - applicationsPerPage;
+  const currentApplications = filteredApplications.slice(
+    indexOfFirstApplication,
+    indexOfLastApplication
+  );
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // ---------------------------
   // Utility: styling for field, coverLetter, etc.
   // ---------------------------
   const fieldColors = {
@@ -403,11 +440,8 @@ const Applications = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`mb-6 text-4xl font-black text-left ${
-            isPro
-              ? "text-blue-400 hover:text-blue-300"
-              : "text-green-400 hover:text-green-300"
-          }`}
+          className={`mb-6 text-4xl font-black text-left text-green-400 hover:text-green-300
+          `}
         >
           Applications
         </motion.h1>
@@ -721,8 +755,9 @@ const Applications = () => {
         )}
 
         {/* TABLE DISPLAY */}
-        <div className="flex justify-center mt-6">
-          {filteredApplications.length === 0 ? (
+        <div className="flex-col justify-center mt-6">
+          {currentApplications.length === 0 &&
+          filteredApplications.length === 0 ? (
             <div className="text-center text-gray-400">
               No applications submitted yet. Go apply to an internship now!
             </div>
@@ -760,7 +795,7 @@ const Applications = () => {
                   </thead>
 
                   <tbody>
-                    {filteredApplications.map((application) => (
+                    {currentApplications.map((application) => (
                       <React.Fragment key={application._id}>
                         <tr className="border-t border-gray-700">
                           {/* 1) Combined Company / Position / Field */}
@@ -939,7 +974,7 @@ const Applications = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredApplications.map((application) => (
+                    {currentApplications.map((application) => (
                       <React.Fragment key={application._id}>
                         <tr className="border-t-2 border-gray-700">
                           {/* Combined "Company" and "Position" columns */}
@@ -1070,6 +1105,51 @@ const Applications = () => {
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center mt-4 space-x-2 font-bold">
+                  <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === 1
+                        ? "bg-gray-600 text-gray-400"
+                        : "bg-gray-800 text-green-300 hover:bg-gray-700"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        onClick={() => handlePageClick(pageNumber)}
+                        className={`px-3 py-1 rounded ${
+                          currentPage === pageNumber
+                            ? "bg-green-400 text-black"
+                            : "bg-gray-800 text-green-300 hover:bg-gray-700"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    )
+                  )}
+
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === totalPages
+                        ? "bg-gray-600 text-gray-400"
+                        : "bg-gray-800 text-green-300 hover:bg-gray-700"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>

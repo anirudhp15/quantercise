@@ -53,7 +53,11 @@ function RouteComponent() {
     { path: "/404", element: <NotFoundPage /> },
     {
       path: "/plan-selection",
-      element: <PlanSelection />,
+      element: (
+        <ProtectedRoute>
+          <PlanSelection />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/home",

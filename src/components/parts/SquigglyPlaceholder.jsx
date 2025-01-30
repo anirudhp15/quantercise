@@ -6,7 +6,7 @@ const SquigglyPlaceholder = ({ lines = 3 }) => {
       {Array.from({ length: lines }).map((_, idx) => (
         <div
           key={idx}
-          className="w-full h-2 bg-gray-400 rounded-lg animate-pulse"
+          className="w-full h-2 bg-gray-500 rounded-lg animate-pulse"
           style={{
             width: `${Math.random() * (90 - 60) + 60}%`, // Random width for variability
           }}

@@ -23,6 +23,7 @@ import { PiUnionBold } from "react-icons/pi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLowDetail } from "../../../contexts/LowDetailContext";
 import "../../../index.css";
+import { useUser } from "../../../contexts/userContext";
 
 // Lazy-loaded components to improve performance
 const Waitlist = lazy(() => import("./NewsletterButton"));
@@ -31,7 +32,8 @@ const AuthButtons = lazy(() => import("./AuthButtons"));
 const Header = ({ onJoinClick }) => {
   const [activeSection, setActiveSection] = useState("");
   const navigate = useNavigate();
-  const { userLoggedIn, isPro } = useAuth();
+  const { userLoggedIn } = useAuth();
+  const { isPro } = useUser();
   const location = useLocation();
   const { lowDetailMode, toggleLowDetailMode } = useLowDetail();
   const [profileOpen, setProfileOpen] = useState(false);
@@ -41,11 +43,10 @@ const Header = ({ onJoinClick }) => {
     () => [
       { to: "/home", label: "HOME", icon: <FaHome /> },
       { to: "/practice-problems", label: "PRACTICE", icon: <FaTasks /> },
-      { to: "/progress", label: "PROGRESS", icon: <FaChartLine /> },
-      { to: "/profile", label: "PROFILE", icon: <FaUserCircle /> },
+      // { to: "/progress", label: "PROGRESS", icon: <FaChartLine /> },
       ...(isPro
         ? [
-            { to: "/analytics", label: "ANALYTICS", icon: <FaChartLine /> },
+            // { to: "/analytics", label: "ANALYTICS", icon: <FaChartLine /> },
             {
               to: "/applications",
               label: "APPLICATIONS",
@@ -53,6 +54,7 @@ const Header = ({ onJoinClick }) => {
             },
           ]
         : []),
+      { to: "/profile", label: "PROFILE", icon: <FaUserCircle /> },
     ],
     [isPro]
   );

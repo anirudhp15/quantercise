@@ -9,6 +9,7 @@ import { SiOpentofu } from "react-icons/si";
 import { RxDoubleArrowRight } from "react-icons/rx";
 import { ProblemCard, ProblemTimer } from "../problems";
 import { useFetchProblem } from "../../../hooks/useFetch/useFetchNewProblem";
+import { Link } from "react-router-dom";
 
 const ProblemOfTheDay = () => {
   const [userAnswer, setUserAnswer] = useState("");
@@ -85,18 +86,21 @@ const ProblemOfTheDay = () => {
           showNotes={showNotes}
           fetchNewProblem={fetchNewProblem}
         />
-        <button className="block px-6 py-2 mx-auto my-8 font-bold text-white bg-blue-500 rounded-lg lg:hidden group hover:bg-blue-600">
+        <Link
+          to="/problems"
+          className="block px-6 py-2 mx-auto my-8 font-bold text-white bg-blue-500 rounded-lg whitespace-nowrap w-min lg:hidden group hover:bg-blue-600"
+        >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
-        </button>
+        </Link>
       </div>
       {/* Text Section */}
       <div className="w-5/6 pb-8 mx-auto leading-loose text-left lg:my-auto lg:w-1/3 lg:ml-12">
         <motion.h2
           id="concepts-words"
-          className="relative pt-2 pb-4 text-4xl font-black tracking-tighter text-center text-transparent lg:text-left md:pb-8 sm:text-5xl md:text-6xl gradient-text animate-gradient"
+          className="relative pt-2 pb-4 text-4xl font-black tracking-tighter text-center text-transparent lg:text-left md:pb-8 md:text-5xl gradient-text animate-gradient"
         >
-          150+ Problems
+          150+ Real Problems
         </motion.h2>
         <p className="mt-4 text-xl font-bold">
           <SiOpentofu className="inline-block mb-[2px] ml-[-2px] mr-2 text-blue-400" />
@@ -113,10 +117,13 @@ const ProblemOfTheDay = () => {
           Track your progress and master essential concepts with tailored
           feedback for continuous improvement
         </p>
-        <button className="hidden px-6 py-2 my-8 font-bold text-white bg-blue-500 rounded-lg lg:block group hover:bg-blue-600">
+        <Link
+          to="/problems"
+          className="hidden px-6 py-2 my-8 font-bold text-white bg-blue-500 rounded-lg whitespace-nowrap w-min lg:block group hover:bg-blue-600"
+        >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ const PriceCard = React.memo(
 
     return (
       <div
-        className={`relative group group/card w-full max-w-lg p-6 transition-all duration-100 border-2 bg-gray-950 rounded-md border-gray-500
+        className={`relative group group/card w-full max-w-lg p-6 transition-all duration-100 border-2 bg-gray-950 rounded-lg border-gray-500
       } ${isAnnual ? "scale-[1.00]" : "scale-[0.99]"} ${
           title === "Pro" || title === "Pro Yearly"
             ? "hover:border-blue-400"

@@ -20,9 +20,11 @@ import Logo from "../../../assets/images/q.jpeg";
 import ProLogo from "../../../assets/images/qpro.jpg";
 import { useLowDetail } from "../../../contexts/LowDetailContext";
 import "../../../index.css";
+import { useUser } from "../../../contexts/userContext";
 
 const LargeSidebar = ({ expanded, setExpanded }) => {
-  const { currentUser, isPro } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+  const { isPro } = useUser();
   const { lowDetailMode, toggleLowDetailMode } = useLowDetail();
   const navigate = useNavigate();
 
@@ -46,13 +48,13 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
       text: "Problems",
       link: "/practice-problems",
     },
-    {
-      icon: <TbProgressCheck />,
-      text: "Progress",
-      link: "/progress",
-    },
+    // {
+    //   icon: <TbProgressCheck />,
+    //   text: "Progress",
+    //   link: "/progress",
+    // },
     { icon: <FaClipboardList />, text: "Applications", link: "/applications" },
-    { icon: <FaChartBar />, text: "Analytics", link: "/analytics" },
+    // { icon: <FaChartBar />, text: "Analytics", link: "/analytics" },
   ];
 
   return (
@@ -130,7 +132,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
               {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
             </button>
             <Link
-              to="\settings"
+              to="/profile"
               className={`flex items-center p-2 my-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
             >
               <span className="text-xl">

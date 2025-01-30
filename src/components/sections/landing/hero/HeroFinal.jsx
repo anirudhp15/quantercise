@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { PiArrowArcRightThin } from "react-icons/pi";
 import { TbUserEdit, TbNews } from "react-icons/tb";
-
+import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
 import backgroundImage from "../../../../assets/images/mac.png";
@@ -18,12 +18,23 @@ const Intro = React.memo(({ triggerBounce }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [showQuote, setShowQuote] = useState(true); // State to control quote display
   const form = useRef();
+  const navigate = useNavigate();
 
   const quote = "Luck is what happens when preparation meets opportunity.";
   const author = "- Seneca, c. 1-100 AD.";
 
   const handleEmailChange = useCallback((e) => {
     setEmail(e.target.value);
+  }, []);
+
+  const handleCreateAccount = useCallback(() => {
+    console.log("Create Account button clicked.");
+    navigate("/register");
+  }, []);
+
+  const handleJoinNewsletter = useCallback(() => {
+    console.log("Join Newsletter button clicked.");
+    navigate("/waitlist");
   }, []);
 
   const handleSubmit = useCallback((e) => {
@@ -190,6 +201,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
+                    onClick={handleCreateAccount}
                     className="px-4 py-2 mt-8 text-xs font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-green-400 hover:text-black"
                   >
                     Create Account
@@ -199,6 +211,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
+                    onClick={handleJoinNewsletter}
                     className="px-4 py-2 mt-8 text-xs font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-black hover:text-green-400"
                   >
                     Join Newsletter
@@ -242,9 +255,8 @@ const Intro = React.memo(({ triggerBounce }) => {
         </>
       )}
       <motion.div
-        initial={{ y: 0 }}
-        // animate={{ y: 0 }}
-        // exit={{ y: "100%" }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, delay: 7, ease: "easeOut" }}
         class="custom-shape-divider-bottom-1733168517"
       >

@@ -206,6 +206,35 @@ const Home = React.memo(() => {
               buttonBorderColor={"border-green-400"}
               columnSpan={"lg:col-span-2"}
             />
+            {isPro === null && (
+              <SectionCard
+                title="Profile Settings"
+                icon={<FaCog />}
+                description="Update your profile information and account settings."
+                buttonText="View Profile"
+                link="/profile"
+                textColor={"text-gray-400"}
+                bgColor={"bg-gray-400"}
+                hoverColor={"hover:text-gray-400"}
+                buttonBorderColor={"border-gray-400"}
+                columnSpan={"lg:col-span-3"}
+              />
+            )}
+
+            {isPro === false && (
+              <SectionCard
+                title="Profile Settings"
+                icon={<FaCog />}
+                description="Update your profile information and account settings."
+                buttonText="View Profile"
+                link="/profile"
+                textColor={"text-gray-400"}
+                bgColor={"bg-gray-400"}
+                hoverColor={"hover:text-gray-400"}
+                buttonBorderColor={"border-gray-400"}
+                columnSpan={"lg:col-span-3"}
+              />
+            )}
             {/* <SectionCard
               title="Track Progress"
               icon={<TbProgressCheck />}
@@ -250,7 +279,7 @@ const Home = React.memo(() => {
                 columnSpan={"lg:col-span-3"}
               />
             )} */}
-            {isPro && (
+            {isPro === true && (
               <SectionCard
                 title="Applications"
                 icon={<FaClipboardList />}
@@ -264,18 +293,20 @@ const Home = React.memo(() => {
                 columnSpan={"lg:col-span-3"}
               />
             )}
-            <SectionCard
-              title="Profile Settings"
-              icon={<FaCog />}
-              description="Update your profile information and account settings."
-              buttonText="View Profile"
-              link="/profile"
-              textColor={"text-gray-400"}
-              bgColor={"bg-gray-400"}
-              hoverColor={"hover:text-gray-400"}
-              buttonBorderColor={"border-gray-400"}
-              columnSpan={"lg:col-span-5"}
-            />
+            {isPro === true && (
+              <SectionCard
+                title="Profile Settings"
+                icon={<FaCog />}
+                description="Update your profile information and account settings."
+                buttonText="View Profile"
+                link="/profile"
+                textColor={"text-gray-400"}
+                bgColor={"bg-gray-400"}
+                hoverColor={"hover:text-gray-400"}
+                buttonBorderColor={"border-gray-400"}
+                columnSpan={"lg:col-span-5"}
+              />
+            )}
           </motion.div>
         </div>
       </div>

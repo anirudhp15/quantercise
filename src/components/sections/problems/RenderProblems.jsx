@@ -24,9 +24,10 @@ const RenderProblems = ({
   handleSolveProblem,
   toggleBookmarkProblem,
   bookmarkedProblems,
-  isPro,
+  isPro, // can be null (free), false (Sharpe), or true (Pro)
   containerRef,
 }) => {
+  // 1) Early return if no problems
   if (problemsToShow.length === 0) {
     return (
       <div>
@@ -48,13 +49,18 @@ const RenderProblems = ({
     );
   }
 
-  const sortedProblems = problemsToShow.sort((a, b) => {
-    if (!isPro) {
-      return a.isPro === b.isPro ? 0 : a.isPro ? 1 : -1;
-    }
-    return 0;
-  });
+  /**
+   * 2) Filter logic:
+   *    - If the user is free (isPro === null), only show problems where problem.isPro === false
+   *    - If the user is Sharpe (isPro === false) or Pro (isPro === true), show all problems
+   */
+  const filteredProblems =
+    isPro === null
+      ? problemsToShow.filter((p) => p.isPro === false)
+      : problemsToShow; // user can see everything if isPro is false or true
 
+  // 3) Optional: sort or further transform the filtered problems
+  // For simplicity, we'll skip re-sorting. Just use `filteredProblems` directly.
   const gridColumns =
     selectedLayout === "1 Column"
       ? "grid-cols-1"
@@ -75,24 +81,34 @@ const RenderProblems = ({
         handleBackToCategories={handleBackToCategories}
         handleSearch={handleSearch}
       />
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`grid ${gridColumns} max-w-screen-2xl gap-6 pb-12 px-4 mx-auto`}
       >
-        {sortedProblems.map((problem) => (
+        {filteredProblems.map((problem) => (
           <div
             key={problem.id}
-            className={`relative z-9 group p-4 shadow-lg rounded-lg bg-gray-700 ${
-              !isPro && problem.isPro ? "opacity-100" : ""
-            } ${!isPro && problem.isPro ? "cursor-not-allowed" : ""}`}
-            onClick={() => handleSolveProblem(problem)}
+            // Basic styling
+            className={`relative group p-4 shadow-lg rounded-lg bg-gray-700`}
+            // The entire card is clickable if the user can solve the problem
+            onClick={() => {
+              // Only allow solving if user isPro (false or true) OR the problem is free (problem.isPro === false)
+              if (isPro !== null || !problem.isPro) {
+                handleSolveProblem(problem);
+              }
+            }}
           >
-            {!isPro && problem.isPro && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg pointer-events-none"></div>
+            {/* If user is free and the problem is isPro: true, overlay a lock or overlay */}
+            {isPro === null && problem.isPro && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg pointer-events-none" />
             )}
+
+            {/* Top section: tags, bookmark icon */}
             <div className="flex items-center justify-between">
+              {/* Difficulty + some tags */}
               <div className="flex items-center space-x-2">
                 <span
                   className={`flex flex-row tracking-tighter px-2 py-1 text-xs lg:text-sm text-black font-black rounded-sm ${
@@ -106,6 +122,8 @@ const RenderProblems = ({
                   <FaStar className="w-4 h-4 mr-2 text-black" />
                   {problem.difficulty.toUpperCase()}
                 </span>
+
+                {/* Show up to 2 tags, with a tooltip for the rest */}
                 {problem.tags?.length > 0 && (
                   <div className="flex items-center space-x-2">
                     {problem.tags.slice(0, 2).map((tag, index) => (
@@ -129,6 +147,8 @@ const RenderProblems = ({
                   </div>
                 )}
               </div>
+
+              {/* Bookmark Button */}
               <button
                 className={`p-1 rounded-full transition-transform duration-300 ease-in-out ${
                   bookmarkedProblems.includes(problem.id)
@@ -136,7 +156,7 @@ const RenderProblems = ({
                     : "text-gray-400 hover:text-yellow-600"
                 } hover:scale-105 group hover:bg-gray-600`}
                 onClick={(e) => {
-                  e.stopPropagation();
+                  e.stopPropagation(); // Prevent card click
                   toggleBookmarkProblem(problem.id);
                 }}
               >
@@ -156,29 +176,34 @@ const RenderProblems = ({
                 )}
               </button>
             </div>
-            <div className="my-4 border-t-2 border-gray-500"></div>
+
+            {/* Divider */}
+            <div className="my-4 border-t-2 border-gray-500" />
+
+            {/* Bottom section: problem title and Solve/Locked button */}
             <div className="flex items-center justify-between">
               <h2 className="font-bold text-green-400 truncate text-md lg:text-lg">
                 {problem.title}
               </h2>
               <button
-                className={`px-3 relative z-10 py-1 flex items-center space-x-2 text-sm font-black ${
-                  !isPro && problem.isPro
+                className={`px-3 py-1 relative z-10 flex items-center space-x-2 text-sm font-black rounded-md ${
+                  // If user is free & problem.isPro => locked
+                  isPro === null && problem.isPro
                     ? "bg-black text-gray-400 cursor-not-allowed"
                     : problem.completed
                     ? "bg-black text-green-400"
                     : "bg-green-400 text-black hover:bg-black hover:text-green-400"
-                } rounded-md`}
+                }`}
                 onClick={(e) => {
-                  e.stopPropagation();
-                  if (isPro || !problem.isPro) {
+                  e.stopPropagation(); // prevent card click
+                  if (isPro !== null || !problem.isPro) {
                     handleSolveProblem(problem);
                   }
                 }}
               >
-                {!isPro && problem.isPro ? (
+                {isPro === null && problem.isPro ? (
                   <>
-                    <span>LOCKED</span>{" "}
+                    <span>LOCKED</span>
                     <FaLock className="inline-block w-4 h-4" />
                   </>
                 ) : problem.completed ? (

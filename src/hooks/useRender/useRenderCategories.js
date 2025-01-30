@@ -9,6 +9,7 @@ import { BsBank } from "react-icons/bs";
 import { LuBrainCircuit } from "react-icons/lu";
 import { SiLeetcode } from "react-icons/si";
 import axios from "axios";
+import { ReactTyped } from "react-typed";
 
 const BACKEND_DOMAIN =
   process.env.NODE_ENV === "production"
@@ -28,7 +29,7 @@ export const useRenderCategories = (
 
   const initialCategories = [
     {
-      name: "Mathematical Skills",
+      name: "Mathematical Literacy",
       category: "Critical Mathematical Foundations",
       icon: <ImSigma />,
       description: "Fundamental math concepts for quantitative roles",
@@ -98,23 +99,28 @@ export const useRenderCategories = (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-between pb-4 lg:flex-row"
+        className="flex flex-col items-center justify-between w-full pb-4 sm:flex-row"
       >
-        <h3 className="mb-4 text-2xl font-bold text-center text-gray-300 lg:mb-0 lg:text-left">
-          Topics of Practice
-        </h3>
+        <ReactTyped
+          strings={["Topics of Practice"]}
+          typeSpeed={80}
+          backSpeed={60}
+          startDelay={100}
+          showCursor={false}
+          className="mb-4 text-xl font-bold text-center text-gray-400 trackind-wide sm:mb-0 lg:text-left"
+        />
 
-        <div className="flex gap-3 text-black lg:gap-4">
+        <div className="flex gap-3 text-xs text-black lg:text-sm lg:gap-4">
           <button
             onClick={handleRefreshAllClick}
-            className="flex items-center px-4 py-2 text-sm font-semibold transition-colors bg-gray-400 rounded-lg hover:bg-gray-700 hover:text-gray-300"
+            className="flex items-center px-4 py-2 font-semibold transition-colors bg-gray-400 rounded-lg hover:bg-gray-700 hover:text-gray-300"
           >
             <FaSyncAlt className="mr-2 transition-transform hover:rotate-180" />
             Refresh
           </button>
           <button
             onClick={handleBookmarkClick}
-            className="flex items-center px-4 py-2 text-sm font-semibold transition-colors bg-yellow-400 rounded-lg hover:bg-yellow-700 hover:text-yellow-300"
+            className="flex items-center px-4 py-2 font-semibold transition-colors bg-yellow-400 rounded-lg hover:bg-yellow-700 hover:text-yellow-300"
           >
             <MdBookmark className="mr-2 group-hover:hidden" />
             <MdBookmarks className="hidden mr-2 group-hover:inline-block" />
@@ -122,7 +128,7 @@ export const useRenderCategories = (
           </button>
           <button
             onClick={handleReviewAllClick}
-            className="flex items-center px-4 py-2 text-sm font-semibold transition-colors bg-green-400 rounded-lg hover:bg-green-700 hover:text-green-300"
+            className="flex items-center px-4 py-2 font-semibold transition-colors bg-green-400 rounded-lg whitespace-nowrap hover:bg-green-700 hover:text-green-300"
           >
             All Problems
             <FaArrowRightLong className="ml-2 transition-transform group-hover:translate-x-1" />
@@ -141,18 +147,17 @@ export const useRenderCategories = (
           <motion.div
             key={index}
             variants={itemVariants}
-            className={`relative group ${
-              category.isPro ? "cursor-not-allowed" : ""
-            }`}
+            className={`relative group 
+              ${category.isPro ? "cursor-not-allowed" : ""}`}
           >
-            <div className="relative h-full p-6 transition-all duration-200 bg-gray-800 rounded-lg shadow-lg hover:shadow-xl lg:p-8">
+            <div className="relative h-full p-6 transition-all duration-200 bg-gray-800 rounded-lg shadow-lg group-hover:bg-gray-900 hover:shadow-xl lg:p-8">
               <div className="flex items-center justify-between lg:items-start">
                 {/* Title */}
                 <h2 className="pr-12 text-xl font-bold text-left text-gray-200 transition-all duration-200 sm:text-2xl group-hover:animate-pulse lg:text-2xl">
                   {category.name}
                 </h2>
                 {/* Icon */}
-                <div className="flex items-center justify-center lg:text-2xl">
+                <div className="flex items-center justify-center p-1 text-xl lg:text-2xl xl:text-2xl">
                   {category.icon}
                 </div>
               </div>
@@ -166,9 +171,20 @@ export const useRenderCategories = (
               <div className="my-4 border-t-2 border-gray-700" />
 
               {/* Tags + Button Container */}
-              <div className="flex flex-col justify-between lg:flex-row lg:items-center lg:gap-4">
+              <div className="flex flex-col justify-between lg:gap-4">
+                {/* Practice Button */}
+                <button
+                  onClick={() =>
+                    !category.isPro && handleCategoryClick(category.category)
+                  }
+                  disabled={category.isPro}
+                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-black transition-transform bg-green-400 border-2 border-green-400 rounded-lg hover:text-green-400 h-min hover:bg-black lg:text-base"
+                >
+                  Practice
+                  <FaArrowRightLong className="ml-2 transition-transform group-hover:translate-x-1" />
+                </button>
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4 lg:mb-0 lg:flex-1">
+                <div className="flex flex-wrap gap-2 mt-4 lg:mt-0 lg:mb-0 lg:flex-1">
                   {category.tags?.slice(0, 4).map((tag, tagIndex) => (
                     <span
                       key={tagIndex}
@@ -177,28 +193,24 @@ export const useRenderCategories = (
                       {tag}
                     </span>
                   ))}
+                  {category.tags?.length > 5 && (
+                    <span className="px-3 py-1 text-xs font-medium text-gray-200 bg-gray-700 rounded-full whitespace-nowrap lg:text-sm">
+                      + {category.tags.length - 5} more
+                    </span>
+                  )}
                 </div>
-
-                {/* Practice Button */}
-                <button
-                  onClick={() =>
-                    !category.isPro && handleCategoryClick(category.category)
-                  }
-                  disabled={category.isPro}
-                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-black transition-transform bg-green-400 rounded-lg hover:bg-green-500 hover:scale-105 lg:text-base"
-                >
-                  Practice
-                  <FaArrowRightLong className="ml-2 transition-transform group-hover:translate-x-1" />
-                </button>
               </div>
 
               {/* Pro Overlay */}
               {category.isPro && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm">
+                <div className="absolute inset-0 flex flex-col items-center justify-center rounded-lg bg-black/40 backdrop-blur-sm">
                   <SlLock className="mb-2 text-3xl text-gray-400" />
-                  <span className="px-4 text-sm text-center text-gray-300">
+                  <span className="px-4 text-sm text-center text-gray-300 opacity-5 group-hover:opacity-100">
                     Coming soon for{" "}
-                    <span className="font-bold text-blue-400">Pro</span> users
+                    <span className="font-bold text-blue-400 animate-pulse">
+                      Pro
+                    </span>{" "}
+                    users
                   </span>
                 </div>
               )}

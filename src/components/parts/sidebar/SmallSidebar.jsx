@@ -13,9 +13,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { doSignOut } from "../../../firebase/auth";
 import AuthContext from "../../../contexts/authContext";
+import { useUser } from "../../../contexts/userContext";
 
 const SmallSidebar = ({ expanded, setExpanded }) => {
-  const { currentUser, isPro } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+  const { isPro } = useUser();
   const navigate = useNavigate();
 
   const colorClass = isPro
@@ -32,9 +34,9 @@ const SmallSidebar = ({ expanded, setExpanded }) => {
       text: "Problems",
       link: "/practice-problems",
     },
-    { icon: <TbProgressCheck />, text: "Progress", link: "/progress" },
+    // { icon: <TbProgressCheck />, text: "Progress", link: "/progress" },
     { icon: <FaClipboardList />, text: "Applications", link: "/applications" },
-    { icon: <FaChartBar />, text: "Analytics", link: "/analytics" },
+    // { icon: <FaChartBar />, text: "Analytics", link: "/analytics" },
     { icon: <FaCog />, text: "Settings", link: "/settings" },
   ];
 

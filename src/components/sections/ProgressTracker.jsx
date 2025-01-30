@@ -17,11 +17,13 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
+import { useUser } from "../../contexts/userContext";
 
 const ProgressTracker = () => {
   const [problems, setProblems] = useState([]);
   const lowDetailMode = useLowDetail().lowDetailMode;
-  const { currentUser, isPro } = useAuth();
+  const { currentUser } = useAuth();
+  const { isPro } = useUser();
   const containerRef = useRef(null);
 
   useEffect(() => {

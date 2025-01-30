@@ -268,7 +268,7 @@ const PracticeProblems = React.memo(() => {
               backSpeed={60}
               startDelay={500}
               showCursor={false}
-              className="h-8 text-2xl font-light tracking-wide text-gray-300 lg:ml-8"
+              className="h-8 text-2xl font-bold tracking-wide text-gray-400 lg:ml-8"
             />
           </motion.h1>
         )}

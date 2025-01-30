@@ -152,10 +152,10 @@ const ProblemSolution = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center w-full "
+            className="flex flex-col items-center justify-center w-full h-min"
           >
             {/* Title Section */}
-            <div className="flex items-center justify-between w-full pb-2 mb-4 border-b-4 border-gray-600">
+            <div className="flex items-center justify-between w-full pb-2 mb-4 border-b-4 border-gray-600 h-min">
               <div className="flex flex-col w-full">
                 <h2 className="mb-2 text-3xl font-bold tracking-tighter text-green-400">
                   {selectedProblem.title}
@@ -185,7 +185,7 @@ const ProblemSolution = ({
               <div className="flex flex-col items-center justify-center w-32 border-2 border-green-400 rounded-full aspect-square bg-gray-700/50">
                 <button
                   onClick={handleStartProblem}
-                  className="p-4 font-bold text-black bg-green-400 border-2 border-green-400 rounded-full aspect-square animate-pulse hover:bg-green-500"
+                  className="p-6 font-bold text-black bg-green-400 border-2 border-green-400 rounded-full aspect-square animate-pulse hover:bg-green-500"
                 >
                   Begin
                 </button>

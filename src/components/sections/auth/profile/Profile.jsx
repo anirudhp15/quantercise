@@ -3,7 +3,7 @@ import { useAuth } from "../../../../contexts/authContext";
 import { useUser } from "../../../../contexts/userContext";
 import { useLowDetail } from "../../../../contexts/LowDetailContext";
 import AnimatedGrid2 from "../../landing/animatedGrid/AnimatedGrid2";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SiOpentofu } from "react-icons/si";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
@@ -23,14 +23,12 @@ const Profile = () => {
     setCurrentPlan,
   } = useUser();
   const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
+  const navigate = useNavigate();
 
   // Set the selected color to the current profileColor initially
   const [selectedColor, setSelectedColor] = useState(profileColor);
 
   useEffect(() => {
-    console.log("Profile color:", profileColor);
-    console.log("Current plan:", currentPlan);
-    console.log("Is Pro:", isPro);
     // Sync selectedColor with profileColor
     setSelectedColor(profileColor);
   }, [profileColor]);
@@ -44,6 +42,7 @@ const Profile = () => {
   const handleUpgradePlan = () => {
     // Redirect to plan selection or handle Stripe checkout
     console.log("Redirecting to plan upgrade...");
+    navigate("/plan-selection");
   };
 
   const handleCancelMembership = async () => {
@@ -156,7 +155,11 @@ const Profile = () => {
                 </div>
                 <Link
                   to="/edit-profile"
-                  className={`flex mt-6 group w-min whitespace-nowrap flex-row px-3 py-1 font-bold text-black border-2 rounded-lg shadow-lg bg-green-400 hover:bg-black border-green-400 hover:text-green-400
+                  style={{
+                    backgroundColor: selectedColor || "#6B7280",
+                    borderColor: selectedColor || "#6B7280",
+                  }}
+                  className={`flex mt-6 group w-min whitespace-nowrap flex-row px-3 py-1 font-bold text-black border-2 rounded-lg shadow-lg bg-green-400 hover:bg-black border-green-400 hover:text-gray-100
                   `}
                 >
                   Edit Profile

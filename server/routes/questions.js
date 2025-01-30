@@ -115,10 +115,30 @@ router.get("/tags", async (req, res) => {
   }
 });
 
-// Fetch a random question
+// // Fetch a random question
+// router.get("/random", async (req, res) => {
+//   try {
+//     const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
+
+//     if (randomQuestion.length === 0) {
+//       return res.status(404).json({ error: "No questions found" });
+//     }
+
+//     res.json(randomQuestion[0]);
+//   } catch (error) {
+//     console.log(error);
+//     console.error("Error fetching random question:", error.message);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+// Fetch a random question excluding Programming and Algorithmic Thinking
 router.get("/random", async (req, res) => {
   try {
-    const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
+    const randomQuestion = await Question.aggregate([
+      { $match: { category: { $ne: "Programming and Algorithmic Thinking" } } },
+      { $sample: { size: 1 } },
+    ]);
 
     if (randomQuestion.length === 0) {
       return res.status(404).json({ error: "No questions found" });
@@ -126,7 +146,6 @@ router.get("/random", async (req, res) => {
 
     res.json(randomQuestion[0]);
   } catch (error) {
-    console.log(error);
     console.error("Error fetching random question:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }

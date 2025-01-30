@@ -106,6 +106,7 @@ export const doSignInWithGoogle = async () => {
       email: user.email,
       displayName,
       profilePicture,
+      registrationStep: "complete", // Update registration step
     });
 
     return user;

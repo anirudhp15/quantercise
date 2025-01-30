@@ -96,12 +96,12 @@ const Waitlist = () => {
             value={email}
             onChange={handleEmailChange}
             placeholder="Enter your email"
-            className="w-full px-4 py-3 text-white placeholder-gray-400 bg-gray-900 border border-gray-600 rounded-lg shadow-sm outline-none font-extralight focus:border-2 focus:border-green-600 focus:bg-gray-950"
+            className="w-full px-4 py-3 text-white placeholder-gray-400 bg-gray-800 border-gray-600 rounded-lg shadow-sm outline-none font-extralight focus:border-2 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <motion.button
             type="submit"
-            className="w-auto px-4 py-2 text-lg font-bold text-green-400 border-2 border-green-400 rounded-lg shadow-lg whitespace-nowrap hover:bg-green-400 hover:text-black"
+            className="w-auto px-4 py-2 text-lg font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg hover:text-green-400 whitespace-nowrap hover:bg-black"
           >
             Subscribe Now
           </motion.button>
