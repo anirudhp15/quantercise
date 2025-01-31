@@ -37,12 +37,15 @@ router.get("/plans/:planId", async (req, res) => {
 router.post("/plans/subscribe", async (req, res) => {
   const { userId, planId } = req.body;
 
+  console.log("Subscribing user to plan:", userId, planId);
+
   try {
     // If planId is "free-plan-price-id", subscribe to the free plan
     if (planId === "free-plan-id") {
       await User.findByIdAndUpdate(userId, {
         currentPlan: null,
         isPro: null,
+        registrationStep: "complete",
       });
       return res.status(200).json({ message: "Subscribed to free plan" });
     }
@@ -53,7 +56,8 @@ router.post("/plans/subscribe", async (req, res) => {
 
     await User.findByIdAndUpdate(userId, {
       currentPlan: plan._id,
-      isPro: true,
+      isPro: plan.name.toLowerCase().includes("pro"),
+      registrationStep: "complete",
     });
 
     res.status(200).json({ message: "Subscription successful", plan });

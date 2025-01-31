@@ -15,6 +15,13 @@
       "destination": "/index.html"
     }
   ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://www.quantercise.com",
+      "permanent": true
+    }
+  ],
   "env": {
     "REACT_APP_API_URL": "https://quantercise-api.app.vercel.com",
     "REACT_APP_ENV": "production"

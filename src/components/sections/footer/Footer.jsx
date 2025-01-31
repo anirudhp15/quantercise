@@ -79,18 +79,26 @@ const Footer = () => {
             >
               Practice
             </Link>
-            <Link
+            {/* <Link
               to="/progress"
               className="text-sm text-gray-300 transition duration-300 hover:text-white"
             >
               Progress
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               to="/analytics"
               className="text-sm text-gray-300 transition duration-300 hover:text-white"
             >
               Analytics
-            </Link>
+            </Link> */}
+            {isPro && (
+              <Link
+                to="/applications"
+                className="text-sm text-gray-300 transition duration-300 hover:text-white"
+              >
+                Applications
+              </Link>
+            )}
             <Link
               to="/profile"
               className="text-sm text-gray-300 transition duration-300 hover:text-white"

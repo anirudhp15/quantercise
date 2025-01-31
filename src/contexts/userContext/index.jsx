@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
   const [mongoId, setMongoId] = useState(null);
   const [notificationPreferences, setNotificationPreferences] = useState({});
   const [subscriptionDetails, setSubscriptionDetails] = useState({});
+  const [registrationStep, setRegistrationStep] = useState(null);
 
   // Fetch user-specific data when currentUser changes
   useEffect(() => {
@@ -32,6 +33,7 @@ export const UserProvider = ({ children }) => {
       setIsPro(userData.isPro);
       setCurrentPlan(userData.currentPlan); // MongoDB ID of the user's plan
       setMongoId(userData._id);
+      setRegistrationStep(userData.registrationStep);
 
       // Update `isPro` based on the plan
       await updatePlanDetails(userData.currentPlan);
@@ -70,13 +72,16 @@ export const UserProvider = ({ children }) => {
   const handlePlanChange = async (planId) => {
     try {
       // Make API call to update the user's plan
-      const response = await axios.post(`/api/plans/subscribe`, {
-        userId: currentUser.uid,
+      console.log("Updating plan for user:", mongoId, planId);
+
+      const response = await axios.post(`/api/payment/plans/subscribe`, {
+        userId: mongoId,
         planId,
       });
 
       // Update context states
       setCurrentPlan(planId);
+      setRegistrationStep("complete");
       await updatePlanDetails(planId);
 
       console.log("Plan updated successfully:", response.data);
@@ -102,6 +107,7 @@ export const UserProvider = ({ children }) => {
   const value = {
     mongoId,
     setMongoId,
+    registrationStep,
     profileColor,
     setProfileColor: updateProfileColor,
     isPro,

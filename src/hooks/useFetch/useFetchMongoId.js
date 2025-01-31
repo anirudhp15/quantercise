@@ -14,6 +14,7 @@ export const useFetchMongoId = (currentUser, setMongoId) => {
 
     const fetchMongoId = async () => {
       try {
+        console.log("Fetching Mongo ID for user:", currentUser);
         const response = await fetch(
           `${BACKEND_DOMAIN}/api/user/mongoId/${currentUser.uid}`
         );

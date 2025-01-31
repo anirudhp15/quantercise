@@ -38,8 +38,12 @@ const PlanSelection = () => {
           throw new Error("Failed to generate checkout URL.");
         }
       } else {
+        const uid = currentUser.firebaseUid || currentUser.googleId;
         // Handle free plan selection
         await handlePlanChange(plan._id); // Update the user context
+        await axios.put(`/api/user/${uid}/registration-step`, {
+          registrationStep: "complete",
+        });
         navigate("/home"); // Redirect to home
       }
     } catch (error) {

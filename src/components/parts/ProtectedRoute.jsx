@@ -1,15 +1,20 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
+import axios from "axios";
+import { useUser } from "../../contexts/userContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { currentUser, registrationStep } = useAuth();
+  const { currentUser } = useAuth();
+  const { registrationStep } = useUser();
 
   // Redirect if the user is not logged in
   if (!currentUser) {
+    console.log("Redirecting to /login, user not logged in");
     return <Navigate to="/register" replace />;
   }
 
+  console.log("Registration step:", registrationStep);
   // Redirect based on the current registration step
   switch (registrationStep) {
     case "auth":

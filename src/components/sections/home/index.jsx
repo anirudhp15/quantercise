@@ -100,13 +100,15 @@ const Home = React.memo(() => {
                   Practice Math
                   <FaArrowRightLong className="ml-2" />
                 </Link>
-                <Link
-                  to="/applications"
-                  className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-sky-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
-                >
-                  Add Application
-                  <FaArrowRightLong className="ml-2" />
-                </Link>
+                {isPro === true && (
+                  <Link
+                    to="/applications"
+                    className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-sky-400 to-blue-700 whitespace-nowrap hover:text-blue-400 hover:from-gray-950 hover:to-black"
+                  >
+                    Add Application
+                    <FaArrowRightLong className="ml-2" />
+                  </Link>
+                )}
                 <Link
                   to="/profile"
                   className="flex items-center justify-center w-full px-1 py-1 rounded bg-gradient-to-br from-gray-300 to-gray-600 whitespace-nowrap hover:text-gray-400 hover:bg-black hover:from-gray-950 hover:to-black"

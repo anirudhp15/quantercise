@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
         firebaseUid: firebaseUser.uid,
         profilePicture: firebaseUser.photoURL,
         registrationStep: "mongo", // Move to the next step
-        isPro: false,
+        isPro: null, // Assign default free plan
         currentPlan: null, // Assign default free plan
       });
 
@@ -60,7 +60,6 @@ export function AuthProvider({ children }) {
         ...response.data.user,
       }));
       setIsPro(false); // Default to free user after registration
-      setRegistrationStep("mongo");
     } catch (error) {
       console.error("Error registering user in MongoDB:", error);
     }
