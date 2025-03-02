@@ -1,12 +1,89 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { FaLightbulb, FaTimes, FaCheck, FaStar } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaLightbulb, FaTimes, FaCheck, FaStar, FaPlus } from "react-icons/fa";
 import { SiOpentofu } from "react-icons/si";
 import { Switch } from "antd";
 import ProblemTimer from "./ProblemTimer";
 import { ReactTyped } from "react-typed";
 import { useFeedback } from "../../../hooks/useFetch/useFetchFeedback";
 import SquigglyPlaceholder from "../../parts/SquigglyPlaceholder";
+import "katex/dist/katex.min.css";
+import { InlineMath, BlockMath } from "react-katex";
+
+// Helper function to process text and render LaTeX
+const ProcessedText = ({ text }) => {
+  if (!text) return null;
+
+  // Regular expression to find LaTeX expressions
+  // Matches both inline $...$ and block $$...$$
+  const latexRegex = /(\$\$[\s\S]+?\$\$)|(\$[\s\S]+?\$)/g;
+
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  let index = 0;
+
+  // Find all LaTeX expressions
+  while ((match = latexRegex.exec(text)) !== null) {
+    // Add text before the LaTeX expression
+    if (match.index > lastIndex) {
+      parts.push({
+        type: "text",
+        content: text.substring(lastIndex, match.index),
+        key: `text-${index}`,
+      });
+      index++;
+    }
+
+    // Add the LaTeX expression
+    const isBlock = match[0].startsWith("$$");
+    const expression = isBlock
+      ? match[0].substring(2, match[0].length - 2)
+      : match[0].substring(1, match[0].length - 1);
+
+    parts.push({
+      type: isBlock ? "block" : "inline",
+      content: expression,
+      key: `latex-${index}`,
+    });
+    index++;
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text after the last LaTeX expression
+  if (lastIndex < text.length) {
+    parts.push({
+      type: "text",
+      content: text.substring(lastIndex),
+      key: `text-${index}`,
+    });
+  }
+
+  // Render all parts
+  return (
+    <div className="whitespace-pre-line feedback-content">
+      {parts.map((part) => {
+        if (part.type === "text") {
+          return <span key={part.key}>{part.content}</span>;
+        } else if (part.type === "inline") {
+          try {
+            return <InlineMath key={part.key} math={part.content} />;
+          } catch (e) {
+            return <span key={part.key}>${part.content}$</span>;
+          }
+        } else if (part.type === "block") {
+          try {
+            return <BlockMath key={part.key} math={part.content} />;
+          } catch (e) {
+            return <span key={part.key}>$${part.content}$$</span>;
+          }
+        }
+        return null;
+      })}
+    </div>
+  );
+};
 
 const ProblemSolution = ({
   currentUser,
@@ -40,16 +117,12 @@ const ProblemSolution = ({
     feedback,
     feedbackCategory,
     loading: loadingFeedback,
+    isComplete,
     fetchFeedback,
   } = useFeedback();
 
   const handleStartProblem = () => {
     setIsOverlayVisible(false);
-  };
-
-  const extractFeedbackExplanation = (feedback) => {
-    if (!feedback) return "No explanation available";
-    return feedback;
   };
 
   const handleSubmit = () => {
@@ -67,7 +140,6 @@ const ProblemSolution = ({
   const handleTimeout = () => {
     setTimeoutOccurred(true);
     setShowSolution(true);
-
     fetchFeedback(selectedProblem.description, "No solution provided", isPro);
   };
 
@@ -255,9 +327,10 @@ const ProblemSolution = ({
               />
               <button
                 onClick={handleSubmit}
-                className="px-6 py-[10px] font-bold text-black bg-green-500 rounded-lg hover:bg-green-600"
+                className="px-6 py-[10px] font-bold text-black bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={loadingFeedback || timeoutOccurred}
               >
-                Submit
+                {loadingFeedback ? "Analyzing..." : "Submit"}
               </button>
             </div>
 
@@ -387,67 +460,108 @@ const ProblemSolution = ({
               </div>
             </div>
 
-            {/* Feedback Section */}
+            {/* Feedback Section - Redesigned */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
-              className="p-8 pt-4 -mx-8 -mb-8 bg-gray-900 rounded-b-lg shadow-md"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mb-6"
             >
-              {showSolution && (
-                <h2
-                  className={`text-lg py-2 font-bold ${feedbackCategory.color}`}
-                >
-                  {feedbackCategory.heading}
-                </h2>
-              )}
-
-              {loadingFeedback ? (
-                <p className="p-4 mt-4 text-blue-300 animate-pulse">
-                  <SiOpentofu className="inline-block mr-2 text-4xl text-blue-400 shadow-lg animate-bounce" />
-                  Fetching feedback...
-                </p>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4 }}
-                  className="p-4 mt-4 bg-gray-700 rounded-lg shadow-md"
-                >
-                  <SiOpentofu
-                    className={`inline-block mr-4 text-4xl ${
-                      timeoutOccurred
-                        ? "text-red-400"
-                        : currentUser
-                        ? currentUser.profileColor ?? "text-gray-400"
-                        : "text-blue-400"
-                    }`}
-                  />
-                  {!showSolution && !loadingFeedback ? (
-                    <ReactTyped
-                      strings={["Press Submit to view feedback"]}
-                      typeSpeed={1}
-                      className="mt-2 text-md font-bold leading-[3rem] text-gray-300"
-                      loop={false}
-                    />
-                  ) : timeoutOccurred ? (
-                    <ReactTyped
-                      strings={[
-                        "Time's up! Press Reset Question to try another one",
-                      ]}
-                      typeSpeed={1}
-                      className="mt-2 text-sm leading-[3rem] text-red-400"
-                      loop={false}
-                    />
-                  ) : (
-                    <div className="mt-2 text-sm leading-[3rem] text-gray-300">
-                      {feedback}
+              <AnimatePresence mode="wait">
+                {loadingFeedback ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col justify-center items-center p-6 space-y-4 bg-gray-700 rounded-lg"
+                  >
+                    <div className="relative w-24 h-24">
+                      <motion.div
+                        animate={{
+                          rotate: 360,
+                          transition: {
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "linear",
+                          },
+                        }}
+                        className="absolute inset-0 w-full h-full rounded-full border-t-4 border-blue-500"
+                      />
+                      <SiOpentofu className="absolute inset-0 mx-auto my-auto w-12 h-12 text-blue-400" />
                     </div>
-                  )}
-                </motion.div>
-              )}
+                    <p className="text-lg font-medium text-blue-300">
+                      Analyzing your solution...
+                    </p>
+                  </motion.div>
+                ) : showSolution ? (
+                  <motion.div
+                    key="feedback"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="overflow-hidden bg-gray-700 rounded-lg"
+                  >
+                    {/* Feedback Header - Redesigned */}
+                    <div
+                      className={`flex items-center p-4 ${feedbackCategory.bgColor}`}
+                    >
+                      <span className="flex justify-center items-center mr-3 w-10 h-10 text-xl bg-gray-900 rounded-full">
+                        {feedbackCategory.icon}
+                      </span>
+                      <div className="flex-1">
+                        <h2
+                          className={`text-lg font-bold ${feedbackCategory.color}`}
+                        >
+                          {feedbackCategory.heading}
+                        </h2>
+                        <p className="text-sm text-gray-300">
+                          {feedbackCategory.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Feedback Content - with LaTeX support */}
+                    <div className="p-6">
+                      <div
+                        className={`p-5 rounded-lg bg-gray-800 border-l-4 ${feedbackCategory.color} shadow-md`}
+                      >
+                        <div className="flex">
+                          <SiOpentofu
+                            className={`flex-shrink-0 mr-3 w-8 h-8 ${feedbackCategory.color}`}
+                          />
+                          <div className="flex-1">
+                            {isComplete ? (
+                              <ProcessedText text={feedback} />
+                            ) : (
+                              <div className="animate-pulse">
+                                <div className="mb-2 w-3/4 h-4 bg-gray-700 rounded"></div>
+                                <div className="mb-2 h-4 bg-gray-700 rounded"></div>
+                                <div className="w-1/2 h-4 bg-gray-700 rounded"></div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="instructions"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex justify-center items-center p-8 bg-gray-700 rounded-lg"
+                  >
+                    <div className="flex items-center p-4 bg-gray-800 rounded-lg">
+                      <SiOpentofu className="mr-4 w-10 h-10 text-gray-400" />
+                      <p className="text-gray-300">
+                        Submit your answer to receive feedback
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </motion.div>

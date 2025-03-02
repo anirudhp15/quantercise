@@ -1,13 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
 import ProblemTimer from "./ProblemTimer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ReactTyped } from "react-typed";
 import { SiOpentofu } from "react-icons/si";
 import { useFeedback } from "../../../hooks/useFetch/useFetchFeedback";
 import { useAuth } from "../../../contexts/authContext";
 import SquigglyPlaceholder from "../../parts/SquigglyPlaceholder";
+import "katex/dist/katex.min.css";
+import { InlineMath, BlockMath } from "react-katex";
+
+// Helper function to process text and render LaTeX
+const ProcessedText = ({ text }) => {
+  if (!text) return null;
+
+  // Regular expression to find LaTeX expressions
+  // Matches both inline $...$ and block $$...$$
+  const latexRegex = /(\$\$[\s\S]+?\$\$)|(\$[\s\S]+?\$)/g;
+
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  let index = 0;
+
+  // Find all LaTeX expressions
+  while ((match = latexRegex.exec(text)) !== null) {
+    // Add text before the LaTeX expression
+    if (match.index > lastIndex) {
+      parts.push({
+        type: "text",
+        content: text.substring(lastIndex, match.index),
+        key: `text-${index}`,
+      });
+      index++;
+    }
+
+    // Add the LaTeX expression
+    const isBlock = match[0].startsWith("$$");
+    const expression = isBlock
+      ? match[0].substring(2, match[0].length - 2)
+      : match[0].substring(1, match[0].length - 1);
+
+    parts.push({
+      type: isBlock ? "block" : "inline",
+      content: expression,
+      key: `latex-${index}`,
+    });
+    index++;
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text after the last LaTeX expression
+  if (lastIndex < text.length) {
+    parts.push({
+      type: "text",
+      content: text.substring(lastIndex),
+      key: `text-${index}`,
+    });
+  }
+
+  // Render all parts
+  return (
+    <div className="whitespace-pre-line feedback-content">
+      {parts.map((part) => {
+        if (part.type === "text") {
+          return <span key={part.key}>{part.content}</span>;
+        } else if (part.type === "inline") {
+          try {
+            return <InlineMath key={part.key} math={part.content} />;
+          } catch (e) {
+            return <span key={part.key}>${part.content}$</span>;
+          }
+        } else if (part.type === "block") {
+          try {
+            return <BlockMath key={part.key} math={part.content} />;
+          } catch (e) {
+            return <span key={part.key}>$${part.content}$$</span>;
+          }
+        }
+        return null;
+      })}
+    </div>
+  );
+};
 
 const ProblemCard = ({
   problem,
@@ -23,7 +100,6 @@ const ProblemCard = ({
   fetchNewProblem,
 }) => {
   const [showSolution, setShowSolution] = useState(false);
-  const [loadingFeedback, setLoadingFeedback] = useState(false);
   const [timeoutOccurred, setTimeoutOccurred] = useState(false); // Track timeout state
   const { currentUser } = useAuth();
   const [isOverlayVisible, setIsOverlayVisible] = useState(true);
@@ -37,53 +113,20 @@ const ProblemCard = ({
     setIsOverlayVisible(false);
   };
 
-  const { feedback, fetchFeedback } = useFeedback();
+  const {
+    feedback,
+    feedbackCategory: hookFeedbackCategory,
+    loading: loadingFeedback,
+    isComplete,
+    fetchFeedback,
+  } = useFeedback();
 
-  const categorizeFeedback = (feedbackText) => {
-    if (!feedbackText || feedbackText === "") {
-      return {
-        heading: "NO FEEDBACK",
-        color: "text-gray-400",
-        replace: "",
-      };
+  // Use the feedbackCategory from the hook instead of local state
+  useEffect(() => {
+    if (hookFeedbackCategory) {
+      setFeedbackCategory(hookFeedbackCategory);
     }
-
-    const lowerText = feedbackText.toLowerCase();
-
-    if (lowerText.includes("strongly wrong")) {
-      return {
-        heading: "STRONGLY INCORRECT",
-        color: "text-red-500",
-        replace: "strongly wrong",
-      };
-    }
-    if (lowerText.includes("weakly wrong")) {
-      return {
-        heading: "SLIGHTLY INCORRECT",
-        color: "text-yellow-500",
-        replace: "weakly wrong",
-      };
-    }
-    if (lowerText.includes("weakly correct")) {
-      return {
-        heading: "SLIGHTLY CORRECT",
-        color: "text-green-300",
-        replace: "weakly correct",
-      };
-    }
-    if (lowerText.includes("strongly correct")) {
-      return {
-        heading: "STRONGLY CORRECT",
-        color: "text-green-500",
-        replace: "strongly correct",
-      };
-    }
-    return {
-      heading: "FEEDBACK UNAVAILABLE",
-      color: "text-gray-400",
-      replace: "",
-    };
-  };
+  }, [hookFeedbackCategory]);
 
   const handleSubmit = () => {
     if (timeoutOccurred) return; // Prevent submission after timeout
@@ -92,30 +135,20 @@ const ProblemCard = ({
 
     if (!userAnswer || userAnswer.trim() === "") {
       // If user hasn't provided an answer
-      fetchFeedback(
-        problem.description,
-        "No solution provided",
-        isPro,
-        categorizeFeedback
-      );
+      fetchFeedback(problem.description, "No solution provided", isPro);
 
       return;
     }
 
     // Fetch feedback only if an answer is provided
-    fetchFeedback(problem.description, userAnswer, isPro, categorizeFeedback);
+    fetchFeedback(problem.description, userAnswer, isPro);
   };
 
   const handleTimeout = () => {
     setTimeoutOccurred(true); // Mark timeout as occurred
     setShowSolution(true); // Show solution
 
-    fetchFeedback(
-      problem.description,
-      "No solution provided",
-      isPro,
-      categorizeFeedback
-    );
+    fetchFeedback(problem.description, "No solution provided", isPro);
   };
 
   const resetQuestion = () => {
@@ -283,10 +316,10 @@ const ProblemCard = ({
             />
             <button
               onClick={handleSubmit}
-              className="px-4 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600"
-              disabled={timeoutOccurred} // Disable button after timeout
+              className="px-4 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={timeoutOccurred || loadingFeedback}
             >
-              Submit
+              {loadingFeedback ? "Analyzing..." : "Submit"}
             </button>
             <button
               onClick={resetQuestion}
@@ -297,69 +330,107 @@ const ProblemCard = ({
           </div>
         </div>
 
-        {/* Feedback Section */}
+        {/* Feedback Section - Redesigned */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.4 }}
-          className="p-8 pt-4 -mx-8 bg-gray-900 rounded-b-lg shadow-md"
+          className="p-4 -mx-8 bg-gray-900 rounded-b-lg shadow-md"
         >
-          {loadingFeedback ? (
-            <p className="p-4 mt-4 text-blue-300 animate-pulse">
-              <SiOpentofu className="inline-block mr-2 text-4xl text-blue-400 shadow-lg animate-bounce" />
-              Fetching feedback...
-            </p>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4 }}
-              className="p-8 mt-4 bg-gray-800 rounded-b-lg shadow-md"
-            >
-              {showSolution && (
-                <h2 className={`text-lg font-bold ${feedbackCategory.color}`}>
-                  {feedbackCategory.heading || "NO FEEDBACK"}
-                </h2>
-              )}
-              <div className="p-4 bg-gray-700 rounded-b-lg">
-                <SiOpentofu
-                  className={`inline-block mr-4 text-4xl ${
-                    timeoutOccurred
-                      ? "text-red-400"
-                      : currentUser
-                      ? currentUser.profileColor ?? "text-gray-400"
-                      : "text-blue-400"
-                  }`}
-                />
-                {!showSolution && !loadingFeedback ? (
-                  <ReactTyped
-                    strings={["Press Submit to view feedback"]}
-                    typeSpeed={1}
-                    className="mt-2 text-sm leading-[3rem] text-gray-300"
-                    loop={false}
+          <AnimatePresence mode="wait">
+            {loadingFeedback ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col justify-center items-center p-6 space-y-4"
+              >
+                <div className="relative w-24 h-24">
+                  <motion.div
+                    animate={{
+                      rotate: 360,
+                      transition: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                    }}
+                    className="absolute inset-0 w-full h-full rounded-full border-t-4 border-blue-500"
                   />
-                ) : timeoutOccurred ? (
-                  <ReactTyped
-                    strings={[
-                      "Time's up! Press Reset Question to try another one",
-                    ]}
-                    typeSpeed={1}
-                    className="mt-2 text-sm leading-[3rem] text-red-400"
-                    loop={false}
-                  />
-                ) : (
-                  <ReactTyped
-                    strings={[feedback]}
-                    typeSpeed={1}
-                    className="mt-2 text-sm leading-[3rem] text-gray-300"
-                    loop={false}
-                  />
-                )}
-              </div>
-            </motion.div>
-          )}
+                  <SiOpentofu className="absolute inset-0 mx-auto my-auto w-12 h-12 text-blue-400" />
+                </div>
+                <p className="text-lg font-medium text-blue-300">
+                  Analyzing your solution...
+                </p>
+              </motion.div>
+            ) : showSolution ? (
+              <motion.div
+                key="feedback"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col p-4"
+              >
+                {/* Feedback Header - Redesigned */}
+                <div
+                  className={`flex items-center p-4 mb-4 rounded-lg ${feedbackCategory.bgColor}`}
+                >
+                  <span className="flex justify-center items-center mr-3 w-10 h-10 text-xl bg-gray-900 rounded-full">
+                    {feedbackCategory.icon}
+                  </span>
+                  <div className="flex-1">
+                    <h2
+                      className={`text-lg font-bold ${feedbackCategory.color}`}
+                    >
+                      {feedbackCategory.heading}
+                    </h2>
+                    <p className="text-sm text-gray-300">
+                      {feedbackCategory.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Feedback Content - with LaTeX support */}
+                <div
+                  className={`p-5 rounded-lg bg-gray-800 border-l-4 ${feedbackCategory.color} shadow-md`}
+                >
+                  <div className="flex mb-4">
+                    <SiOpentofu
+                      className={`mr-3 w-8 h-8 ${feedbackCategory.color}`}
+                    />
+                    <div className="flex-1">
+                      {isComplete ? (
+                        <ProcessedText text={feedback} />
+                      ) : (
+                        <div className="animate-pulse">
+                          <div className="mb-2 w-3/4 h-4 bg-gray-700 rounded"></div>
+                          <div className="mb-2 h-4 bg-gray-700 rounded"></div>
+                          <div className="w-1/2 h-4 bg-gray-700 rounded"></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="instructions"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex justify-center items-center p-6"
+              >
+                <div className="flex items-center p-4 w-full bg-gray-800 rounded-lg">
+                  <SiOpentofu className="mr-4 w-10 h-10 text-gray-400" />
+                  <p className="text-gray-300">
+                    Submit your answer to receive feedback
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </motion.div>
     </div>

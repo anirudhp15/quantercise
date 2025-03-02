@@ -10,7 +10,7 @@ const openai = new OpenAI({
   organization: "org-ilo1smhJbfXlKQ2MpMScq3lR", // Optional: Add your organization ID if applicable
 });
 
-// Endpoint to get feedback for a solution
+// Endpoint to get streaming feedback for a solution
 router.post("/solution-stream", async (req, res) => {
   const { problemDescription, userSolution, isPro } = req.body;
 
@@ -19,11 +19,10 @@ router.post("/solution-stream", async (req, res) => {
   res.setHeader("Connection", "keep-alive");
 
   // Determine the model to use based on user plan
-  // Use models that support streaming
   const model = isPro ? "gpt-4-turbo-preview" : "gpt-3.5-turbo";
 
   try {
-    // Construct system message for categorization
+    // Construct system message for categorization that encourages proper LaTeX formatting
     const systemMessage = `
       You are an experienced quantitative analyst evaluating solutions to quantitative problems.
       First, determine if the solution is:
@@ -36,6 +35,12 @@ router.post("/solution-stream", async (req, res) => {
       Then provide helpful, concise feedback explaining why the solution is correct or incorrect.
       Begin your response with one of these category labels in brackets, for example: [strongly right]
       Then provide your feedback explanation.
+      
+      When your response includes mathematical expressions or equations:
+      - Use LaTeX syntax with single $ delimiters for inline expressions, e.g., $x^2 + y^2 = z^2$
+      - Use double $$ delimiters for block equations, e.g., $$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$
+      - Ensure proper escaping of LaTeX special characters
+      - Use proper LaTeX notation for fractions, exponents, integrals, etc.
     `;
 
     const userMessage = `
@@ -112,7 +117,7 @@ router.post("/solution", async (req, res) => {
   const model = isPro ? "gpt-4-turbo-preview" : "gpt-3.5-turbo";
 
   try {
-    // Construct system message for categorization
+    // Construct system message with LaTeX support
     const systemMessage = `
       You are an experienced quantitative analyst evaluating solutions to quantitative problems.
       First, determine if the solution is:
@@ -122,11 +127,15 @@ router.post("/solution", async (req, res) => {
       - weakly right (correct approach with minor errors)
       - strongly right (completely correct approach and answer)
       
-      Then provide helpful, concise feedback explaining why the solution is correct or incorrect.
+      When your response includes mathematical expressions or equations:
+      - Use LaTeX syntax with single $ delimiters for inline expressions, e.g., $x^2 + y^2 = z^2$
+      - Use double $$ delimiters for block equations, e.g., $$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$
+      - Ensure proper escaping of LaTeX special characters
+      
       Format your response as a JSON object with two fields:
       {
         "category": "one of: strongly wrong, weakly wrong, undefined, weakly right, strongly right",
-        "feedback": "your detailed feedback here"
+        "feedback": "your detailed feedback here with LaTeX formatting as needed"
       }
     `;
 
