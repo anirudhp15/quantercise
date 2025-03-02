@@ -133,6 +133,7 @@ function RouteComponent() {
     <div className="flex flex-col min-h-screen bg-gray-950">
       {showHeader && !isPlanSelectionPage && !isOnboardingPage && <Header />}
       {!lowDetailMode && <AnimatedGrid />}
+
       <div className="flex flex-col flex-grow w-full">{routesElement}</div>
       {showFooter && <Footer />}
     </div>

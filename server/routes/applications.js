@@ -50,6 +50,7 @@ router.post("/edit-application", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    console.log(user);
 
     // Find the application to edit
     const appIndex = user.applications.findIndex(

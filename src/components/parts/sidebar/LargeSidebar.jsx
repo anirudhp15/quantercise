@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import {
   FaClipboardList,
-  FaChartBar,
   FaSignOutAlt,
   FaCog,
   FaToggleOn,
@@ -9,11 +8,8 @@ import {
 } from "react-icons/fa";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { TbHome } from "react-icons/tb";
-import { TbProgressCheck } from "react-icons/tb";
-
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { doSignOut } from "../../../firebase/auth";
 import AuthContext from "../../../contexts/authContext";
 import Logo from "../../../assets/images/q.jpeg";
@@ -58,14 +54,14 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
   ];
 
   return (
-    <aside className="relative z-20 hidden h-screen lg:flex">
+    <aside className="hidden relative z-20 h-screen lg:flex">
       <nav
         className={`flex flex-col h-full bg-black border-r-4 border-gray-500 shadow-md transition-all duration-300 ${
           expanded ? "w-64" : "w-16"
         }`}
       >
         {/* Logo and Toggle */}
-        <div className="flex items-center justify-between p-4">
+        <div className="flex justify-between items-center p-4">
           <div className="flex items-center">
             {/* <img
               src={logo}
@@ -75,7 +71,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             {expanded && (
               <Link
                 to="/landing"
-                className={`text-2xl tracking-tighter font-black ${colorClass}`}
+                className={`text-2xl font-black tracking-tighter ${colorClass}`}
               >
                 Quantercise
               </Link>
@@ -85,8 +81,8 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             onClick={toggleLowDetailMode}
             className={`p-2 rounded-lg shadow-lg transition duration-300 flex justify-center items-center ${
               lowDetailMode
-                ? "bg-gray-800 text-green-400 hover:bg-gray-700"
-                : "bg-gray-800 text-red-400 hover:bg-gray-700"
+                ? "text-green-400 bg-gray-800 hover:bg-gray-700"
+                : "text-red-400 bg-gray-800 hover:bg-gray-700"
             } ${!expanded ? "hidden" : ""}`}
           >
             {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
@@ -100,13 +96,13 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
         </div>
 
         {/* Navigation Menu */}
-        <ul className="flex flex-col justify-between h-full px-3 ">
+        <ul className="flex flex-col justify-between px-3 h-full">
           <div className="space-y-2">
             {menuItems.map((item, index) => (
-              <li key={index} className="relative ">
+              <li key={index} className="relative">
                 <Link
                   to={item.link}
-                  className={`flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
+                  className={`flex items-center p-2 text-gray-300 rounded-lg transition-colors hover:bg-gray-700`}
                 >
                   <span className="text-xl">{item.icon}</span>
                   {expanded && (
@@ -125,15 +121,15 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
                 expanded ? "hidden" : ""
               } flex justify-center items-center ${
                 lowDetailMode
-                  ? "bg-gray-800 text-green-400 hover:bg-gray-700"
-                  : "bg-gray-800 text-red-400 hover:bg-gray-700"
+                  ? "text-green-400 bg-gray-800 hover:bg-gray-700"
+                  : "text-red-400 bg-gray-800 hover:bg-gray-700"
               }`}
             >
               {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
             </button>
             <Link
               to="/profile"
-              className={`flex items-center p-2 my-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors `}
+              className={`flex items-center p-2 my-2 text-gray-300 rounded-lg transition-colors hover:bg-gray-700`}
             >
               <span className="text-xl">
                 <FaCog />
@@ -169,7 +165,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             )}
             <button
               onClick={handleSignOut}
-              className={`flex gap-2 text-black items-center w-full p-2 mt-4 text-sm font-medium text-center whitespace-nowrap rounded-lg shadow ${bgColorClass}`}
+              className={`flex gap-2 items-center p-2 mt-4 w-full text-sm font-medium text-center text-black whitespace-nowrap rounded-lg shadow ${bgColorClass}`}
             >
               <FaSignOutAlt className="relative z-10 text-black" />
               {expanded ? "Sign Out" : null}

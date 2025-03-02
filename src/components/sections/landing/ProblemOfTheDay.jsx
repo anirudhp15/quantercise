@@ -10,9 +10,11 @@ import { RxDoubleArrowRight } from "react-icons/rx";
 import { ProblemCard, ProblemTimer } from "../problems";
 import { useFetchProblem } from "../../../hooks/useFetch/useFetchNewProblem";
 import { Link } from "react-router-dom";
+import { useUser } from "../../../contexts/userContext";
 
 const ProblemOfTheDay = () => {
   const [userAnswer, setUserAnswer] = useState("");
+  const { isPro } = useUser();
   const [timeTaken, setTimeTaken] = useState(0);
   const [notes, setNotes] = useState("");
   const [savedMessage, setSavedMessage] = useState(false);
@@ -46,7 +48,7 @@ const ProblemOfTheDay = () => {
   if (!problem && !error) {
     return (
       <div className="relative z-10 flex items-center justify-center min-h-[50vh] bg-gray-800">
-        <p className="text-gray-400 font-extralight">
+        <p className="font-extralight text-gray-400">
           Loading today's problem...
         </p>
       </div>
@@ -56,7 +58,7 @@ const ProblemOfTheDay = () => {
   if (error) {
     return (
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[50vh] bg-gray-800">
-        <p className="text-red-400 font-extralight">{error}</p>
+        <p className="font-extralight text-red-400">{error}</p>
         <button
           className="px-4 py-2 mt-4 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-400"
           onClick={fetchNewProblem}
@@ -78,6 +80,7 @@ const ProblemOfTheDay = () => {
           problem={problem}
           userAnswer={userAnswer}
           setUserAnswer={setUserAnswer}
+          isPro={isPro}
           notes={notes}
           setNotes={setNotes}
           handleSaveNotes={handleSaveNotes}
@@ -88,14 +91,14 @@ const ProblemOfTheDay = () => {
         />
         <Link
           to="/problems"
-          className="block px-6 py-2 mx-auto my-8 font-bold text-white bg-blue-500 rounded-lg whitespace-nowrap w-min lg:hidden group hover:bg-blue-600"
+          className="block px-6 py-2 mx-auto my-8 w-min font-bold text-white whitespace-nowrap bg-blue-500 rounded-lg lg:hidden group hover:bg-blue-600"
         >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
         </Link>
       </div>
       {/* Text Section */}
-      <div className="w-5/6 pb-8 mx-auto leading-loose text-left lg:my-auto lg:w-1/3 lg:ml-12">
+      <div className="pb-8 mx-auto w-5/6 leading-loose text-left lg:my-auto lg:w-1/3 lg:ml-12">
         <motion.h2
           id="concepts-words"
           className="relative pt-2 pb-4 text-4xl font-black tracking-tighter text-center text-transparent lg:text-left md:pb-8 md:text-5xl gradient-text animate-gradient"
@@ -107,7 +110,7 @@ const ProblemOfTheDay = () => {
           Get personalized feedback on your solutions to learn from your common
           mistakes
         </p>
-        <p className="mt-4 text-lg font-medium ">
+        <p className="mt-4 text-lg font-medium">
           <FaTrophy className="inline-block mb-[2px] mr-2 text-yellow-400" />
           Simulate high-pressure challenges inspired by real quant interviews to
           sharpen your problem-solving
@@ -119,7 +122,7 @@ const ProblemOfTheDay = () => {
         </p>
         <Link
           to="/problems"
-          className="hidden px-6 py-2 my-8 font-bold text-white bg-blue-500 rounded-lg whitespace-nowrap w-min lg:block group hover:bg-blue-600"
+          className="hidden px-6 py-2 my-8 w-min font-bold text-white whitespace-nowrap bg-blue-500 rounded-lg lg:block group hover:bg-blue-600"
         >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />

@@ -243,13 +243,13 @@ const PracticeProblems = React.memo(() => {
 
   return (
     <div className="relative w-full text-gray-300 bg-gradient-to-b from-black via-gray-900 to-black">
-      <div className="relative z-10 flex flex-col justify-start min-h-screen py-24 mx-auto max-w-screen-2xl lg:py-32">
-        <div className="w-full px-4 mx-auto max-w-screen-2xl ">
+      <div className="flex relative z-10 flex-col justify-start py-24 mx-auto max-w-screen-2xl min-h-screen lg:py-32">
+        <div className="px-4 mx-auto w-full max-w-screen-2xl">
           <Link
             to="/home"
-            className={`flex w-min hover:cursor-pointer items-center px-2 py-1 text-sm font-semibold border-2 rounded-lg group text-black hover:text-green-400 border-green-400 hover:bg-black bg-green-400`}
+            className={`flex items-center px-2 py-1 w-min text-sm font-semibold text-black bg-green-400 rounded-lg border-2 border-green-400 hover:cursor-pointer group hover:text-green-400 hover:bg-black`}
           >
-            <FaArrowLeftLong className="ml-1 mr-2 transition-all duration-200 group-hover:-translate-x-1" />
+            <FaArrowLeftLong className="mr-2 ml-1 transition-all duration-200 group-hover:-translate-x-1" />
             Home
           </Link>
         </div>
@@ -259,7 +259,7 @@ const PracticeProblems = React.memo(() => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`flex flex-col tracking-tighter items-center py-2 px-4 lg:flex-row text-4xl max-w-screen-2xl mx-auto w-full text-center lg:justify-between font-black text-green-400`}
+            className={`flex flex-col items-center px-4 py-2 mx-auto w-full max-w-screen-2xl text-4xl font-black tracking-tighter text-center text-green-400 lg:flex-row lg:justify-between`}
           >
             Practice Problems
             <ReactTyped

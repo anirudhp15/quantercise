@@ -405,9 +405,9 @@ const Applications = () => {
   // Render
   // ---------------------------
   return (
-    <div className="relative flex min-h-screen overflow-auto text-gray-300 bg-gradient-to-br from-gray-950 to-gray-900">
+    <div className="flex overflow-auto relative min-h-screen text-gray-300 bg-gradient-to-br to-gray-900 from-gray-950">
       {/* Large Sidebar */}
-      <div className="fixed z-20 hidden lg:flex">
+      <div className="hidden fixed z-20 lg:flex">
         <LargeSidebar
           expanded={sidebarExpanded}
           setExpanded={setSidebarExpanded}
@@ -440,15 +440,14 @@ const Applications = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`mb-6 text-4xl font-black text-left text-green-400 hover:text-green-300
-          `}
+          className={`mb-6 text-4xl font-black text-left text-green-400 hover:text-green-300`}
         >
           Applications
         </motion.h1>
         {/* SEARCH / FILTERS / ADD BUTTON */}
         <div className="flex flex-col gap-2 mb-6 sm:flex-row sm:items-center sm:justify-between">
           {/* Search Bar */}
-          <div className="relative flex items-center w-full bg-gray-800 border-4 border-gray-800 rounded-lg lg:max-w-md sm:w-full">
+          <div className="flex relative items-center w-full bg-gray-800 rounded-lg border-4 border-gray-800 lg:max-w-md sm:w-full">
             <Input
               className="flex w-full h-min"
               placeholder="Search your applications..."
@@ -458,7 +457,7 @@ const Applications = () => {
               onChange={handleSearch}
               style={{ maxHeight: 40, height: 32, border: "2px solid #9ca3af" }}
             />
-            <FaSearch className="absolute text-gray-500 right-4" />
+            <FaSearch className="absolute right-4 text-gray-500" />
           </div>
 
           <div className="flex flex-row order-last gap-2 sm:items-center sm:gap-4 lg:order-none">
@@ -466,7 +465,7 @@ const Applications = () => {
             <select
               value={statusFilter}
               onChange={handleStatusFilterChange}
-              className="w-full px-2 py-1 text-sm font-medium text-green-300 bg-gray-800 border-2 border-gray-700 rounded-md focus:outline-none focus:border-green-500 sm:w-auto"
+              className="px-2 py-1 w-full text-sm font-medium text-green-300 bg-gray-800 rounded-md border-2 border-gray-700 focus:outline-none focus:border-green-500 sm:w-auto"
             >
               <option value="">All Statuses</option>
               <option value="Applied">Applied</option>
@@ -479,7 +478,7 @@ const Applications = () => {
             <select
               value={fieldFilter}
               onChange={handleFieldFilterChange}
-              className="w-full px-2 py-1 text-sm font-medium text-green-300 bg-gray-800 border-2 border-gray-700 rounded-md focus:outline-none focus:border-green-500 sm:w-auto"
+              className="px-2 py-1 w-full text-sm font-medium text-green-300 bg-gray-800 rounded-md border-2 border-gray-700 focus:outline-none focus:border-green-500 sm:w-auto"
             >
               <option value="">All Fields</option>
               <option value="Trading">Trading</option>
@@ -494,13 +493,59 @@ const Applications = () => {
             {/* Add Button */}
             <button
               onClick={handleFormToggle}
-              className="flex items-center px-3 py-1 text-sm font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm w-min whitespace-nowrap hover:text-green-400 hover:bg-black hover:shadow-lg sm:px-2 sm:py-1"
+              className="flex items-center px-3 py-1 w-min text-sm font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg sm:px-2 sm:py-1"
             >
               <FaPlus className="mr-2 sm:mr-1" />
               Add Application
             </button>
           </div>
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-end items-center mt-4 space-x-2 text-sm font-bold">
+            <button
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded ${
+                currentPage === 1
+                  ? "bg-gray-600 text-gray-400"
+                  : "bg-gray-800 text-green-300 hover:bg-gray-700"
+              }`}
+            >
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageClick(pageNumber)}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === pageNumber
+                      ? "bg-green-400 text-black"
+                      : "bg-gray-800 text-green-300 hover:bg-gray-700"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded ${
+                currentPage === totalPages
+                  ? "bg-gray-600 text-gray-400"
+                  : "bg-gray-800 text-green-300 hover:bg-gray-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
+
         {/* FORM FOR ADD/EDIT */}
 
         {isFormOpen && (
@@ -544,7 +589,7 @@ const Applications = () => {
                     value={form.company}
                     onChange={handleInputChange}
                     placeholder="e.g. Citadel"
-                    className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                    className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                   />
                 </div>
 
@@ -559,7 +604,7 @@ const Applications = () => {
                     value={form.position}
                     onChange={handleInputChange}
                     placeholder="e.g. Summer Analyst"
-                    className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                    className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                   />
                 </div>
 
@@ -572,7 +617,7 @@ const Applications = () => {
                     name="status"
                     value={form.status}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                    className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                   >
                     <option value="">Select Status</option>
                     <option value="Not Applied">Not Applied</option>
@@ -586,7 +631,7 @@ const Applications = () => {
 
               {/* Step 2: Additional fields if user chooses "Add More Info" */}
               {!editMode && !showMoreInfo && (
-                <div className="flex items-center justify-end mt-4 space-x-3">
+                <div className="flex justify-end items-center mt-4 space-x-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -600,14 +645,14 @@ const Applications = () => {
                         })
                       );
                     }}
-                    className="px-4 py-1 font-semibold text-white bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600"
+                    className="px-4 py-1 font-semibold text-white bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600"
                   >
                     Skip & Add
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowMoreInfo(true)}
-                    className="px-4 py-1 font-semibold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:text-green-400 hover:bg-black"
+                    className="px-4 py-1 font-semibold text-black bg-green-400 rounded-lg border-2 border-green-400 shadow-sm hover:text-green-400 hover:bg-black"
                   >
                     Add More Info
                   </button>
@@ -628,7 +673,7 @@ const Applications = () => {
                         name="dateOfSubmission"
                         value={form.dateOfSubmission}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       />
                     </div>
 
@@ -642,7 +687,7 @@ const Applications = () => {
                         name="deadlineDate"
                         value={form.deadlineDate}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       />
                     </div>
 
@@ -655,7 +700,7 @@ const Applications = () => {
                         name="field"
                         value={form.field}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       >
                         <option value="">Select Field</option>
                         <option value="Trading">Trading</option>
@@ -679,7 +724,7 @@ const Applications = () => {
                         name="coverLetter"
                         value={form.coverLetter}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       >
                         <option value="No Cover Letter">No Cover Letter</option>
                         <option value="Cover Letter Submitted">
@@ -700,7 +745,7 @@ const Applications = () => {
                         value={form.location}
                         onChange={handleInputChange}
                         placeholder="e.g. NYC, Remote"
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       />
                     </div>
 
@@ -713,7 +758,7 @@ const Applications = () => {
                         name="workMode"
                         value={form.workMode}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       >
                         <option value="">Select Work Mode</option>
                         <option value="In-person">In-person</option>
@@ -733,7 +778,7 @@ const Applications = () => {
                         onChange={handleInputChange}
                         rows="3"
                         placeholder="Any additional details, interview notes, etc."
-                        className="w-full px-3 py-2 mt-1 text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
+                        className="px-3 py-2 mt-1 w-full text-green-400 bg-gray-900 rounded-lg shadow-sm focus:outline-none focus:border-green-500"
                       />
                     </div>
                   </div>
@@ -742,7 +787,7 @@ const Applications = () => {
                   <div className="flex justify-end mt-4">
                     <button
                       type="submit"
-                      className="inline-flex items-center px-3 py-1 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg group"
+                      className="inline-flex items-center px-3 py-1 font-bold text-black bg-green-400 rounded-lg border-2 border-green-400 shadow-sm hover:text-green-400 hover:bg-black hover:shadow-lg group"
                     >
                       <FaPlus className="mr-2 transition-all duration-500 group-hover:-rotate-180" />
                       {editMode ? "Save Changes" : "Add"}
@@ -764,8 +809,8 @@ const Applications = () => {
           ) : (
             <>
               {/* Table for large screens */}
-              <div className="relative z-10 hidden w-full overflow-auto shadow-lg rounded-t-md lg:block bg-gray-950">
-                <table className="min-w-full bg-gray-900 border-2 border-gray-700 rounded-lg">
+              <div className="hidden overflow-auto relative z-10 w-full rounded-t-md shadow-lg lg:block bg-gray-950">
+                <table className="min-w-full bg-gray-900 rounded-lg border-2 border-gray-700">
                   <thead>
                     <tr className="text-green-400 bg-gray-800">
                       {[
@@ -777,7 +822,7 @@ const Applications = () => {
                       ].map(({ main, sub }) => (
                         <th
                           key={main}
-                          className="p-4 font-extrabold text-left text-md whitespace-nowrap"
+                          className="p-4 font-extrabold text-left whitespace-nowrap text-md"
                         >
                           <div className="flex flex-col">
                             <span className="text-green-400 text-md">
@@ -911,7 +956,7 @@ const Applications = () => {
                                 onClick={() =>
                                   toggleNotesExpansion(application._id)
                                 }
-                                className="text-gray-200 transition duration-150 hover:text-gray-500 whitespace-nowrap"
+                                className="text-gray-200 whitespace-nowrap transition duration-150 hover:text-gray-500"
                               >
                                 {expandedNotesRow === application._id ? (
                                   <TbNotesOff className="w-5 h-5" />
@@ -946,8 +991,8 @@ const Applications = () => {
               </div>
 
               {/* Table for small screens */}
-              <div className="relative z-10 block w-full overflow-auto rounded-lg shadow-lg lg:hidden bg-gray-950">
-                <table className="min-w-full bg-gray-900 border-2 border-gray-700 rounded-lg">
+              <div className="block overflow-auto relative z-10 w-full rounded-lg shadow-lg lg:hidden bg-gray-950">
+                <table className="min-w-full bg-gray-900 rounded-lg border-2 border-gray-700">
                   <thead>
                     <tr className="text-green-400 bg-gray-800">
                       {[
@@ -957,7 +1002,7 @@ const Applications = () => {
                       ].map(({ main, sub }) => (
                         <th
                           key={main}
-                          className="p-4 font-extrabold text-left text-md whitespace-nowrap"
+                          className="p-4 font-extrabold text-left whitespace-nowrap text-md"
                         >
                           <div className="flex flex-col">
                             <span className="text-green-400 text-md">
@@ -1003,7 +1048,7 @@ const Applications = () => {
 
                           {/* Deadline + Status */}
                           <td className="flex flex-col p-4 text-sm font-medium text-gray-300 border-gray-700 last:border-r-0">
-                            <div className="text-sm font-semibold rounded-md whitespace-nowrap">
+                            <div className="text-sm font-semibold whitespace-nowrap rounded-md">
                               {dayjs(application.deadlineDate).format(
                                 "MMM D, YYYY (ddd)"
                               )}
@@ -1105,51 +1150,6 @@ const Applications = () => {
                   </tbody>
                 </table>
               </div>
-
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center mt-4 space-x-2 font-bold">
-                  <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded ${
-                      currentPage === 1
-                        ? "bg-gray-600 text-gray-400"
-                        : "bg-gray-800 text-green-300 hover:bg-gray-700"
-                    }`}
-                  >
-                    Previous
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (pageNumber) => (
-                      <button
-                        key={pageNumber}
-                        onClick={() => handlePageClick(pageNumber)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === pageNumber
-                            ? "bg-green-400 text-black"
-                            : "bg-gray-800 text-green-300 hover:bg-gray-700"
-                        }`}
-                      >
-                        {pageNumber}
-                      </button>
-                    )
-                  )}
-
-                  <button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded ${
-                      currentPage === totalPages
-                        ? "bg-gray-600 text-gray-400"
-                        : "bg-gray-800 text-green-300 hover:bg-gray-700"
-                    }`}
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
             </>
           )}
         </div>

@@ -102,7 +102,7 @@ const Intro = React.memo(({ triggerBounce }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, delay: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
+            className="flex fixed inset-0 z-50 flex-col justify-center items-center bg-black"
           >
             <ReactTyped
               strings={[quote]}
@@ -143,7 +143,7 @@ const Intro = React.memo(({ triggerBounce }) => {
       {!showQuote && (
         <>
           <div className="absolute top-0 left-0 w-full h-full z-9">
-            <div className="fixed top-0 z-10 left-4 transform-gpu">
+            <div className="fixed top-0 left-4 z-10 transform-gpu">
               <ReactTyped
                 strings={[
                   "quantercise",
@@ -175,63 +175,63 @@ const Intro = React.memo(({ triggerBounce }) => {
             className="relative z-[11] flex flex-col items-center justify-center h-full px-8 mx-auto max-w-screen-2xl xl:flex-row"
           >
             <div className="text-center xl:w-1/3 xl:text-left">
-              <div className=" xl:mx-auto xl:w-2/3">
-                <motion.h1
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1 }}
-                  className="text-3xl font-extrabold tracking-tight text-gray-200 whitespace-nowrap xl:pt-16 sm:text-4xl md:text-5xl"
-                >
-                  <span className="text-gray-100/75">Welcome to</span> <br />
-                  <span className="block text-5xl font-black tracking-tighter text-transparent whitespace-nowrap sm:pt-12 gradient-text animate-gradient sm:inline md:text-6xl">
-                    Quantercise
+              <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1 }}
+                className="text-3xl font-extrabold tracking-tight text-gray-200 xl:pt-16 sm:text-4xl md:text-5xl"
+              >
+                <span className="block text-5xl font-black tracking-tighter sm:pt-12 sm:inline md:text-6xl">
+                  Quantitative prep{" "}
+                  <span className="text-transparent gradient-text animate-gradient">
+                    made easy.
                   </span>
-                </motion.h1>
-                <motion.p
+                </span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="hidden mt-4 text-lg font-normal tracking-wide text-center text-gray-400 xl:max-w-[400px] lg:text-left md:block sm:text-xl md:text-2xl"
+              >
+                A cutting-edge platform designed to elevate all of your
+                quantitative skills.
+              </motion.p>
+              <div className="flex flex-row gap-4 justify-center mb-4 xl:justify-normal">
+                <motion.button
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                  className="hidden mt-4 text-lg font-normal tracking-wide text-center text-gray-400 xl:max-w-[400px] lg:text-left md:block sm:text-xl md:text-2xl"
+                  transition={{ duration: 1, delay: 1 }}
+                  onClick={handleCreateAccount}
+                  className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
                 >
-                  A cutting-edge platform designed to elevate all of your
-                  quantitative skills.
-                </motion.p>
-                <div className="flex flex-row justify-center gap-4 mb-4 xl:justify-normal">
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1 }}
-                    onClick={handleCreateAccount}
-                    className="px-4 py-2 mt-8 text-xs font-bold text-green-400 bg-black border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-green-400 hover:text-black"
-                  >
-                    Create Account
-                    <TbUserEdit className="inline-block w-4 h-4 ml-2 lg:w-4 lg:h-6" />
-                  </motion.button>
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1 }}
-                    onClick={handleJoinNewsletter}
-                    className="px-4 py-2 mt-8 text-xs font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg shadow-lg lg:text-lg whitespace-nowrap hover:bg-black hover:text-green-400"
-                  >
-                    Join Newsletter
-                    <TbNews className="inline-block w-4 h-4 ml-2 lg:w-4 lg:h-6" />
-                  </motion.button>
-                </div>
+                  Create Account
+                  <TbUserEdit className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                </motion.button>
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 1 }}
+                  onClick={handleJoinNewsletter}
+                  className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
+                >
+                  Join Newsletter
+                  <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                </motion.button>
               </div>
             </div>
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 2.5, delay: 0.3 }}
-              className="relative z-10 mx-auto mt-4 lg:max-w-screen-lg xl:mt-0 xl:w-2/3"
+              className="relative z-10 mt-4 lg:max-w-screen-lg xl:mt-0 xl:w-2/3"
             >
               {/* Right MacBook Mockup */}
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 2.5, delay: 0.3 }}
-                className="relative flex items-center justify-center w-full"
+                className="flex relative justify-end w-full"
               >
                 <img
                   src={backgroundImage}

@@ -26,6 +26,7 @@ app.use((req, res, next) => {
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3001",
   "https://quantercise.com",
   "https://quantercise-api.vercel.app",
   "https://anirudhp15.github.io/quantercise",

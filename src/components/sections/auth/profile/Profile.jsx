@@ -119,8 +119,8 @@ const Profile = () => {
             <div className="relative rounded-lg">
               <div>
                 <SiOpentofu
-                  className="w-32 h-32 mb-4 lg:mb-8"
-                  style={{ color: selectedColor || "#6B7280" }}
+                  className="w-32 h-32 p-4 mb-4 text-white rounded-full outline outline-4 outline-gray-100 lg:mb-8"
+                  style={{ backgroundColor: selectedColor || "#6B7280" }}
                 />
                 <div className="grid grid-cols-5 gap-2">
                   {colorOptions.map((color) => (

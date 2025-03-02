@@ -1,203 +1,357 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../../contexts/authContext";
+import { useUser } from "../../../../contexts/userContext";
+import { FaCamera, FaCheck, FaSpinner } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { useLowDetail } from "../../../../contexts/LowDetailContext";
 import AnimatedGrid2 from "../../landing/animatedGrid/AnimatedGrid2";
 import { storage } from "../../../../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useNavigate } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+import { SiOpentofu } from "react-icons/si";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const { currentUser, updateProfile } = useAuth();
-  const [displayName, setDisplayName] = useState(currentUser.displayName || "");
-  const [email, setEmail] = useState(currentUser.email || "");
+  const { profileColor } = useUser();
+  const [form, setForm] = useState({
+    displayName: currentUser?.displayName || "",
+    email: currentUser?.email || "",
+  });
   const [photoFile, setPhotoFile] = useState(null);
-  const [previewPhoto, setPreviewPhoto] = useState(currentUser.photoURL || "");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [previewPhoto, setPreviewPhoto] = useState(currentUser?.photoURL || "");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [photoChanged, setPhotoChanged] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const { lowDetailMode } = useLowDetail(); // Access the Low Detail Mode
+  const { lowDetailMode } = useLowDetail();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Keep local state updated if user changes between accounts, etc.
-    setDisplayName(currentUser.displayName || "");
-    setEmail(currentUser.email || "");
-    setPreviewPhoto(currentUser.photoURL || "");
+    // Keep local state updated if user changes
+    setForm({
+      displayName: currentUser?.displayName || "",
+      email: currentUser?.email || "",
+    });
+    setPreviewPhoto(currentUser?.photoURL || "");
   }, [currentUser]);
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.displayName.trim()) {
+      newErrors.displayName = "Display name is required";
+    }
+
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
-      setPhotoFile(e.target.files[0]);
-      setPreviewPhoto(URL.createObjectURL(e.target.files[0])); // Live preview
+      const file = e.target.files[0];
+      if (file.size > 5242880) {
+        // 5MB max
+        setErrors((prev) => ({
+          ...prev,
+          photo: "Image must be less than 5MB",
+        }));
+        return;
+      }
+
+      setPhotoFile(file);
+      setPreviewPhoto(URL.createObjectURL(file));
+      setPhotoChanged(true);
+
+      // Clear error
+      if (errors.photo) {
+        setErrors((prev) => ({
+          ...prev,
+          photo: "",
+        }));
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSaving(true);
+    setSuccessMessage("");
 
     try {
       let photoURL = currentUser.photoURL;
 
       // If a new photo is uploaded, store it in Firebase Storage
       if (photoFile) {
+        setIsUploading(true);
         const photoRef = ref(storage, `profilePictures/${currentUser.uid}`);
         await uploadBytes(photoRef, photoFile);
         photoURL = await getDownloadURL(photoRef);
+        setIsUploading(false);
       }
 
-      // Update the Firebase Auth profile (displayName & photoURL)
-      await updateProfile({ displayName, photoURL });
+      // Update the Firebase Auth profile
+      await updateProfile({
+        displayName: form.displayName,
+        photoURL,
+      });
 
-      // Update the user in your MongoDB via the backend
-      // (using profilePicture field to match your backend route)
+      // Update the user in MongoDB
       await axios.put(`/api/user/${currentUser.uid}`, {
-        displayName,
-        email,
+        displayName: form.displayName,
+        email: form.email,
         profilePicture: photoURL,
       });
 
-      setMessage("Profile updated successfully!");
+      setSuccessMessage("Profile updated successfully!");
+
+      // Clear the changed flag
+      setPhotoChanged(false);
+
       // After a brief success message, navigate back to /profile
-      setTimeout(() => navigate("/profile"), 2000);
+      setTimeout(() => navigate("/profile"), 1500);
     } catch (error) {
-      setMessage(`Failed to update profile: ${error.message}`);
+      console.error("Failed to update profile:", error);
+      setErrors((prev) => ({
+        ...prev,
+        submit: `Failed to update profile: ${error.message}`,
+      }));
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
+  const cancelEdit = () => {
+    navigate("/profile");
+  };
+
   return (
-    <div className="flex items-center justify-center w-full min-h-screen text-gray-300">
-      {/* Optional background animation */}
+    <div className="flex relative justify-center w-full min-h-screen text-gray-300">
+      {/* Background animation */}
       {!lowDetailMode && <AnimatedGrid2 />}
 
-      {/* Form Container */}
-      <div className="relative z-10 w-full max-w-screen-xl p-4 mx-auto">
-        <div className="flex items-center justify-between mb-4">
-          <motion.h1
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-3xl font-black text-green-400"
+      {/* Main Content Container */}
+      <div className="flex relative z-10 flex-col justify-center px-4 py-24 mx-auto w-full max-w-screen-xl xl:px-0">
+        {/* Back to Profile Button */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="flex justify-start"
+        >
+          <Link
+            to="/profile"
+            className="flex items-center px-2 py-1 w-min text-sm font-semibold text-black bg-green-400 rounded-lg border-2 border-green-400 group hover:text-green-400 hover:bg-black"
           >
-            Edit Profile
-          </motion.h1>
-          {/* Close / Cancel Edit Button */}
-          <button
-            onClick={() => navigate("/profile")}
-            className="p-2 text-gray-400 transition duration-300 rounded hover:text-gray-100 hover:bg-gray-700"
-          >
-            <FaTimes size={20} />
-          </button>
-        </div>
+            <FaArrowLeftLong className="mr-2 transition-all duration-200 group-hover:-translate-x-1" />{" "}
+            Profile
+          </Link>
+        </motion.div>
 
+        {/* Page Title */}
+        <motion.h1
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="py-4 w-full text-4xl font-black text-left text-green-400"
+        >
+          Edit Profile
+        </motion.h1>
+
+        {/* Edit Form Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="p-6 rounded-lg shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-500"
+          className="p-8 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shadow-lg transition-all duration-200 hover:border-gray-500"
         >
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Display Name */}
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-400">
-                Display Name
-              </label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full px-3 py-2 font-semibold transition duration-300 rounded-lg bg-gradient-to-r from-gray-700 to-black focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Enter your display name"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-400">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 font-semibold transition duration-300 rounded-lg bg-gradient-to-r from-gray-700 to-black focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            {/* Profile Picture Upload */}
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-400">
-                Profile Picture
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="w-full px-3 py-2 font-semibold transition duration-300 rounded-lg bg-gradient-to-r from-gray-700 to-black focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Feedback Message */}
-            {message && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className={`font-semibold ${
-                  message.includes("successfully")
-                    ? "text-green-400"
-                    : "text-red-400"
-                }`}
-              >
-                {message}
-              </motion.div>
-            )}
-
-            {previewPhoto && (
-              <div className="pt-4 mt-4 border-t-2 border-gray-700">
-                <p className="mb-1 text-sm font-medium text-gray-400">
-                  Preview:
-                </p>
-                <div className="flex ">
-                  <div className="w-40">
-                    <img
-                      src={previewPhoto}
-                      alt="Profile Preview"
-                      className="object-cover w-40 h-40 mb-2 rounded-md aspect-square"
-                    />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-semibold text-gray-400">
-                      {displayName}
-                    </p>
-                    <p className="mb-2 text-xs text-gray-500">{email}</p>
-                    {/* Submit Button */}
-                    <div className="flex justify-start">
-                      <motion.button
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        type="submit"
-                        disabled={loading}
-                        className={`inline-block text-xs lg:text-sm px-2 py-1 font-bold text-black transition duration-300 border-2 rounded-lg shadow-sm ${
-                          loading
-                            ? "bg-gray-700 border-gray-700 cursor-not-allowed"
-                            : "bg-green-400 border-green-400 hover:bg-black hover:text-green-400"
-                        }`}
-                      >
-                        {loading ? "Updating..." : "Save Changes"}
-                      </motion.button>
-                    </div>
-                  </div>
-                </div>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 gap-6 lg:grid-cols-3"
+          >
+            {/* Left Column - Photo Upload */}
+            <div className="flex flex-col items-center space-y-4">
+              <div className="relative">
+                {previewPhoto ? (
+                  <img
+                    src={previewPhoto}
+                    alt="Profile"
+                    className="object-cover mx-auto w-40 h-40 rounded-lg border-4"
+                    style={{ borderColor: profileColor || "#6B7280" }}
+                  />
+                ) : (
+                  <SiOpentofu
+                    className="p-4 mx-auto w-40 h-40 text-white rounded-lg border-4"
+                    style={{
+                      backgroundColor: profileColor || "#6B7280",
+                      borderColor: profileColor || "#6B7280",
+                    }}
+                  />
+                )}
+                <label
+                  htmlFor="photo-upload"
+                  className="absolute right-0 bottom-0 p-2 text-black bg-green-400 rounded-full cursor-pointer hover:bg-green-500"
+                >
+                  <FaCamera className="w-4 h-4" />
+                </label>
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
               </div>
-            )}
+
+              {/* Photo upload status */}
+              <div className="w-full text-center">
+                {isUploading ? (
+                  <span className="inline-flex items-center text-blue-400">
+                    <FaSpinner className="mr-2 w-4 h-4 animate-spin" />
+                    Uploading...
+                  </span>
+                ) : photoChanged ? (
+                  <span className="text-yellow-400">
+                    New photo selected (Save to apply)
+                  </span>
+                ) : errors.photo ? (
+                  <span className="text-red-400">{errors.photo}</span>
+                ) : (
+                  <span className="text-sm text-gray-400">
+                    Click the camera icon to change photo
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Middle and Right Columns - Form Fields */}
+            <div className="space-y-6 lg:col-span-2">
+              {/* Display Name */}
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-300">
+                  Display Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="displayName"
+                  value={form.displayName}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 font-semibold text-green-400 transition duration-300 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                    errors.displayName ? "border-red-500 border-2" : ""
+                  }`}
+                  placeholder="Enter your display name"
+                />
+                {errors.displayName && (
+                  <p className="mt-1 text-sm text-red-400">
+                    {errors.displayName}
+                  </p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-300">
+                  Email <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 font-semibold text-green-400 transition duration-300 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                    errors.email ? "border-red-500 border-2" : ""
+                  }`}
+                  placeholder="Enter your email"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+                )}
+              </div>
+
+              {/* Form Buttons - Save and Cancel */}
+              <div className="flex justify-end pt-4 mt-6 space-x-4 border-t border-gray-700">
+                <button
+                  type="button"
+                  onClick={cancelEdit}
+                  className="px-4 py-2 font-semibold text-gray-300 bg-gray-700 rounded-lg transition duration-300 hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving || isUploading}
+                  className={`inline-flex items-center px-4 py-2 font-bold text-black transition duration-300 bg-green-400 rounded-lg shadow-md hover:bg-green-500 ${
+                    isSaving || isUploading
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {isSaving ? (
+                    <>
+                      <FaSpinner className="mr-2 w-4 h-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <FaCheck className="mr-2 w-4 h-4" />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Success/Error Message */}
+              {successMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-3 text-center text-black bg-green-400 rounded-lg"
+                >
+                  {successMessage}
+                </motion.div>
+              )}
+
+              {errors.submit && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-3 text-center text-white bg-red-500 rounded-lg"
+                >
+                  {errors.submit}
+                </motion.div>
+              )}
+            </div>
           </form>
         </motion.div>
       </div>

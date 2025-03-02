@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaLightbulb, FaTimes, FaCheck, FaStar } from "react-icons/fa";
 import { SiOpentofu } from "react-icons/si";
@@ -33,73 +33,23 @@ const ProblemSolution = ({
   toggleNotes,
 }) => {
   const [showSolution, setShowSolution] = useState(false);
-  const [loadingFeedback, setLoadingFeedback] = useState(false);
-  const [timeoutOccurred, setTimeoutOccurred] = useState(false); // Track timeout state
-  const [feedback, setFeedback] = useState("");
-  const [feedbackCategory, setFeedbackCategory] = useState({
-    heading: "",
-    color: "",
-    replace: "",
-  });
+  const [timeoutOccurred, setTimeoutOccurred] = useState(false);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
-  const [isOverlayVisible, setIsOverlayVisible] = useState(true); // State for overlay
+  const {
+    feedback,
+    feedbackCategory,
+    loading: loadingFeedback,
+    fetchFeedback,
+  } = useFeedback();
+
   const handleStartProblem = () => {
-    setIsOverlayVisible(false); // Remove overlay
-    // Start timer if needed
+    setIsOverlayVisible(false);
   };
-
-  const { fetchFeedback } = useFeedback();
 
   const extractFeedbackExplanation = (feedback) => {
     if (!feedback) return "No explanation available";
-
-    const match = feedback.match(/Explanation:(.*)/); // Captures everything after "Explanation:"
-    return match && match[1] ? match[1] : "No explanation provided";
-  };
-
-  const categorizeFeedback = (feedbackText) => {
-    if (!feedbackText || feedbackText === "") {
-      return {
-        heading: "NO FEEDBACK",
-        color: "text-gray-400",
-        replace: "",
-      };
-    }
-
-    const lowerText = feedbackText.toLowerCase();
-    if (lowerText.includes("strongly wrong")) {
-      return {
-        heading: "STRONGLY INCORRECT",
-        color: "text-red-500",
-        replace: "strongly wrong",
-      };
-    }
-    if (lowerText.includes("weakly wrong")) {
-      return {
-        heading: "SLIGHTLY INCORRECT",
-        color: "text-yellow-500",
-        replace: "weakly wrong",
-      };
-    }
-    if (lowerText.includes("weakly correct")) {
-      return {
-        heading: "SLIGHTLY CORRECT",
-        color: "text-green-300",
-        replace: "weakly correct",
-      };
-    }
-    if (lowerText.includes("strongly correct")) {
-      return {
-        heading: "STRONGLY CORRECT",
-        color: "text-green-500",
-        replace: "strongly correct",
-      };
-    }
-    return {
-      heading: "FEEDBACK UNAVAILABLE",
-      color: "text-gray-400",
-      replace: "",
-    };
+    return feedback;
   };
 
   const handleSubmit = () => {
@@ -107,28 +57,18 @@ const ProblemSolution = ({
     setShowSolution(true);
 
     if (!userAnswer || userAnswer.trim() === "") {
-      fetchFeedback(
-        selectedProblem.description,
-        "No solution provided",
-        categorizeFeedback
-      );
+      fetchFeedback(selectedProblem.description, "No solution provided", isPro);
       return;
     }
 
-    fetchFeedback(selectedProblem.description, userAnswer, categorizeFeedback);
+    fetchFeedback(selectedProblem.description, userAnswer, isPro);
   };
 
   const handleTimeout = () => {
-    setTimeoutOccurred(true); // Mark timeout as occurred
-    setShowSolution(true); // Show solution
+    setTimeoutOccurred(true);
+    setShowSolution(true);
 
-    // Set feedback and category for timeout
-    setFeedback("No solution was given");
-    setFeedbackCategory({
-      heading: "NO SOLUTION",
-      color: "text-gray-400",
-      replace: "",
-    });
+    fetchFeedback(selectedProblem.description, "No solution provided", isPro);
   };
 
   return (
@@ -136,9 +76,9 @@ const ProblemSolution = ({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex items-center justify-center"
+      className="flex justify-center items-center"
     >
-      <div className="relative w-full p-8 mx-4 mt-8 bg-gray-800 rounded-lg shadow-2xl max-w-screen-4xl">
+      <div className="relative p-8 mx-4 mt-8 w-full bg-gray-800 rounded-lg shadow-2xl max-w-screen-4xl">
         {/* Title and Timer */}
         <button
           onClick={handleCloseModal}
@@ -152,10 +92,10 @@ const ProblemSolution = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center w-full h-min"
+            className="flex flex-col justify-center items-center w-full h-min"
           >
             {/* Title Section */}
-            <div className="flex items-center justify-between w-full pb-2 mb-4 border-b-4 border-gray-600 h-min">
+            <div className="flex justify-between items-center pb-2 mb-4 w-full border-b-4 border-gray-600 h-min">
               <div className="flex flex-col w-full">
                 <h2 className="mb-2 text-3xl font-bold tracking-tighter text-green-400">
                   {selectedProblem.title}
@@ -166,7 +106,7 @@ const ProblemSolution = ({
 
                 {/* Tags & Difficulty Skeleton */}
                 <div className="flex gap-2 my-4">
-                  <div className="flex items-center gap-2 px-3 py-1 text-sm font-black text-gray-600 rounded-sm bg-gray-700/50">
+                  <div className="flex gap-2 items-center px-3 py-1 text-sm font-black text-gray-600 rounded-sm bg-gray-700/50">
                     <FaStar className="w-4 h-4 text-gray-600" />
                     {selectedProblem.difficulty.toUpperCase()}
                   </div>
@@ -182,10 +122,10 @@ const ProblemSolution = ({
               </div>
 
               {/* Timer Area Skeleton */}
-              <div className="flex flex-col items-center justify-center w-32 border-2 border-green-400 rounded-full aspect-square bg-gray-700/50">
+              <div className="flex flex-col justify-center items-center w-32 rounded-full border-2 border-green-400 aspect-square bg-gray-700/50">
                 <button
                   onClick={handleStartProblem}
-                  className="p-6 font-bold text-black bg-green-400 border-2 border-green-400 rounded-full aspect-square animate-pulse hover:bg-green-500"
+                  className="p-6 font-bold text-black bg-green-400 rounded-full border-2 border-green-400 animate-pulse aspect-square hover:bg-green-500"
                 >
                   Begin
                 </button>
@@ -193,12 +133,12 @@ const ProblemSolution = ({
             </div>
 
             {/* Problem Description Skeleton */}
-            <div className="w-full p-4 mt-4 rounded-lg bg-gray-700/50">
+            <div className="p-4 mt-4 w-full rounded-lg bg-gray-700/50">
               <SquigglyPlaceholder lines={3} />
             </div>
 
             {/* Input Field Skeleton */}
-            <div className="flex items-center w-full gap-2 my-4">
+            <div className="flex gap-2 items-center my-4 w-full">
               <div className="w-full h-12 rounded-lg cursor-not-allowed bg-gray-700/50" />
               <div className="flex items-center w-24 h-12 rounded-lg cursor-not-allowed bg-gray-700/50">
                 <span className="w-full font-bold text-center text-gray-400">
@@ -210,11 +150,11 @@ const ProblemSolution = ({
             {/* Hints & Notes Section Skeleton */}
             <div className="flex flex-col lg:h-[300px] gap-4 mb-8 lg:flex-row w-full">
               {/* Hints Panel */}
-              <div className="relative flex-1 h-full p-8 rounded-lg bg-gray-900/50">
+              <div className="relative flex-1 p-8 h-full rounded-lg bg-gray-900/50">
                 <div className="mb-4">
                   <SquigglyPlaceholder lines={1} width="60px" />
                 </div>
-                <div className="h-4 my-1 rounded bg-gray-800/50" />
+                <div className="my-1 h-4 rounded bg-gray-800/50" />
                 {[1, 2].map((_, index) => (
                   <div
                     key={index}
@@ -230,7 +170,7 @@ const ProblemSolution = ({
               </div>
 
               {/* Notes Panel */}
-              <div className="relative flex-1 h-full p-8 rounded-lg bg-gray-900/50">
+              <div className="relative flex-1 p-8 h-full rounded-lg bg-gray-900/50">
                 <div className="mb-4">
                   <SquigglyPlaceholder lines={1} width="60px" />
                 </div>
@@ -243,7 +183,7 @@ const ProblemSolution = ({
             </div>
 
             {/* Feedback Section Skeleton */}
-            <div className="w-full p-8 pt-4 -mx-8 -mb-8 rounded-b-lg bg-gray-900/50">
+            <div className="p-8 pt-4 -mx-8 -mb-8 w-full rounded-b-lg bg-gray-900/50">
               <div className="h-32 rounded-lg bg-gray-800/50" />
             </div>
           </motion.div>
@@ -259,7 +199,7 @@ const ProblemSolution = ({
           }`}
         >
           <div className="flex flex-col">
-            <div className="flex items-center justify-between pb-2 mb-4 border-b-4 border-gray-600">
+            <div className="flex justify-between items-center pb-2 mb-4 border-b-4 border-gray-600">
               <div className="flex flex-col">
                 <h2 className="mb-2 text-3xl font-bold tracking-tighter text-green-400">
                   {selectedProblem.title}
@@ -284,7 +224,7 @@ const ProblemSolution = ({
                   {selectedProblem.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 text-sm tracking-wide text-white rounded-full shadow-md bg-gradient-to-r from-blue-500 to-indigo-500"
+                      className="px-3 py-1 text-sm tracking-wide text-white bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-md"
                     >
                       {tag}
                     </span>
@@ -305,13 +245,13 @@ const ProblemSolution = ({
             </div>
 
             {/* User Input */}
-            <div className="flex items-center gap-2 my-4">
+            <div className="flex gap-2 items-center my-4">
               <input
                 type="text"
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
                 placeholder="Your Answer"
-                className="w-full p-3 text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 hover:bg-gray-700 hover:ring-green-600 hover:ring-2"
+                className="p-3 w-full text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 hover:bg-gray-700 hover:ring-green-600 hover:ring-2"
               />
               <button
                 onClick={handleSubmit}
@@ -333,7 +273,7 @@ const ProblemSolution = ({
                 {hintsVisible ? (
                   <div className="flex flex-col justify-between h-full">
                     <div>
-                      <div className="flex h-4 my-1 overflow-hidden text-xs bg-gray-800 rounded">
+                      <div className="flex overflow-hidden my-1 h-4 text-xs bg-gray-800 rounded">
                         <div
                           style={{
                             width: `${
@@ -342,7 +282,7 @@ const ProblemSolution = ({
                               100
                             }%`,
                           }}
-                          className="flex flex-col justify-center text-center text-white transition-all duration-500 ease-in-out bg-green-500 shadow-none progress-bar whitespace-nowrap"
+                          className="flex flex-col justify-center text-center text-white whitespace-nowrap bg-green-500 shadow-none transition-all duration-500 ease-in-out progress-bar"
                         ></div>
                       </div>
                       {selectedProblem.hints
@@ -358,16 +298,16 @@ const ProblemSolution = ({
                         ))}
                     </div>
                     <div className="pb-4">
-                      <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
+                      <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
                         {currentHintIndex + 1 < selectedProblem.hints.length ? (
                           <button
-                            className="px-3 py-2 font-bold text-white transition-colors duration-300 bg-green-400 rounded shadow-md hover:bg-green-500"
+                            className="px-3 py-2 font-bold text-white bg-green-400 rounded shadow-md transition-colors duration-300 hover:bg-green-500"
                             onClick={showNextHint}
                           >
                             Next Hint
                           </button>
                         ) : (
-                          <p className="font-bold text-gray-400 ">
+                          <p className="font-bold text-gray-400">
                             All hints shown!
                           </p>
                         )}
@@ -381,11 +321,11 @@ const ProblemSolution = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col justify-between h-full pb-8">
+                  <div className="flex flex-col justify-between pb-8 h-full">
                     <p className="text-gray-500">Hints are hidden.</p>
                     {!hintsVisible && (
                       <button
-                        className="px-4 py-2 font-bold text-black transition-colors duration-300 rounded-lg shadow-md bg-green-400/85 hover:bg-green-300"
+                        className="px-4 py-2 font-bold text-black rounded-lg shadow-md transition-colors duration-300 bg-green-400/85 hover:bg-green-300"
                         onClick={() => setHintsVisible(true)}
                       >
                         Show Hint
@@ -409,9 +349,9 @@ const ProblemSolution = ({
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Type your notes here..."
-                      className="w-full p-3 mt-2 text-white bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="p-3 mt-2 w-full text-white bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <div className="flex items-center justify-between mt-4 text-sm">
+                    <div className="flex justify-between items-center mt-4 text-sm">
                       <button
                         onClick={handleSaveNotes}
                         className="px-3 py-2 font-semibold text-white bg-blue-500 rounded shadow-md hover:bg-blue-600"
@@ -432,11 +372,11 @@ const ProblemSolution = ({
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col justify-between h-full pb-8">
+                  <div className="flex flex-col justify-between pb-8 h-full">
                     <p className="text-gray-500">Notes are hidden.</p>
                     {!showNotes && (
                       <button
-                        className="px-4 py-2 font-bold text-white transition-colors duration-300 bg-gray-700 rounded-lg shadow-md hover:bg-gray-600"
+                        className="px-4 py-2 font-bold text-white bg-gray-700 rounded-lg shadow-md transition-colors duration-300 hover:bg-gray-600"
                         onClick={toggleNotes}
                       >
                         Show Notes
@@ -502,12 +442,9 @@ const ProblemSolution = ({
                       loop={false}
                     />
                   ) : (
-                    <ReactTyped
-                      strings={[extractFeedbackExplanation(feedback)]}
-                      typeSpeed={1}
-                      className="mt-2 text-sm leading-[3rem] text-gray-300"
-                      loop={false}
-                    />
+                    <div className="mt-2 text-sm leading-[3rem] text-gray-300">
+                      {feedback}
+                    </div>
                   )}
                 </motion.div>
               )}

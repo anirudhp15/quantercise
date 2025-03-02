@@ -118,7 +118,7 @@ const Register = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-gradient-to-br from-gray-800 to-black sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-gradient-to-br to-gray-800 from-black sm:px-6 lg:px-8">
       <div class="relative z-[9] custom-shape-divider-top-1736546609">
         <svg
           data-name="Layer 1"
@@ -342,7 +342,7 @@ const Register = () => {
               : "Continue with Google"}
           </motion.button>
         </main>
-        <div class=" relative shadow-xl mb-12 z-[9] custom-shape-divider-bottom-1736546061">
+        <div class=" relative  mb-12 z-[9] custom-shape-divider-bottom-1736546061">
           <svg
             data-name="Layer 1"
             xmlns="http://www.w3.org/2000/svg"
