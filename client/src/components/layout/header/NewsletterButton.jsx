@@ -16,9 +16,9 @@ const NewsletterButton = () => {
   };
 
   return (
-    <div className="items-center hidden space-x-0 sm:flex">
+    <div className="hidden items-center space-x-0 sm:flex">
       <button
-        className="flex items-center px-3 py-1 text-sm font-bold text-green-400 transition-all duration-100 transform bg-transparent border-2 border-green-400 rounded-lg hover:scale-105 whitespace-nowrap hover:text-black hover:bg-green-400 hover:border-green-400"
+        className="flex items-center px-2 py-1 text-sm font-black tracking-tighter text-green-400 whitespace-nowrap bg-transparent rounded-lg border-2 border-green-400 transition-all duration-100 transform hover:scale-105 hover:text-black hover:bg-green-400 hover:border-green-400"
         onClick={handleJoinClick}
       >
         {isNewsletterPage ? "Learn More" : "Join Newsletter"}

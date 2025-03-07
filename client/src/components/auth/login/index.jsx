@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MdOutlineLogin } from "react-icons/md";
 import { Navigate, useNavigate, Link, useLocation } from "react-router-dom";
-import { debounce } from "lodash";
 import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
@@ -30,12 +29,41 @@ const Login = () => {
   // Get the intended destination if user was redirected to login
   const from = location.state?.from?.pathname || "/home";
 
+  // Define all hooks before any conditional returns
+  const handleGoogleSignIn = useCallback(async (e) => {
+    e.preventDefault();
+    setIsSigningIn(true);
+    setErrorMessage("");
+
+    try {
+      await doSignInWithGoogle();
+      // No need to navigate here - the useEffect will handle it
+    } catch (error) {
+      console.error("Google login error:", error);
+
+      if (error.code === "auth/popup-closed-by-user") {
+        setErrorMessage("Sign-in cancelled. Please try again.");
+      } else if (error.code === "auth/network-request-failed") {
+        setErrorMessage(
+          "Network error. Please check your internet connection and try again."
+        );
+      } else {
+        setErrorMessage(
+          "Error signing in with Google: " +
+            (error.message || "Please try again.")
+        );
+      }
+    } finally {
+      setIsSigningIn(false);
+    }
+  }, []);
+
   // Clear auth errors when component mounts
   useEffect(() => {
     if (authError) {
       setAuthError(null);
     }
-  }, []);
+  }, [authError, setAuthError]);
 
   // Handle animation and fade-in
   useEffect(() => {
@@ -55,6 +83,17 @@ const Login = () => {
       }
     }
   }, [userLoggedIn, registrationStep, navigate, from]);
+
+  // Now we can have conditional returns after all hooks have been defined
+  // If user is already authenticated, redirect to home
+  if (userLoggedIn && !isLoading) {
+    return <Navigate to="/home" replace />;
+  }
+
+  // If auth is still being checked, don't show anything yet to prevent flashing content
+  if (isLoading) {
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,49 +137,8 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = useCallback(
-    debounce(async (e) => {
-      e.preventDefault();
-      setIsSigningIn(true);
-      setErrorMessage("");
-
-      try {
-        await doSignInWithGoogle();
-        // No need to navigate here - the useEffect will handle it
-      } catch (error) {
-        console.error("Google login error:", error);
-
-        if (error.code === "auth/popup-closed-by-user") {
-          setErrorMessage("Sign-in cancelled. Please try again.");
-        } else if (error.code === "auth/network-request-failed") {
-          setErrorMessage(
-            "Network error. Please check your internet connection and try again."
-          );
-        } else {
-          setErrorMessage(
-            "Error signing in with Google: " +
-              (error.message || "Please try again.")
-          );
-        }
-      } finally {
-        setIsSigningIn(false);
-      }
-    }, 300),
-    []
-  );
-
-  // If auth is still being checked, don't show anything yet to prevent flashing content
-  if (isLoading) {
-    return null;
-  }
-
-  // If user is already logged in, useEffect will handle redirection
-  if (userLoggedIn && !isLoading) {
-    return null;
-  }
-
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-gradient-to-br from-gray-800 to-black sm:px-6 lg:px-8">
+    <div className="flex flex-col justify-center items-center p-4 w-full min-h-screen bg-gradient-to-br from-gray-800 to-black sm:px-6 lg:px-8">
       <div className="relative z-[9] shadow-xl custom-shape-divider-top-1736546609x">
         <svg
           data-name="Layer 1"
@@ -155,13 +153,13 @@ const Login = () => {
         </svg>
       </div>
       <Link
-        className={`z-10 absolute top-3 tracking-tighter left-8 md:left-28 text-xl font-black px-4 py-1 rounded-md transition duration-100 text-green-400 hover:text-green-200`}
+        className={`absolute top-3 left-8 z-10 px-4 py-1 text-xl font-black tracking-tighter text-green-400 rounded-md transition duration-100 md:left-28 hover:text-green-200`}
         to="/landing"
       >
         Quantercise
       </Link>
-      <div className="flex flex-col items-center justify-center w-full max-w-screen-xl lg:flex-row">
-        <h1 className="relative z-20 block w-full max-w-lg pb-8 text-5xl font-black tracking-tighter text-center text-transparent lg:hidden lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
+      <div className="flex flex-col justify-center items-center w-full max-w-screen-xl lg:flex-row">
+        <h1 className="block relative z-20 pb-8 w-full max-w-lg text-5xl font-black tracking-tighter text-center text-transparent bg-clip-text lg:hidden lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl animate-gradient gradient-text">
           <span className="inline lg:block">Code. </span>
           {"  "}
           <span className="inline lg:block">Analyze. </span>
@@ -171,7 +169,7 @@ const Login = () => {
         </h1>
         <main
           ref={loginRef}
-          className="relative z-10 w-full max-w-md p-8 mx-auto space-y-8 bg-gray-900 border-4 border-gray-800 shadow-2xl lg:w-1/2 rounded-xl"
+          className="relative z-10 p-8 mx-auto space-y-8 w-full max-w-md bg-gray-900 rounded-xl border-4 border-gray-800 shadow-2xl lg:w-1/2"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -202,7 +200,7 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 mt-2 text-gray-200 transition-all duration-200 bg-gray-800 border border-gray-800 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-950"
+                  className="px-3 py-2 mt-2 w-full text-gray-200 bg-gray-800 rounded-lg border border-gray-800 shadow-sm transition-all duration-200 outline-none focus:border-green-600 focus:bg-gray-950"
                 />
               </motion.div>
               <motion.div
@@ -222,7 +220,7 @@ const Login = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 mt-2 text-gray-200 transition-all duration-200 bg-gray-800 border border-gray-800 rounded-lg shadow-sm outline-none focus:border-green-600 focus:bg-gray-950"
+                  className="px-3 py-2 mt-2 w-full text-gray-200 bg-gray-800 rounded-lg border border-gray-800 shadow-sm transition-all duration-200 outline-none focus:border-green-600 focus:bg-gray-950"
                 />
               </motion.div>
               {errorMessage && (
@@ -245,7 +243,7 @@ const Login = () => {
                 className={`w-full px-4 py-2 text-black font-bold rounded-lg ${
                   isSigningIn
                     ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-green-400 hover:bg-green-500 hover:shadow-xl transition duration-300 shadow-md"
+                    : "bg-green-400 shadow-md transition duration-300 hover:bg-green-500 hover:shadow-xl"
                 }`}
               >
                 {isSigningIn ? "Signing In..." : "Sign In"}
@@ -265,7 +263,7 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
-              className="flex items-center justify-center"
+              className="flex justify-center items-center"
             >
               <div className="w-full border-b border-gray-700 opacity-50"></div>
               <div className="absolute px-4 text-sm font-bold text-gray-400 bg-gray-800">
@@ -324,9 +322,9 @@ const Login = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-10 flex flex-col items-center w-full lg:w-1/2 "
+          className="flex relative z-10 flex-col items-center w-full lg:w-1/2"
         >
-          <h1 className="hidden w-full max-w-lg pt-8 text-5xl font-black tracking-tighter text-center text-transparent lg:block lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl bg-clip-text animate-gradient gradient-text">
+          <h1 className="hidden pt-8 w-full max-w-lg text-5xl font-black tracking-tighter text-center text-transparent bg-clip-text lg:block lg:text-left lg:pt-0 lg:max-w-md lg:text-7xl animate-gradient gradient-text">
             <span className="inline lg:block">Code. </span>
             {"  "}
             <span className="inline lg:block">Analyze. </span>
@@ -334,7 +332,7 @@ const Login = () => {
             <span className="inline lg:block">Conquer. </span>
             {"  "}
           </h1>
-          <div className="hidden max-w-md mt-8 space-y-8 font-semibold lg:block">
+          <div className="hidden mt-8 space-y-8 max-w-md font-semibold lg:block">
             <div>
               <h2 className="text-xl font-bold text-gray-100">
                 Get Started Quickly
@@ -354,7 +352,7 @@ const Login = () => {
               </p>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-100 ">
+              <h2 className="text-xl font-bold text-gray-100">
                 Track Internship Applications
               </h2>
               <p className="pl-2 mt-2 text-gray-400 border-l-4 border-purple-400">

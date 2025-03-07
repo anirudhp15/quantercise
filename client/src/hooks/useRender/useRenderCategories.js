@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
+import {
+  FaArrowRightLong,
+  FaArrowLeftLong,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { FaSyncAlt } from "react-icons/fa";
 import { MdBookmark, MdBookmarks } from "react-icons/md";
@@ -28,6 +33,7 @@ export const useRenderCategories = (
   containerRef
 ) => {
   const [categories, setCategories] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const initialCategories = [
     {
@@ -194,7 +200,7 @@ export const useRenderCategories = (
                   <FaArrowRightLong className="ml-2 transition-transform group-hover:translate-x-1" />
                 </button>
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-4 lg:mt-3 lg:mb-0 lg:flex-1">
+                <div className="flex flex-wrap gap-2 my-4 lg:mt-3 lg:mb-0 lg:flex-1">
                   {category.tags?.slice(0, 4).map((tag, tagIndex) => (
                     <span
                       key={tagIndex}
@@ -211,11 +217,21 @@ export const useRenderCategories = (
                 </div>
                 {/* 3 Featured Problems Section */}
                 {/* 3 Featured Problems Section */}
-                <div className="px-4 py-4 mt-2 bg-gray-900 rounded-xl shadow-xl">
-                  <h3 className="text-xl font-bold text-gray-400">
-                    Featured Problems
-                  </h3>
-                  <div className="mt-4 space-y-4">
+
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex justify-between items-center w-full text-xl font-bold text-gray-400 focus:outline-none"
+                >
+                  Featured Problems
+                  {isOpen ? (
+                    <FaChevronUp className="text-gray-500 hover:text-gray-300" />
+                  ) : (
+                    <FaChevronDown className="text-gray-500 hover:text-gray-300" />
+                  )}
+                </button>
+
+                {isOpen && (
+                  <div className="space-y-4 transition-all duration-300 ease-in-out">
                     {problems
                       .filter(
                         (problem) => problem.category === category.category
@@ -273,7 +289,7 @@ export const useRenderCategories = (
                         </div>
                       ))}
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Pro Overlay */}

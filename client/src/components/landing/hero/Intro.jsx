@@ -83,7 +83,7 @@ const Intro = React.memo(({ triggerBounce }) => {
   return (
     <div
       id="hero"
-      className="relative flex items-center justify-center w-full min-h-screen text-gray-300 bg-center bg-cover bg-gradient-to-b from-gray-800 to-gray-950"
+      className="flex relative justify-center items-center w-full min-h-screen text-gray-300 bg-center bg-cover bg-gradient-to-b from-gray-800 to-gray-950"
     >
       <AnimatePresence>
         {showQuote && (
@@ -92,7 +92,7 @@ const Intro = React.memo(({ triggerBounce }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, delay: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
+            className="flex fixed inset-0 z-50 flex-col justify-center items-center bg-black"
           >
             <ReactTyped
               strings={[quote]}
@@ -121,7 +121,7 @@ const Intro = React.memo(({ triggerBounce }) => {
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
               onClick={() => setShowQuote(false)}
-              className="fixed px-6 py-3 font-black text-white border-2 border-white rounded-full bottom-8 hover:text-black hover:bg-green-500 hover:border-black focus:outline-none"
+              className="fixed bottom-8 px-6 py-3 font-black text-white rounded-full border-2 border-white hover:text-black hover:bg-green-500 hover:border-black focus:outline-none"
             >
               SKIP
             </motion.button>
@@ -133,7 +133,7 @@ const Intro = React.memo(({ triggerBounce }) => {
         <>
           <div className="absolute top-0 left-0 w-full h-full z-9">
             <AnimatedGrid />
-            <div className="absolute top-0 z-10 left-4 transform-gpu">
+            <div className="absolute top-0 left-4 z-10 transform-gpu">
               <ReactTyped
                 strings={[
                   "quantercise",
@@ -153,7 +153,7 @@ const Intro = React.memo(({ triggerBounce }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="relative z-10 flex flex-col items-center justify-center h-full max-w-screen-xl mx-auto lg:flex-row"
+            className="flex relative z-10 flex-col justify-center items-center mx-auto max-w-screen-xl h-full lg:flex-row"
           >
             <div className="px-12 text-center lg:w-1/2 lg:pr-8 lg:text-left">
               <motion.h1
@@ -199,7 +199,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 <form
                   ref={form}
                   onSubmit={handleSubmit}
-                  className="flex flex-col items-center gap-4 lg:flex-row lg:items-start"
+                  className="flex flex-col gap-4 items-center lg:flex-row lg:items-start"
                 >
                   <input
                     type="email"
@@ -207,7 +207,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     value={email}
                     onChange={handleEmailChange}
                     placeholder="Enter your email"
-                    className="w-full max-w-xs px-3 py-2 text-white transition duration-200 bg-gray-900 border border-gray-600 rounded-lg shadow-sm outline-none h-11 font-extralight focus:border-2 focus:border-green-600 focus:bg-gray-950"
+                    className="px-3 py-2 w-full max-w-xs h-11 font-extralight text-white bg-gray-900 rounded-lg border border-gray-600 shadow-sm transition duration-200 outline-none focus:border-2 focus:border-green-600 focus:bg-gray-950"
                     required
                   />
                   <motion.button
@@ -215,8 +215,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     className={`w-auto px-6 py-[6px] text-lg font-bold text-green-400 border-2 border-green-400 rounded-lg hover:bg-green-400 shadow-lg whitespace-nowrap lg:mt-0 ${
                       triggerBounce
                         ? "animate-bounce outline-2 outline outline-offset-4 outline-green-400"
-                        : ""
-                    } hover:scale-105 group hover:text-black hover:shadow-xl`}
+                        : ""} hover:scale-105 group hover:text-black hover:shadow-xl`}
                   >
                     Notify Me
                     <FaArrowRightLong className="inline-block ml-2 transition-transform duration-300 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -237,23 +236,23 @@ const Intro = React.memo(({ triggerBounce }) => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 2.5, delay: 0.3 }}
-              className="relative z-10 max-w-screen-xl mx-auto mt-4 lg:mt-0 lg:w-1/2"
+              className="relative z-10 mx-auto mt-4 max-w-screen-xl lg:mt-0 lg:w-1/2"
             >
-              <div className="relative flex flex-col">
-                <div className="flex items-end justify-start space-x-4">
+              <div className="flex relative flex-col">
+                <div className="flex justify-start items-end space-x-4">
                   <motion.div
                     initial={{ opacity: 0, x: 15, y: 15 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
                     transition={{ duration: 1.5, delay: 0.5 }}
-                    className="relative max-w-sm mb-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
+                    className="overflow-hidden relative mb-4 max-w-sm rounded-lg border-2 border-gray-500 shadow-lg transition-all duration-150 sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
                     <img
+                      alt="Content image"
                       src={backgroundImage}
-                      alt="Quantitative Finance Illustration"
-                      className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
+                      className="w-full shadow-xl transition-opacity duration-150 group-hover:opacity-40"
                       loading="lazy"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center w-full h-full px-4 py-2 transition-opacity duration-150 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
+                    <div className="flex absolute right-0 bottom-0 left-0 z-10 justify-center items-center px-4 py-2 w-full h-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
                       <p className="text-sm font-thin text-center text-white md:text-lg">
                         Access our extensive knowledgebase of interview
                         questions, tagged by specific concepts and subjects to
@@ -272,7 +271,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     <PiArrowArcRightThin className="hidden w-16 h-16 text-green-400 rotate-90 lg:block" />
                   </motion.div>
                 </div>
-                <div className="flex items-start justify-center space-x-4 lg:justify-end">
+                <div className="flex justify-center items-start space-x-4 lg:justify-end">
                   <motion.div
                     initial={{ clipPath: "inset(100% 0 0 0)" }}
                     animate={{ clipPath: "inset(0 0 0 0)" }}
@@ -285,15 +284,15 @@ const Intro = React.memo(({ triggerBounce }) => {
                     initial={{ opacity: 0, x: -15, y: -15 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
                     transition={{ duration: 1.5, delay: 0.7 }}
-                    className="relative max-w-sm mt-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
+                    className="overflow-hidden relative mt-4 max-w-sm rounded-lg border-2 border-gray-500 shadow-lg transition-all duration-150 sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
                     <img
+                      alt="Content image"
                       src={trackingImage}
-                      alt="Applications Tracking Page"
-                      className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
+                      className="w-full shadow-xl transition-opacity duration-150 group-hover:opacity-40"
                       loading="lazy"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center w-full h-full px-4 py-2 transition-opacity duration-150 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
+                    <div className="flex absolute right-0 bottom-0 left-0 z-10 justify-center items-center px-4 py-2 w-full h-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
                       <p className="text-sm font-thin text-center text-white md:text-lg">
                         Manage your internship and job applications directly
                         from our platform. Track deadlines, statuses, and more

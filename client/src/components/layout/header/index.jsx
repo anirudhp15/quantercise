@@ -150,7 +150,17 @@ const Header = ({ onJoinClick }) => {
       {/* Right: Settings Button or Auth Buttons */}
       <div className="flex items-center">
         {isLandingPage || !userLoggedIn ? (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <button
+              onClick={toggleLowDetailMode}
+              className={`p-2 rounded-lg shadow-lg transition duration-300 flex sm:hidden justify-center items-center ${
+                lowDetailMode
+                  ? "text-green-400 bg-gray-700 hover:bg-gray-600"
+                  : "text-red-400 bg-gray-700 hover:bg-gray-600"
+              }`}
+            >
+              {lowDetailMode ? <FaToggleOn /> : <FaToggleOff />}
+            </button>
             <Suspense fallback={<div>Loading...</div>}>
               <Waitlist onJoinClick={onJoinClick} />
               <motion.div
@@ -165,7 +175,7 @@ const Header = ({ onJoinClick }) => {
             </Suspense>
             <button
               onClick={toggleLowDetailMode}
-              className={`py-2 px-2 ml-2 rounded-lg shadow-lg transition duration-300 flex justify-center items-center ${
+              className={`p-2 ml-4 rounded-lg hidden shadow-lg transition duration-300 sm:flex justify-center items-center ${
                 lowDetailMode
                   ? "text-green-400 bg-gray-700 hover:bg-gray-600"
                   : "text-red-400 bg-gray-700 hover:bg-gray-600"

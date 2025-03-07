@@ -1,16 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import anime from "animejs";
-import axios from "axios";
+
 import PriceCard from "./PriceCard"; // Import the PriceCard component
-import { handleCheckout } from "../../../utils/stripe"; // Import utility function
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
-import { motion } from "framer-motion";
-import { useAuth } from "../../../contexts/authContext";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const Pricing = () => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +30,7 @@ const Pricing = () => {
       >
         <div className="absolute inset-0 z-20 opacity-30 pointer-events-none"></div>
 
-        <div className="px-8 w-full max-w-6xl text-center">
+        <div className="px-4 w-full max-w-6xl text-center">
           <h2 className="py-8 text-4xl font-bold tracking-tighter text-transparent md:text-5xl gradient-text animate-gradient">
             Pricing
           </h2>
@@ -42,6 +38,7 @@ const Pricing = () => {
           <p className="mx-auto max-w-screen-md text-lg">
             Start with{" "}
             <span className="font-bold text-white">15 free questions.</span>{" "}
+            <br />
             Upgrade below for more features.
           </p>
 
@@ -63,8 +60,7 @@ const Pricing = () => {
             >
               <div
                 className={`absolute top-0 left-0 w-8 h-8 bg-white rounded-full shadow transition-transform duration-300 ${
-                  isAnnual ? "transform translate-x-full" : ""
-                }`}
+                  isAnnual ? "transform translate-x-full" : ""}`}
               />
             </div>
             <span

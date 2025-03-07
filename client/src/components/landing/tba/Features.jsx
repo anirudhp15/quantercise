@@ -56,7 +56,7 @@ const Features = () => {
             transition={{ duration: 0.8 }}
             className="relative mx-auto mb-8 overflow-hidden transition-all duration-200 border-2 border-gray-500 rounded-lg md:mb-0 hover:border-gray-300"
           >
-            <img
+            <img alt="Content image"
               src={practiceProblemsImage}
               alt="Practice Problems Page"
               className="object-cover w-full h-full"
@@ -68,7 +68,7 @@ const Features = () => {
             transition={{ duration: 0.8 }}
             className="relative mx-auto overflow-hidden transition-all duration-200 border-2 border-gray-500 rounded-lg hover:border-gray-300"
           >
-            <img
+            <img alt="Content image"
               src={progressImage}
               alt="Progress Page"
               className="object-cover w-full h-full"

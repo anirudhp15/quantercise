@@ -63,7 +63,7 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
         {/* Logo and Toggle */}
         <div className="flex justify-between items-center p-4">
           <div className="flex items-center">
-            {/* <img
+            {/* <img alt="Content image"
               src={logo}
               alt="Logo"
               className={`w-8 h-8 mr-2 ${!expanded && "hidden"}`}
@@ -162,8 +162,8 @@ const LargeSidebar = ({ expanded, setExpanded }) => {
             {currentUser && (
               <div className="flex items-center w-full">
                 <img
+                  alt="Content image"
                   src={currentUser.photoURL || logo}
-                  alt="Profile"
                   className="w-8 h-8 rounded-full"
                 />
                 {expanded && (

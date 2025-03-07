@@ -8,7 +8,7 @@ import { handleCheckout } from "../../../../utils/stripe"; // Import utility fun
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const Pricing = () => {
   const [loading, setLoading] = useState(false);

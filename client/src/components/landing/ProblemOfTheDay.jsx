@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ReactTyped } from "react-typed";
-import axios from "axios";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+
 import "react-circular-progressbar/dist/styles.css";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaStar, FaCheckCircle, FaTrophy } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaCheckCircle, FaTrophy } from "react-icons/fa";
 import { SiOpentofu } from "react-icons/si";
 import { RxDoubleArrowRight } from "react-icons/rx";
-import { ProblemCard, ProblemTimer } from "../sections/problems";
+import { ProblemCard } from "../sections/problems";
 import { useFetchProblem } from "../../hooks/useFetch/useFetchNewProblem";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/userContext";
@@ -72,7 +70,7 @@ const ProblemOfTheDay = () => {
   return (
     <div
       id="problems"
-      className="relative z-10 flex flex-col-reverse xl:flex-row items-start justify-center min-h-[50vh] py-12 px-8 xl:px-24 text-gray-300 bg-gray-800"
+      className="relative z-10 flex flex-col-reverse xl:flex-row items-start justify-center min-h-[50vh] py-12 px-4 xl:px-24 text-gray-300 bg-gray-800"
     >
       {/* Problem Demo Section */}
       <div className="w-full xl:w-2/3">
@@ -98,7 +96,7 @@ const ProblemOfTheDay = () => {
         </Link>
       </div>
       {/* Text Section */}
-      <div className="pb-8 mx-auto w-5/6 leading-loose text-left xl:my-auto lg:w-1/2 xl:w-1/3 xl:ml-12">
+      <div className="px-4 pb-8 mx-auto leading-loose text-left xl:my-auto lg:w-1/2 xl:w-1/3 xl:ml-12">
         <motion.h2
           id="concepts-words"
           className="relative pt-2 pb-4 text-4xl font-bold tracking-tighter text-center text-transparent xl:text-left md:pb-8 md:text-5xl gradient-text animate-gradient"
@@ -106,18 +104,18 @@ const ProblemOfTheDay = () => {
           150+ Problems
         </motion.h2>
         <div className="flex flex-col gap-4 mx-auto w-auto">
-          <p className="flex items-center text-base font-medium text-gray-300">
-            <SiOpentofu className="mr-2 w-5 h-5 text-blue-400 line-clamp-2" />
+          <p className="flex text-base font-medium text-gray-300">
+            <SiOpentofu className="mt-1 mr-2 w-5 h-5 text-blue-400 line-clamp-2" />
             Get personalized feedback to learn from common mistakes.
           </p>
 
-          <p className="flex items-center text-base text-gray-300">
-            <FaTrophy className="mr-2 w-5 h-5 text-yellow-400" />
+          <p className="flex text-base text-gray-300">
+            <FaTrophy className="mt-1 mr-2 w-5 h-5 text-yellow-400" />
             Simulate high-pressure challenges inspired by real quant interviews.
           </p>
 
-          <p className="flex items-center text-base text-gray-300">
-            <FaCheckCircle className="mr-2 w-5 h-5 text-green-400" />
+          <p className="flex text-base text-gray-300">
+            <FaCheckCircle className="mt-1 mr-2 w-5 h-5 text-green-400" />
             Track your progress and master essential concepts.
           </p>
         </div>

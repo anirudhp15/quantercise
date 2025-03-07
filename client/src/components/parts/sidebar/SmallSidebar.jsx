@@ -70,7 +70,7 @@ const SmallSidebar = ({ expanded, setExpanded }) => {
         {/* Header with logo and close button */}
         <div className="flex justify-between items-center p-4 border-b-2 border-gray-700">
           <div className="flex items-center">
-            <img src={logo} alt="Logo" className="mr-2 w-8 h-8" />
+            <img alt="Content image" src={logo} className="mr-2 w-8 h-8" />
             <Link
               to="/landing"
               className={`text-xl font-black tracking-tighter ${colorClass}`}
@@ -154,8 +154,8 @@ const SmallSidebar = ({ expanded, setExpanded }) => {
           {currentUser && (
             <div className="flex items-center mt-2 mb-4">
               <img
+                alt="Content image"
                 src={currentUser.photoURL || logo}
-                alt="Profile"
                 className="w-10 h-10 rounded-full"
               />
               <div className="ml-3">

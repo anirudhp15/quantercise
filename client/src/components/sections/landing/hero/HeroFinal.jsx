@@ -233,7 +233,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 transition={{ duration: 2.5, delay: 0.3 }}
                 className="flex relative justify-end w-full"
               >
-                <img
+                <img alt="Content image"
                   src={backgroundImage}
                   alt="Quantercise MacBook Mockup"
                   className="w-[80%] relative z-20"

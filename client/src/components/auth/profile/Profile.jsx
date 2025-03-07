@@ -15,6 +15,7 @@ import {
   FaShieldAlt,
   FaBell,
   FaCreditCard,
+  FaCheckCircle,
 } from "react-icons/fa";
 import { SiOpentofu } from "react-icons/si";
 import axios from "axios";
@@ -144,7 +145,7 @@ const Profile = () => {
   return (
     <div className="flex relative justify-center w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-900 via-gray-950">
       {!lowDetailMode && <AnimatedGrid2 />}
-      <div className="flex relative z-10 flex-col px-6 py-24 mx-auto w-full max-w-7xl lg:py-32">
+      <div className="flex relative z-10 flex-col px-4 py-24 mx-auto w-full max-w-7xl lg:py-32">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -167,7 +168,7 @@ const Profile = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:gap-8 xl:grid-cols-3">
           {/* Left Column - Profile Summary */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -175,12 +176,12 @@ const Profile = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="xl:col-span-1"
           >
-            <div className="p-8 bg-gray-800 bg-opacity-90 rounded-2xl shadow-xl backdrop-blur-lg">
+            <div className="p-8 bg-gray-800 bg-opacity-90 rounded-lg shadow-xl backdrop-blur-lg">
               <div className="flex flex-col items-center text-center">
                 {currentUser?.photoURL ? (
                   <img
+                    alt="Content image"
                     src={currentUser.photoURL}
-                    alt="Profile"
                     className="w-32 h-32 rounded-full border-4 shadow-lg"
                     style={{ borderColor: profileColor }}
                   />
@@ -249,104 +250,111 @@ const Profile = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8 xl:col-span-2"
+            className="space-y-4 lg:space-y-8 xl:col-span-2"
           >
             {/* Membership Section */}
-            <div className="p-8 bg-gray-800 bg-opacity-90 rounded-2xl shadow-xl backdrop-blur-lg">
-              <h3 className="flex items-center mb-6 text-2xl font-bold tracking-wide text-white">
-                <FaCrown className="mr-3 text-yellow-400" /> Membership
+            <div className="p-8 bg-gray-800 bg-opacity-70 rounded-xl shadow-2xl backdrop-blur-xl">
+              <h3 className="flex items-center mb-6 text-3xl font-bold text-white">
+                <FaCrown className="mr-2 text-yellow-400 drop-shadow-md" />
+                Membership
               </h3>
-              <div className="flex flex-col justify-between items-center sm:flex-row">
+
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div>
-                  <p className="text-sm text-gray-300">Current Plan</p>
-                  <p className="mt-1 text-xl font-medium tracking-wide text-white">
+                  <p className="text-sm font-semibold tracking-wide text-gray-400 uppercase">
+                    Current Plan
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold text-green-300">
                     {getPlanName()}
                   </p>
+
                   {isPro !== null && planDetails?.features && (
-                    <ul className="mt-4 space-y-1">
+                    <ul className="mt-5 space-y-2">
                       {planDetails.features
                         .slice(0, 3)
                         .map((feature, index) => (
                           <li
                             key={index}
-                            className="flex items-center text-sm text-gray-400"
+                            className="flex items-center text-gray-300"
                           >
-                            <span className="mr-2 text-green-400">✓</span>
+                            <FaCheckCircle className="mr-2 text-green-500" />
                             {feature}
                           </li>
                         ))}
                     </ul>
                   )}
                 </div>
-                <div className="mt-6 space-y-3 sm:mt-0">
+
+                <div className="flex flex-col justify-center space-y-4">
                   {isPro === null ? (
                     <button
                       onClick={handleUpgradePlan}
-                      className="px-6 py-3 w-full text-sm font-medium text-white bg-gradient-to-r from-green-500 to-green-600 rounded-md transition hover:from-green-600 hover:to-green-700"
+                      className="px-6 py-3 w-full font-medium text-white bg-gradient-to-r from-green-500 to-teal-500 rounded-lg shadow-lg transition duration-300 hover:from-green-600 hover:to-teal-600"
                     >
                       Upgrade Plan
                     </button>
                   ) : isPro === false ? (
-                    <div className="flex flex-row gap-2">
+                    <div className="flex gap-3">
                       <button
                         onClick={handleUpgradePlan}
-                        className="px-6 py-3 w-full text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-md transition hover:from-blue-600 hover:to-purple-700"
+                        className="flex-1 px-6 py-3 font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg transition duration-300 hover:from-indigo-600 hover:to-purple-700"
                       >
                         Upgrade to Pro
                       </button>
                       <button
                         onClick={handleCancelMembership}
-                        className="px-6 py-3 w-full text-sm font-medium text-red-500 rounded-md border border-red-500 transition hover:bg-red-500 hover:text-white"
+                        className="flex-1 px-6 py-3 font-medium text-red-500 rounded-lg border border-red-500 transition duration-300 hover:bg-red-500 hover:text-white"
                       >
-                        Cancel Membership
+                        Cancel
                       </button>
                     </div>
                   ) : (
                     <button
                       onClick={handleCancelMembership}
-                      className="px-6 py-3 w-full text-sm font-medium text-red-500 rounded-md border border-red-500 transition hover:bg-red-500 hover:text-white"
+                      className="px-6 py-3 w-full font-medium text-red-500 rounded-lg border border-red-500 transition duration-300 hover:bg-red-500 hover:text-white"
                     >
                       Cancel Membership
                     </button>
                   )}
                 </div>
               </div>
+
               {isPro !== null && (
-                <div className="p-4 mt-8 bg-gray-700 rounded-lg">
+                <div className="p-6 mt-8 bg-gray-700 rounded-xl shadow-md">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                      <FaCreditCard className="mr-3 text-gray-400" />
+                      <FaCreditCard className="mr-3 text-xl text-gray-300" />
                       <div>
-                        <p className="text-base font-medium text-white">
-                          Payment Method
-                        </p>
-                        <p className="text-sm text-gray-400">
+                        <div className="flex gap-3 items-center">
+                          <p className="text-base font-semibold text-white">
+                            Payment Method
+                          </p>
+                          <Link
+                            to="/billing"
+                            className="px-3 py-1 text-sm text-white bg-gray-600 rounded-lg transition hover:bg-gray-500"
+                          >
+                            Update
+                          </Link>
+                        </div>
+                        <p className="mt-1 text-sm text-gray-400">
                           {currentUser?.paymentMethodBrand
                             ? `${currentUser.paymentMethodBrand} •••• ${currentUser.paymentMethodLast4}`
                             : "No payment method on file"}
                         </p>
                       </div>
                     </div>
-                    <Link
-                      to="/billing"
-                      className="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-500"
-                    >
-                      Update
-                    </Link>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Appearance Section */}
-            <div className="p-8 bg-gray-800 bg-opacity-90 rounded-2xl shadow-xl backdrop-blur-lg">
-              <h3 className="mb-6 text-2xl font-bold tracking-wide text-white">
+            <div className="p-8 bg-gray-800 bg-opacity-90 rounded-lg shadow-xl backdrop-blur-lg">
+              <h3 className="mb-4 text-2xl font-bold tracking-wide text-white">
                 Appearance
               </h3>
-              <div className="p-8 bg-gray-700 rounded-lg">
-                <p className="mb-4 text-base text-white">
-                  Profile Accent Color
-                </p>
+              <div className="p-4 bg-gray-700 rounded-lg">
+                <p className="mb-4 text-base text-gray-400">Profile Color</p>
                 <div className="flex justify-between items-center">
                   {[
                     "#10B981",
@@ -363,7 +371,7 @@ const Profile = () => {
                     <button
                       key={color}
                       onClick={() => handleColorSelection(color)}
-                      className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${
+                      className={`w-4 h-4 rounded-full transition-transform hover:scale-110 lg:w-8 lg:h-8 ${
                         profileColor === color
                           ? "ring-2 ring-white ring-offset-2 ring-offset-gray-800"
                           : ""

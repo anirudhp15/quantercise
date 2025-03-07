@@ -71,7 +71,7 @@ const PriceCard = React.memo(
           className={`inline-block w-full px-4 py-2 mt-6 font-bold text-center transition-all duration-100 hover:scale-105 hover:cursor-pointer hover:text-white hover:shadow-lg group ${
             isStarter
               ? "bg-gray-300 text-black hover:bg-gray-500 hover:text-white"
-              : title == "Sharpe" || title == "Sharpe Yearly"
+              : title === "Sharpe" || title === "Sharpe Yearly"
               ? "bg-green-400 text-black"
               : "bg-blue-400 text-black"
           }`}

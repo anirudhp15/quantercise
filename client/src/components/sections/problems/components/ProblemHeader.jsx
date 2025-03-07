@@ -11,12 +11,12 @@ const ProblemHeader = ({
 }) => {
   return (
     <motion.div
-      className="flex justify-between items-center"
+      className="flex flex-col justify-between items-center xl:flex-row"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 items-center mb-4 xl:items-start xl:mb-0">
         <h1 className="text-3xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
           {selectedProblem.title}
         </h1>
@@ -43,7 +43,7 @@ const ProblemHeader = ({
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2, delay: index * 0.1 }}
-              className="px-3 py-1 text-sm tracking-wide text-white bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-md"
+              className="flex justify-center items-center px-2 py-1 text-xs tracking-wide text-white whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-md xl:px-3 xl:py-1.5"
             >
               {tag}
             </motion.span>

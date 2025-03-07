@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const stripePromise = loadStripe(
-  "pk_live_51Pf7hS2LYK3gCcnXnwSMrwWSkx0rAvUjXiJerFVVVlvov6xhlpsT9fWBoh26JZSZoivFQC3SqgWKLXS5RmzThBmW00noET6xuB"
-);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const StripeCheckout = () => {
   const location = useLocation();

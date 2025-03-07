@@ -5,10 +5,11 @@ import { useUser } from "../../contexts/userContext";
 import SquigglyPlaceholder from "../parts/SquigglyPlaceholder";
 import { SiOpentofu } from "react-icons/si";
 import AnimatedGrid from "../landing/animatedGrid/AnimatedGrid";
+
 const ProtectedRoute = ({ children }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const location = useLocation();
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading } = useAuth();
   const { registrationStep } = useUser();
 
   // Wait a short delay to ensure Firebase auth has time to initialize
@@ -21,9 +22,9 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   // If we're still loading, show a nice loading screen
-  if (isAuthLoading) {
+  if (isAuthLoading || isLoading) {
     return (
-      <div className="flex fixed inset-0 z-50 justify-center items-center bg-gradient-to-br from-gray-900 to-gray-900 via-gray-950">
+      <div className="flex fixed inset-0 z-50 justify-center items-center px-4 bg-gradient-to-br from-gray-900 to-gray-900 via-gray-950">
         <AnimatedGrid />
         <div className="flex relative z-50 flex-col justify-center items-center p-8 w-full max-w-md bg-gray-800 rounded-lg shadow-2xl">
           <div className="relative mb-6 w-24 h-24">
@@ -48,20 +49,10 @@ const ProtectedRoute = ({ children }) => {
     if (location.pathname === "/login" || location.pathname === "/register") {
       return children;
     }
-
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // If user is authenticated but trying to access login or register page,
-  // redirect them to the dashboard
-  if (
-    currentUser &&
-    (location.pathname === "/login" || location.pathname === "/register")
-  ) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  // User is authenticated and not on login/register, show the protected content
+  // User is authenticated, show the protected content
   return children;
 };
 

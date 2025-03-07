@@ -13,6 +13,7 @@ import {
 
 const RenderProblems = ({
   problemsToShow,
+  problemsCompleted,
   selectedTag,
   handleTagChange,
   selectedDifficulty,
@@ -70,8 +71,8 @@ const RenderProblems = ({
     selectedLayout === "1 Column"
       ? "grid-cols-1"
       : selectedLayout === "2 Columns" || selectedLayout === "Layout"
-      ? "grid-cols-1 sm:grid-cols-2"
-      : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+      ? "grid-cols-1 lg:grid-cols-2"
+      : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3";
 
   // Animation variants for staggered children
   const containerVariants = {
@@ -222,12 +223,13 @@ const RenderProblems = ({
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-green-400 truncate text-md lg:text-lg">
                 {problem.title}
-                {problem.isNew && (
-                  <span className="ml-2 px-1.5 py-0.5 text-xs font-semibold text-black bg-green-400 rounded-sm">
-                    NEW
-                  </span>
-                )}
               </h2>
+              {problem.isNew && (
+                <span className="ml-2 px-1.5 py-0.5 text-xs font-semibold text-black bg-green-400 rounded-sm">
+                  NEW
+                </span>
+              )}
+
               <button
                 className={`px-3 py-1 relative z-10 flex items-center space-x-2 text-sm font-black rounded-md transition-all duration-200 ${
                   // If user is free & problem.isPro => locked

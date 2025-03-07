@@ -168,7 +168,7 @@ const EditProfile = () => {
             <div className="flex flex-col items-center space-y-6">
               <div className="relative">
                 {previewPhoto ? (
-                  <img
+                  <img alt="Content image"
                     src={previewPhoto}
                     alt="Profile"
                     className="object-cover w-40 h-40 rounded-full border-4 shadow-lg"

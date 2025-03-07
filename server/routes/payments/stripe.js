@@ -23,8 +23,8 @@ router.post("/create-checkout-session", async (req, res) => {
       metadata: {
         userId, // Attach userId for easier handling in the webhook or verification
       },
-      success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`, // Redirect to success page
-      cancel_url: `http://localhost:3000/register`, // Redirect back to pricing page on cancellation
+      success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
+      cancel_url: `${process.env.DOMAIN}/register`, // Use environment variable
     });
 
     res.json({ url: session.url });

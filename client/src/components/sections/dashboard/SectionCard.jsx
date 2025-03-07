@@ -25,7 +25,7 @@ const SectionCard = ({
       className={`relative group ${columnSpan}`}
     >
       <div
-        className={`relative z-10 p-4 h-full sm:p-8  rounded-lg shadow-lg transition-all duration-200 transform group-hover:bg-gray-900 ${
+        className={`relative z-10 p-4 h-full sm:p-8 rounded-lg shadow-lg transition-all duration-200 transform group-hover:bg-gray-900 ${
           isSettings ? "bg-gray-900" : "bg-gray-800"
         }`}
       >

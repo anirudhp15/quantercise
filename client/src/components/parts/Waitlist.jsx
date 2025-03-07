@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
-import AnimatedGrid from "../landing/animatedGrid/AnimatedGrid";
 import "../../index.css";
 
 const Waitlist = () => {

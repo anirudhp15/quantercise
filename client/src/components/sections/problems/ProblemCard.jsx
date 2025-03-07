@@ -89,7 +89,7 @@ const ProblemCard = ({
   };
 
   return (
-    <div className="p-8 pb-0 w-full bg-gray-600 rounded-lg shadow-lg hover:shadow-2xl hover:shadow-gray-800">
+    <div className="p-4 pb-0 w-full bg-gray-600 rounded-lg shadow-lg lg:pb-0 lg:p-8 hover:shadow-2xl hover:shadow-gray-800">
       {/* Skeleton Preview Overlay */}
       {isOverlayVisible && (
         <motion.div
@@ -99,8 +99,8 @@ const ProblemCard = ({
           className="flex flex-col justify-center items-center w-full"
         >
           {/* Title & Timer Skeleton */}
-          <div className="flex justify-between items-center pb-2 mb-4 w-full border-b-4 border-gray-500">
-            <div className="flex flex-col w-full lg:w-2/3">
+          <div className="flex flex-col justify-between items-center pb-4 mb-4 w-full border-b-4 border-gray-500 lg:flex-row">
+            <div className="flex flex-col w-full text-center lg:w-2/3 lg:text-left">
               <h2 className="mb-2 text-xl font-bold tracking-tighter text-green-400 lg:text-3xl">
                 {problem.title}
               </h2>
@@ -182,8 +182,8 @@ const ProblemCard = ({
         }`}
       >
         {/* Title and Timer */}
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center md:flex-row md:justify-between">
+          <div className="flex flex-col gap-2 mb-4 md:mb-0">
             <h1 className="text-3xl font-bold tracking-tighter">
               {problem.title}
             </h1>
@@ -230,8 +230,8 @@ const ProblemCard = ({
         </div>
 
         {/* User Input */}
-        <div className="my-4">
-          <div className="flex gap-2 items-center">
+        <div className="my-2 lg:my-4">
+          <div className="flex flex-col gap-2 items-center w-full md:flex-row">
             <input
               type="text"
               value={userAnswer}
@@ -239,19 +239,21 @@ const ProblemCard = ({
               placeholder="Your Answer"
               className="p-2 w-full text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={timeoutOccurred || loadingFeedback}
-            >
-              {loadingFeedback ? "Analyzing..." : "Submit"}
-            </button>
-            <button
-              onClick={resetQuestion}
-              className="px-4 py-2 font-semibold text-white whitespace-nowrap bg-blue-500 rounded-lg hover:bg-blue-600"
-            >
-              Reset Question
-            </button>
+            <div className="flex flex-row gap-2 justify-between items-center w-full md:w-min md:justify-end">
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={timeoutOccurred || loadingFeedback}
+              >
+                {loadingFeedback ? "Analyzing..." : "Submit"}
+              </button>
+              <button
+                onClick={resetQuestion}
+                className="px-4 py-2 font-semibold text-white whitespace-nowrap bg-blue-500 rounded-lg hover:bg-blue-600"
+              >
+                Reset Question
+              </button>
+            </div>
           </div>
         </div>
 
@@ -261,7 +263,7 @@ const ProblemCard = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.4 }}
-          className="p-4 -mx-8 bg-gray-900 rounded-b-lg shadow-md"
+          className="p-4 -mx-4 bg-gray-900 rounded-b-lg shadow-md lg:-mx-8"
         >
           <AnimatePresence mode="wait">
             {loadingFeedback ? (

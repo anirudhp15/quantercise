@@ -349,60 +349,6 @@ const ProblemSolution = ({
     setTimeout(safeScrollToBottom, 100);
   };
 
-  const renderWelcomeScreen = () => {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="flex flex-col justify-center items-center p-8 w-full h-[80vh] text-center"
-      >
-        <div className="p-3 mb-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full">
-          <SiOpentofu className="w-12 h-12 text-white" />
-        </div>
-
-        <h1 className="mb-3 text-3xl font-bold text-white">Welcome to Qube</h1>
-        <p className="mb-8 max-w-lg text-gray-300">
-          Your quantitative interview practice assistant. Ready to help you
-          excel in technical interviews.
-        </p>
-
-        <div className="grid grid-cols-1 gap-4 mb-10 w-full max-w-3xl md:grid-cols-2">
-          {[
-            {
-              icon: <FaLightbulb className="w-5 h-5 text-yellow-400" />,
-              title: "Practice problems",
-              description:
-                "Work through a variety of quant interview problems.",
-            },
-            {
-              icon: <FaRobot className="w-5 h-5 text-blue-400" />,
-              title: "Get intelligent feedback",
-              description:
-                "Receive detailed analysis of your solution approach.",
-            },
-          ].map((feature, index) => (
-            <div key={index} className="p-4 bg-gray-800 rounded-lg">
-              <div className="flex items-center mb-3">
-                {feature.icon}
-                <h3 className="ml-2 text-lg font-medium text-white">
-                  {feature.title}
-                </h3>
-              </div>
-              <p className="text-sm text-gray-400">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={handleStartProblem}
-          className="px-6 py-3 font-medium text-white bg-green-600 rounded-md shadow-lg transition-all hover:bg-green-700 hover:shadow-green-500/20"
-        >
-          Begin Solving
-        </button>
-      </motion.div>
-    );
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: -30 }}
@@ -420,7 +366,7 @@ const ProblemSolution = ({
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="p-16 pb-8 bg-gray-800 rounded-lg shadow-xl"
+            className="px-4 py-8 bg-gray-800 rounded-lg shadow-xl lg:p-16"
           >
             <button
               onClick={handleCloseModal}
@@ -536,12 +482,16 @@ const ProblemSolution = ({
                 </motion.div>
 
                 <motion.h2
-                  className="mb-3 text-2xl font-semibold text-white"
+                  className="mb-3 text-xl font-semibold text-white lg:text-2xl"
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
                 >
-                  Hello! I'm Qube, your quant interview practice assistant.
+                  Hello! I'm Qube, <br /> your{" "}
+                  <span className="text-transparent animate-gradient gradient-text bg-clip">
+                    personal
+                  </span>{" "}
+                  quant assistant
                 </motion.h2>
 
                 <motion.p
@@ -662,7 +612,7 @@ const ProblemSolution = ({
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="hidden gap-2 lg:flex">
                   <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -720,7 +670,7 @@ const ProblemSolution = ({
             </div>
 
             {/* Character counter and keyboard hints */}
-            <div className="flex justify-between mt-2 text-xs text-gray-500">
+            <div className="hidden justify-between mt-2 text-xs text-gray-500 xl:flex">
               <span>
                 Press{" "}
                 <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">
@@ -755,7 +705,7 @@ const ProblemSolution = ({
           <div className="flex flex-col">
             {/* Upper section with problem description and hints/notes */}
             <div
-              className="p-16 pb-8 bg-gray-900 rounded-t-xl"
+              className="px-2 pt-8 pb-4 bg-gray-900 rounded-t-xl xl:pb-8 xl:p-16"
               style={{
                 boxShadow:
                   "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",

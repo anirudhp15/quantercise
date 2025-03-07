@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { PiArrowArcRightThin } from "react-icons/pi";
 import { TbUserEdit, TbNews } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
 import backgroundImage from "../../../assets/images/mac.png";
 import iphoneImage from "../../../assets/images/iphone.png";
-import trackingImage from "../../../assets/images/applications.jpg";
-import AnimatedGrid from "../animatedGrid/AnimatedGrid";
 import "../../../index.css";
 
 // Memoized Intro Component
@@ -168,7 +164,7 @@ const Intro = React.memo(({ triggerBounce }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="relative z-[11] flex flex-col items-center justify-center h-full px-8 mx-auto max-w-screen-2xl xl:flex-row"
+            className="relative z-[11] flex flex-col items-center justify-center h-full px-4 mx-auto max-w-screen-2xl xl:flex-row"
           >
             <div className="text-center xl:w-1/3 xl:text-left">
               <motion.h1
@@ -177,7 +173,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 transition={{ duration: 1 }}
                 className="flex-row text-3xl font-extrabold tracking-tight text-gray-200 xl:pt-16 sm:text-4xl xl:flex-col md:text-5xl"
               >
-                <span className="block text-5xl font-bold tracking-tighter sm:pt-12 sm:inline">
+                <span className="block text-4xl font-bold tracking-tighter md:text-6xl sm:pt-12 sm:inline">
                   quantitative prep{" "}
                 </span>
                 <span className="text-5xl font-bold text-transparent xl:text-6xl gradient-text animate-gradient">
@@ -191,7 +187,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 className=" mt-4 text-base font-normal tracking-wide text-center text-gray-300 xl:max-w-[400px] lg:text-left  sm:text-xl md:text-2xl"
               >
                 Track your application progress and simulate intense quant
-                interviews, all in one place.
+                interviews, all in one place
               </motion.p>
               <div className="hidden flex-row gap-4 justify-center mb-4 xl:flex xl:justify-normal">
                 <motion.button
@@ -232,8 +228,8 @@ const Intro = React.memo(({ triggerBounce }) => {
                   className="absolute left-0 -bottom-4 md:-bottom-8 z-30 w-[30%] transform translate-x-[-15%] translate-y-[10%]"
                 >
                   <img
+                    alt="Content image"
                     src={iphoneImage}
-                    alt="Quantercise iPhone Mockup"
                     className="w-full h-auto drop-shadow-2xl"
                     loading="lazy"
                   />
@@ -247,8 +243,8 @@ const Intro = React.memo(({ triggerBounce }) => {
                   className="relative w-[90%] ml-auto"
                 >
                   <img
-                    src={backgroundImage}
                     alt="Quantercise MacBook Mockup"
+                    src={backgroundImage}
                     className="w-full h-auto drop-shadow-2xl"
                     loading="lazy"
                   />

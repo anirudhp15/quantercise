@@ -10,12 +10,11 @@ import React, {
 import { ReactTyped } from "react-typed";
 import { motion } from "framer-motion";
 import AuthContext from "../../../contexts/authContext";
-import { useFetchMongoId } from "../../../hooks/useFetch/useFetchMongoId";
 import { useFetchProgress } from "../../../hooks/useFetch/useFetchProgress";
 import { useUserProgress } from "../../../hooks/useProblems/useUserProgress";
 import { useRenderCategories } from "../../../hooks/useRender/useRenderCategories";
 import { useRenderProblems } from "../../../hooks/useRender/useRenderProblems";
-
+import useFetchUserData from "../../../hooks/useFetch/useFetchUserData";
 import { useLowDetail } from "../../../contexts/LowDetailContext";
 import RenderProblems from "./components/RenderProblems";
 import ProblemSolution from "./ProblemSolution";
@@ -25,7 +24,7 @@ import { useUser } from "../../../contexts/userContext";
 const PracticeProblems = React.memo(() => {
   const { currentUser } = useContext(AuthContext);
   const { isPro, mongoId } = useUser();
-  // const [mongoId, setMongoId] = useState(null);
+  const { problemsCompleted } = useFetchUserData(currentUser);
   const [bookmarkedProblems, setBookmarkedProblems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProblem, setSelectedProblem] = useState(null);
@@ -295,6 +294,7 @@ const PracticeProblems = React.memo(() => {
         ) : selectedCategory ? (
           <RenderProblems
             problemsToShow={problemsToShow}
+            problemsCompleted={problemsCompleted}
             selectedTag={selectedTag}
             handleTagChange={handleTagChange}
             selectedDifficulty={selectedDifficulty}

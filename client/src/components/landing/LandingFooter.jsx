@@ -67,11 +67,11 @@ const LandingFooter = ({ onJoinClick }) => {
       initial="hidden"
       animate="visible"
       variants={footerVariants}
-      className="relative bottom-0 z-10 w-full min-h-screen pt-8 pb-4 text-gray-300 transition-all duration-100 border-t-4 border-gray-700 group/footer bg-gray-950 xl:hover:border-green-400"
+      className="relative bottom-0 z-10 pt-8 pb-4 w-full text-gray-300 border-t-4 border-gray-700 transition-all duration-100 group/footer bg-gray-950 xl:hover:border-green-400"
     >
       <div
         id="landingfooter"
-        className="flex flex-col items-center justify-between mx-auto space-y-8 md:px-32 lg:flex-row lg:space-y-0"
+        className="flex flex-col justify-between items-center mx-auto space-y-8 md:px-32 lg:flex-row lg:space-y-0"
       >
         <motion.div
           initial="hidden"
@@ -167,11 +167,11 @@ const LandingFooter = ({ onJoinClick }) => {
                 <FaXTwitter size={24} />
               </a>
             </div>
-            <div className="flex items-center px-2 py-1 space-x-2 text-gray-400 transition duration-200 rounded-lg hover:text-black hover:bg-white">
+            <div className="flex items-center px-2 py-1 space-x-2 text-gray-400 rounded-lg transition duration-200 hover:text-black hover:bg-white">
               <MdOutgoingMail size={20} className="mt-[2px]" />
               <a
                 href="mailto:quantercise@gmail.com"
-                className="px-2 py-1 text-sm font-semibold "
+                className="px-2 py-1 text-sm font-semibold"
               >
                 quantercise@gmail.com
               </a>
@@ -179,14 +179,15 @@ const LandingFooter = ({ onJoinClick }) => {
           </div>
         </motion.div>
       </div>
-      <div className="flex flex-col items-center justify-center w-2/3 px-4 py-6 mx-auto rounded-lg">
-        <h2 className="text-lg font-semibold text-center text-white">
-          Have suggestions for features? We value your feedback!
+      <div className="flex flex-col justify-center items-center px-4 py-6 mx-auto rounded-lg">
+        <h2 className="text-lg font-semibold text-center text-gray-400">
+          Have suggestions for features? <br />{" "}
+          <span className="text-gray-300">We value your feedback!</span>
         </h2>
         <form
           ref={form}
           onSubmit={handleSubmit}
-          className="flex flex-col items-center w-full max-w-md gap-4 mt-4"
+          className="flex flex-col gap-4 items-center mt-4 w-full max-w-md"
         >
           <input
             type="text"
@@ -194,7 +195,7 @@ const LandingFooter = ({ onJoinClick }) => {
             value={feedback.from_name}
             onChange={handleChange}
             placeholder="Name"
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            className="px-3 py-2 w-full text-gray-400 rounded-lg border-2 border-t-0 border-r-0 border-l-0 shadow-sm transition duration-200 outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <input
@@ -203,7 +204,7 @@ const LandingFooter = ({ onJoinClick }) => {
             value={feedback.user_email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            className="px-3 py-2 w-full text-gray-400 rounded-lg border-2 border-t-0 border-r-0 border-l-0 shadow-sm transition duration-200 outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <textarea
@@ -211,12 +212,12 @@ const LandingFooter = ({ onJoinClick }) => {
             value={feedback.message}
             onChange={handleChange}
             placeholder="Share your thoughts or suggestions here."
-            className="w-full px-3 py-2 text-gray-400 transition duration-200 border-2 border-t-0 border-l-0 border-r-0 rounded-lg shadow-sm outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
+            className="px-3 py-2 w-full text-gray-400 rounded-lg border-2 border-t-0 border-r-0 border-l-0 shadow-sm transition duration-200 outline-none focus:border-t-gray-600 bg-gray-950 border-b-gray-600 focus:border-green-600 focus:bg-gray-950"
             required
           />
           <button
             type="submit"
-            className="inline-block px-4 py-2 mt-6 font-bold text-black bg-green-400 border-2 border-green-400 rounded-lg hover:text-green-400 hover:bg-black hover:cursor-pointer hover:shadow-lg group"
+            className="inline-block px-4 py-2 mt-6 font-bold text-black bg-green-400 rounded-lg border-2 border-green-400 hover:text-green-400 hover:bg-black hover:cursor-pointer hover:shadow-lg group"
           >
             Send Feedback
             <FaArrowRightLong className="inline-block ml-2 transition-transform duration-200 group-hover/footer:-rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -232,7 +233,7 @@ const LandingFooter = ({ onJoinClick }) => {
           </p>
         )}
       </div>
-      <div className="flex items-center justify-center w-full py-4 text-sm text-gray-500">
+      <div className="flex justify-center items-center py-4 w-full text-sm text-gray-500">
         © 2024 Quantercise. All rights reserved.
       </div>
     </motion.div>

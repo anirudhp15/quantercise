@@ -154,10 +154,19 @@ html {
     #835aff,
     #34d399,
     #0073ff,
-    #835aff
+    #835aff,
+    #34d399,
+    #0073ff,
+    #835aff,
+    #34d399,
+    #0073ff,
+    #835aff,
+    #34d399
   );
-  background-size: 300% 300%;
+  background-size: 800% 800%;
   background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Sidebar.css */

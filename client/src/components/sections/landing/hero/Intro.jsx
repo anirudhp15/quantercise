@@ -247,7 +247,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     transition={{ duration: 1.5, delay: 0.5 }}
                     className="relative max-w-sm mb-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
-                    <img
+                    <img alt="Content image"
                       src={backgroundImage}
                       alt="Quantitative Finance Illustration"
                       className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"
@@ -287,7 +287,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                     transition={{ duration: 1.5, delay: 0.7 }}
                     className="relative max-w-sm mt-4 overflow-hidden transition-all duration-150 border-2 border-gray-500 rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:-rotate-3 lg:-translate-x-6 hover:border-gray-400 group"
                   >
-                    <img
+                    <img alt="Content image"
                       src={trackingImage}
                       alt="Applications Tracking Page"
                       className="w-full transition-opacity duration-150 shadow-xl group-hover:opacity-40"

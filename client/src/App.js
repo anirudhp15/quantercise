@@ -35,6 +35,7 @@ import { path } from "animejs";
 import axios from "axios";
 import { UserProvider } from "./contexts/userContext";
 import ErrorBoundary from "./components/parts/common/ErrorBoundary";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 axios.defaults.baseURL =
   process.env.NODE_ENV === "production"
@@ -44,7 +45,16 @@ axios.defaults.withCredentials = true;
 
 // Smart wildcard redirect component
 function SmartRedirect() {
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading } = useAuth();
+
+  // Wait for authentication to load
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-12 h-12 rounded-full border-t-2 border-b-2 border-green-500 animate-spin"></div>
+      </div>
+    );
+  }
 
   // If user is authenticated, take them to the dashboard/home
   if (currentUser) {
@@ -62,13 +72,20 @@ function DashboardRedirect() {
 
 function RouteComponent() {
   const { lowDetailMode } = useLowDetail();
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading } = useAuth();
+  const location = useLocation(); // Move useLocation up here
 
   const routesArray = [
     { path: "/", element: <LandingPage /> },
     { path: "/landing", element: <LandingPage /> },
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
+    {
+      path: "/login",
+      element: currentUser ? <Navigate to="/home" replace /> : <Login />,
+    },
+    {
+      path: "/register",
+      element: currentUser ? <Navigate to="/home" replace /> : <Register />,
+    },
     { path: "/reset", element: <ResetPage /> },
     { path: "/404", element: <NotFoundPage /> },
     {
@@ -136,8 +153,17 @@ function RouteComponent() {
     { path: "*", element: <SmartRedirect /> },
   ];
 
+  // Move useRoutes up here, before any conditional rendering
   let routesElement = useRoutes(routesArray);
-  const location = useLocation(); // Get current location
+
+  // Wait for authentication to load
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   const showFooter =
     location.pathname !== "/" &&
@@ -158,7 +184,9 @@ function RouteComponent() {
       {showHeader && !isPlanSelectionPage && !isOnboardingPage && <Header />}
       {!lowDetailMode && <AnimatedGrid />}
 
-      <div className="flex flex-col flex-grow w-full">{routesElement}</div>
+      <div className="flex flex-col flex-grow w-full">
+        {routesElement} <SpeedInsights />
+      </div>
       {showFooter && <Footer />}
     </div>
   );

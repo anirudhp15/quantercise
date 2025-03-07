@@ -249,7 +249,7 @@ const FeedbackSection = ({
   }, [conversationHistory]);
 
   return (
-    <div className="p-8 pt-0 bg-gray-900 rounded-b-xl">
+    <div className="p-2 pt-0 bg-gray-900 rounded-b-xl">
       <div
         className="overflow-y-auto flex-grow mb-4 scroll-smooth hide-scrollbar chat-container"
         id="chat-container"
@@ -264,7 +264,7 @@ const FeedbackSection = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col justify-center items-center bg-gray-950 rounded-t-xl min-h-[400px] p-8"
+          className="flex flex-col justify-center items-center bg-gray-950 rounded-t-xl min-h-[400px] px-4 py-8 xl:p-8"
         >
           <div className="flex flex-col justify-center items-center h-full text-center">
             <motion.div
@@ -299,7 +299,7 @@ const FeedbackSection = ({
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.4 }}
-              className="grid grid-cols-1 gap-4 mb-4 w-full max-w-lg sm:grid-cols-2"
+              className="grid grid-cols-1 gap-4 mb-4 w-full max-w-2xl sm:grid-cols-3"
             >
               <div className="p-4 text-left bg-gray-800 rounded-lg border border-gray-700 shadow-md transition-colors hover:bg-gray-750">
                 <p className="text-sm text-gray-300">
@@ -310,7 +310,14 @@ const FeedbackSection = ({
                   approach.
                 </p>
               </div>
-
+              <div className="p-4 text-left bg-gray-800 rounded-lg border border-gray-700 shadow-md transition-colors hover:bg-gray-750">
+                <p className="text-sm text-gray-300">
+                  <span className="block mb-1 font-medium text-yellow-300">
+                    Explain concepts further
+                  </span>
+                  Ask to explain a specific concept or topic in more detail.
+                </p>
+              </div>
               <div className="p-4 text-left bg-gray-800 rounded-lg border border-gray-700 shadow-md transition-colors hover:bg-gray-750">
                 <p className="text-sm text-gray-300">
                   <span className="block mb-1 font-medium text-blue-400">
@@ -326,7 +333,7 @@ const FeedbackSection = ({
         {/* ) : null} */}
 
         {/* Always render the conversation history */}
-        <div className="flex flex-col p-8 pr-16 space-y-8 rounded-b-xl bg-gray-950">
+        <div className="flex flex-col p-4 pb-8 space-y-8 rounded-b-xl xl:p-8 xl:pr-16 bg-gray-950">
           {/* Render all messages from conversation history, sorted by timestamp */}
           {conversationHistory
             .slice() // Create a copy to avoid mutating the original array
@@ -400,7 +407,7 @@ const FeedbackSection = ({
       </div>
 
       {/* Chat input */}
-      <div className="mt-8">
+      <div className="mt-4 mb-4 xl:mt-8 xl:mb-0">
         <div className="flex relative items-center">
           {/* Model selector with tooltip */}
           <div
@@ -607,7 +614,13 @@ const FeedbackSection = ({
         </div>
 
         {/* Character counter and keyboard hints */}
-        <div className="flex justify-between mt-2 text-xs text-gray-500">
+        <button
+          onClick={() => setShowClearConfirm(true)}
+          className="block px-2 py-1 mt-2 text-xs text-gray-400 bg-gray-800 rounded-lg xl:hidden"
+        >
+          Clear Conversation
+        </button>
+        <div className="hidden justify-between mt-2 text-xs text-gray-500 xl:flex">
           <span>
             Press{" "}
             <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Enter</kbd>{" "}
@@ -691,10 +704,10 @@ const UserMessage = ({ message, currentUser, index }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="flex items-start space-x-4"
+    className="flex items-start space-x-0 xl:space-x-4"
   >
     <div
-      className="flex flex-shrink-0 justify-center items-center w-8 h-8 rounded-full"
+      className="hidden flex-shrink-0 justify-center items-center w-8 h-8 rounded-full xl:flex"
       style={{
         backgroundColor: currentUser?.profileColor || "#4B5563",
       }}
@@ -703,7 +716,7 @@ const UserMessage = ({ message, currentUser, index }) => (
         {currentUser?.displayName?.charAt(0) || "U"}
       </span>
     </div>
-    <div className="flex-1 min-w-0">
+    <div className="w-full xl:flex-1 xl:min-w-0">
       <div className="flex items-center mb-1">
         <p className="font-semibold text-gray-300">
           {currentUser?.displayName || "User"}
@@ -835,7 +848,7 @@ const AssistantMessage = ({ message, feedbackCategory, isPro }) => {
       className="flex items-start space-x-4"
     >
       <div
-        className={`flex flex-shrink-0 justify-center items-center w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full`}
+        className={`flex flex-shrink-0 justify-center items-center p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full border border-white`}
       >
         <SiOpentofu className="w-4 h-4 text-white" />
       </div>

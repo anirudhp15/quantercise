@@ -174,7 +174,7 @@ const Topics = () => {
           ></path>
         </svg>
       </div>
-      <div className="relative px-8 mx-auto max-w-screen-2xl text-center">
+      <div className="relative px-4 mx-auto max-w-screen-2xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
