@@ -3,7 +3,6 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
       "config": {
         "distDir": "build"
       }
@@ -14,16 +13,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "REACT_APP_API_URL": "https://quantercise-api.app.vercel.com",
-    "REACT_APP_ENV": "production",
-    "REACT_APP_FIREBASE_API_KEY": "AIzaSyCFm2ByZ2ZmQYau203qOzSGjGsjwWG5J4I",
-    "REACT_APP_FIREBASE_AUTH_DOMAIN": "quantercise.firebaseapp.com",
-    "REACT_APP_FIREBASE_PROJECT_ID": "quantercise",
-    "REACT_APP_FIREBASE_STORAGE_BUCKET": "quantercise.appspot.com",
-    "REACT_APP_FIREBASE_MESSAGING_SENDER_ID": "642507075520",
-    "REACT_APP_FIREBASE_APP_ID": "1:642507075520:web:c215656f4df8a513ffe225",
-    "REACT_APP_FIREBASE_MEASUREMENT_ID": "G-NBR0XYCDJT"
-  }
+  ]
 }
