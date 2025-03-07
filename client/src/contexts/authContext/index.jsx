@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "firebase/auth";
+import { auth } from "../../firebase/firebase";
 import {
-  onAuthStateChanged,
-  signOut,
   setPersistence,
   browserLocalPersistence,
+  onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import axios from "axios";
 
@@ -16,10 +16,10 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isPro, setIsPro] = useState(false); // Track Pro status globally
+  const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
-  const [registrationStep, setRegistrationStep] = useState("auth"); // "auth", "mongo", "plan"
+  const [registrationStep, setRegistrationStep] = useState("auth");
 
   // Ensure Firebase uses persistent auth
   useEffect(() => {
