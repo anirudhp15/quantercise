@@ -15,7 +15,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "MONGODB_URI": "{{Add your MongoDB URI here - or better, use Vercel's environment variables UI}}"
+    "MONGODB_URI": "mongodb+srv://quantercise:Ripstik15@quantercise.ncizzpt.mongodb.net/quantercise?retryWrites=true&w=majority&"
   },
   "headers": [
     {
