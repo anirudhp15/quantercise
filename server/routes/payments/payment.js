@@ -110,4 +110,11 @@ router.post("/plans/select", async (req, res) => {
   }
 });
 
+router.get("/current", async (req, res) => {
+  const { userId } = req.body;
+
+  const user = await User.findById(userId);
+  res.status(200).json(user);
+});
+
 module.exports = router;

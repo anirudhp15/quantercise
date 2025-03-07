@@ -1,70 +1,126 @@
-# Getting Started with Create React App
+# Quantercise
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive platform for quantitative finance interview preparation and training.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+Quantercise is a MERN stack application designed to help users prepare for quantitative finance interviews through practice problems, performance analytics, and personalized feedback.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Authentication System**: Secure login, registration, and profile management
+- **Practice Problems**: Curated problems for quant interview preparation
+- **Performance Analytics**: Track your progress and identify areas for improvement
+- **Interactive UI**: Modern and responsive interface built with React and Tailwind CSS
+- **Personalized Feedback**: Get feedback on your solutions and approach
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- **Frontend**: React, Tailwind CSS, Chakra UI, Framer Motion
+- **Backend**: Express.js, Node.js
+- **Database**: MongoDB
+- **Authentication**: JWT, Firebase
+- **Deployment**: Vercel
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Structure
 
-### `npm run build`
+```
+quantercise/
+│
+├── client/                 # Frontend React application
+│   ├── public/             # Public assets
+│   └── src/                # Source files
+│       ├── components/     # React components
+│       │   ├── common/     # Reusable components
+│       │   ├── layout/     # Layout components
+│       │   ├── auth/       # Authentication components
+│       │   ├── dashboard/  # Dashboard components
+│       │   ├── problems/   # Problem-related components
+│       │   ├── analytics/  # Analytics components
+│       │   └── landing/    # Landing page components
+│       ├── contexts/       # Context providers
+│       ├── hooks/          # Custom React hooks
+│       ├── utils/          # Utility functions
+│       ├── assets/         # Static assets
+│       └── App.js          # Main application component
+│
+├── server/                 # Backend Express application
+│   ├── config/             # Configuration files
+│   ├── controllers/        # Request controllers
+│   ├── middleware/         # Express middleware
+│   ├── models/             # Mongoose models
+│   ├── routes/             # API routes
+│   ├── utils/              # Utility functions
+│   └── index.js            # Entry point
+│
+└── package.json            # Root package.json for project management
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js (v14 or higher)
+- npm or yarn
+- MongoDB
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clone the repository
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   git clone https://github.com/yourusername/quantercise.git
+   cd quantercise
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. Install dependencies
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Set up environment variables
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   - Create a `.env` file in the root directory
+   - Create a `.env` file in the server directory
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Start the development server
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+## Development
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Running in Development Mode
 
-### Analyzing the Bundle Size
+```bash
+# Run both client and server
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Run only client
+npm run start:client
 
-### Making a Progressive Web App
+# Run only server
+npm run start:server
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Building for Production
 
-### Advanced Configuration
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Deployment
 
-### Deployment
+The application is configured for deployment on Vercel:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Frontend: Deployed as a static site
+- Backend: Deployed as a serverless function
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ISC
+
+## Author
+
+Ani Pottammal

@@ -10,6 +10,9 @@ const stripeRoutes = require("./routes/payments/stripe");
 const progressRoutes = require("./routes/progress");
 const feedbackRoutes = require("./routes/feedback");
 const paymentRoutes = require("./routes/payments/payment");
+const conversationRoutes = require("./routes/conversations");
+const webhooksRoutes = require("./routes/payments/webhooks");
+const testRoutes = require("./routes/payments/test");
 
 const app = express();
 
@@ -40,7 +43,7 @@ mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    autoIndex: false,
+    autoIndex: true,
   })
   .then(async () => {
     console.log("Connected to MongoDB");
@@ -72,6 +75,9 @@ app.use("/api/stripe", stripeRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/conversations", conversationRoutes);
+app.use("/api/webhooks", webhooksRoutes);
+app.use("/api/payment/test", testRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

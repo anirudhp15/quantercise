@@ -75,103 +75,6 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// UPDATE: Update progress for one or more questions
-router.post("/update-progress", async (req, res) => {
-  try {
-    const { userId, progressUpdates } = req.body;
-
-    // Validate the input
-    if (!userId || !progressUpdates || !Array.isArray(progressUpdates)) {
-      return res
-        .status(400)
-        .json({ message: "Missing required fields or invalid data" });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Loop through progress updates and apply them
-    for (const update of progressUpdates) {
-      const { questionId, progress } = update;
-
-      let questionProgress = user.progress.find(
-        (p) => p.questionId.toString() === questionId
-      );
-
-      if (questionProgress) {
-        // Update existing progress
-        questionProgress.completed =
-          progress.completed ?? questionProgress.completed;
-        questionProgress.correct = progress.correct ?? questionProgress.correct;
-        questionProgress.attempts =
-          progress.attempts ?? questionProgress.attempts;
-        questionProgress.timeSpent =
-          (questionProgress.timeSpent || 0) + (progress.timeSpent || 0);
-        questionProgress.lastAttempted = Date.now();
-      } else {
-        // If the question hasn't been worked on, initialize the fields
-        const initialProgress = {
-          questionId,
-          completed: progress.completed || false,
-          correct: progress.correct || null,
-          attempts: progress.attempts || 0,
-          timeSpent: progress.timeSpent || 0,
-          lastAttempted: Date.now(),
-        };
-        // Add new progress entry
-        user.progress.push(initialProgress);
-      }
-    }
-
-    // Save the updated user document
-    await user.save();
-    res.json({ message: "Progress updated successfully" });
-  } catch (error) {
-    console.error("Error updating progress:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// READ: Get user progress for all questions or specific questions
-router.get("/progress/:userId", async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const { questionIds } = req.query;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
-
-    // Find the user by ID and select the progress field
-    const user = await User.findById(userId).select("progress");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Filter progress if specific questionIds are provided
-    let progress = user.progress;
-    if (questionIds) {
-      const questionIdsArray = Array.isArray(questionIds)
-        ? questionIds
-        : [questionIds];
-      progress = progress.filter((p) =>
-        questionIdsArray.includes(p.questionId.toString())
-      );
-    }
-
-    res.json({ progress });
-  } catch (error) {
-    console.error("Error fetching user progress:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // GET: Get the MongoDB ID based on firebaseUid or googleId
 router.get("/mongoId/:id", async (req, res) => {
   try {
@@ -193,47 +96,14 @@ router.get("/mongoId/:id", async (req, res) => {
   }
 });
 
-// UPDATE: Update Pro status
-router.post("/update-pro-status", async (req, res) => {
+// UPDATE: Increment user's sign-in count based on their firebaseUid or googleId
+router.put("/:uid/signin", async (req, res) => {
   try {
-    const { userId, isPro } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({ message: "Missing userId" });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    user.isPro = isPro;
-    await user.save();
-
-    res.status(200).json({ message: "Pro status updated successfully", user });
-  } catch (error) {
-    console.error("Error updating Pro status:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// UPDATE: Increment user's sign-in count based on their mongoId
-router.put("/:id/signin", async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Validate the mongoId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
+    const { uid } = req.params;
 
     // Find the user by mongoId and increment the signInCount
-    const user = await User.findByIdAndUpdate(
-      id,
+    const user = await User.findOneAndUpdate(
+      { $or: [{ firebaseUid: uid }, { googleId: uid }] },
       { $inc: { signInCount: 1 } }, // Increment the signInCount by 1
       { new: true } // Return the updated document
     );
@@ -282,8 +152,8 @@ router.put("/:uid/update-color", async (req, res) => {
 });
 
 // Backend route to update the registration step
-router.put("/:uid/registration-step", async (req, res) => {
-  const { uid } = req.params;
+router.put("/:mongoId/registration-step", async (req, res) => {
+  const { mongoId } = req.params;
   const { registrationStep } = req.body;
 
   if (!["auth", "mongo", "plan", "complete"].includes(registrationStep)) {
@@ -291,10 +161,10 @@ router.put("/:uid/registration-step", async (req, res) => {
   }
 
   try {
-    const user = await User.findOneAndUpdate(
-      { firebaseUid: uid },
+    const user = await User.findByIdAndUpdate(
+      mongoId,
       { registrationStep },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!user) {
@@ -308,12 +178,12 @@ router.put("/:uid/registration-step", async (req, res) => {
 });
 
 // Backend route to update the user's current plan linking it to Plan model
-router.put("/:uid/current-plan", async (req, res) => {
-  const { uid } = req.params;
+router.put("/:mongoId/current-plan", async (req, res) => {
+  const { mongoId } = req.params;
   const { currentPlan } = req.body;
 
   try {
-    const user = await User.findOne({ firebaseUid: uid });
+    const user = await User.findById(mongoId);
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
@@ -328,14 +198,12 @@ router.put("/:uid/current-plan", async (req, res) => {
 });
 
 // CANCEL: Cancel user's membership
-router.post("/:uid/cancel-membership", async (req, res) => {
-  const { uid } = req.params;
+router.post("/:mongoId/cancel-membership", async (req, res) => {
+  const { mongoId } = req.params;
 
   try {
     // Find the user by their Firebase UID or Google ID
-    const user = await User.findOne({
-      $or: [{ firebaseUid: uid }, { googleId: uid }],
-    });
+    const user = await User.findById(mongoId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
