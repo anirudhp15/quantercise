@@ -77,8 +77,8 @@ async function createStripeCheckoutSession(priceId, userId) {
       },
     ],
     metadata: { userId },
-    success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:3000/pricing`,
+    success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.DOMAIN}/pricing`,
   });
 
   return session.url;
