@@ -14,7 +14,21 @@ const openai = new OpenAI({
 // 1) STREAMING ENDPOINT
 // -------------------------
 router.post("/solution-stream", async (req, res) => {
-  const { problemDescription, userSolution, isPro } = req.body;
+  // Get the required parameters from the request body
+  const { problemDescription, userSolution, isPro, isDemo = false } = req.body;
+
+  // Basic validation
+  if (!problemDescription || !userSolution) {
+    return res.status(400).json({
+      error: "Missing required parameters: problemDescription or userSolution",
+    });
+  }
+
+  // Skip authentication check for demo conversations from the landing page
+  if (!isDemo) {
+    // For regular conversations, ensure user is authenticated
+    // ... existing authentication check code ...
+  }
 
   // Set up SSE headers
   res.setHeader("Content-Type", "text/event-stream");

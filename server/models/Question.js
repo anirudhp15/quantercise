@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
-  id: Number,
   title: { type: String, required: true }, // Marked as required
   difficultyScore: { type: Number, default: 0 }, // Default to 0 for new questions
   difficulty: {
@@ -15,7 +14,6 @@ const questionSchema = new Schema({
   hints: { type: [String], default: [] }, // Array of strings for hints
   category: { type: String, required: true }, // Category should be required
   tags: { type: [String], default: [] }, // Array of strings for tags
-  averageTimeToSolve: { type: Number, default: 0 }, // Default to 0 for new questions
   isPro: { type: Boolean, default: false }, // Default to false
 
   progressionId: { type: String, required: true }, // Group questions into progressions

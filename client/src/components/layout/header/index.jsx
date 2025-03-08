@@ -24,7 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLowDetail } from "../../../contexts/LowDetailContext";
 import "../../../index.css";
 import { useUser } from "../../../contexts/userContext";
-
+import NewsletterButton from "./NewsletterButton";
 // Lazy-loaded components to improve performance
 const Waitlist = lazy(() => import("./NewsletterButton"));
 const AuthButtons = lazy(() => import("./AuthButtons"));
@@ -78,7 +78,9 @@ const Header = ({ onJoinClick }) => {
 
   // Determine if the current page is a landing page
   const isLandingPage =
-    location.pathname === "/landing" || location.pathname === "/";
+    location.pathname === "/landing" ||
+    location.pathname === "/" ||
+    location.pathname === "/newsletter-sign-up";
 
   const isUnauthorizedPage =
     location.pathname === "/login" ||
@@ -113,9 +115,7 @@ const Header = ({ onJoinClick }) => {
       <div className="flex items-center space-x-4">
         <RouterLink
           className={`z-10 text-xl font-black tracking-tighter transition duration-100 ${
-            isLandingPage
-              ? "text-green-400 hover:text-green-200"
-              : isPro
+            isPro
               ? "text-blue-400 hover:text-blue-200"
               : "text-green-400 hover:text-green-200"
           }`}
@@ -131,10 +131,14 @@ const Header = ({ onJoinClick }) => {
           landingPageLinks.map((link) => (
             <ScrollLink
               key={link.to}
-              className={`text-sm font-semibold cursor-pointer px-2 py-1 rounded-lg transition-all ${
+              className={`text-xs font-semibold cursor-pointer px-2 py-1 rounded-lg transition-all ${
                 activeSection === link.to
-                  ? "bg-white text-black"
-                  : "text-gray-400 hover:bg-white hover:text-black"
+                  ? ` text-black ${
+                      isPro ? "bg-blue-400/75" : "bg-green-400/75"
+                    }`
+                  : `text-gray-400  hover:text-black ${
+                      isPro ? "hover:bg-blue-400" : "hover:bg-green-400"
+                    }`
               }`}
               to={link.to}
               smooth={true}
@@ -188,6 +192,7 @@ const Header = ({ onJoinClick }) => {
           userLoggedIn && (
             <div className="relative z-30">
               <div className="flex items-center space-x-4">
+                {isLandingPage && <NewsletterButton />}
                 <button
                   className={`group flex rounded-lg items-center px-4 py-1 text-sm font-bold transform border-2 ${
                     isPro

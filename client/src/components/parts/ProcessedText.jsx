@@ -62,24 +62,40 @@ const markdownStyles = `
     justify-content: center;
     text-align: center;
     margin: 1rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5rem 0;
+    width: 100%;
   }
   
   /* Ensure inline math is properly aligned */
   .katex {
     display: inline-block;
     text-align: center;
+    min-width: min-content;
   }
   
-  /* Add spacing between math elements */
+  /* Add spacing between math elements and ensure proper width */
   .math-block {
     display: block;
     margin: 1em 0;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  /* Ensure fractions and other math elements render properly */
+  .katex-html {
+    min-width: min-content;
   }
   
   /* Fix LaTeX delimiters for double dollar signs */
   .katex-display > .katex {
     text-align: center;
     display: block;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto;
   }
   
   /* Blinking cursor animation */
@@ -137,9 +153,14 @@ const CodeBlock = ({ children, className, inline }) => {
 // Component for math expressions
 const MathComponent = ({ value, inline }) => {
   return (
-    <div className={inline ? "math-inline" : "math-block"}>
+    <div
+      className={inline ? "math-inline" : "math-block"}
+      style={{ overflowX: "auto", maxWidth: "100%" }}
+    >
       {/* Placeholder for the math content that will be rendered by KaTeX */}
-      {value}
+      <div style={{ display: "inline-block", minWidth: "min-content" }}>
+        {value}
+      </div>
     </div>
   );
 };

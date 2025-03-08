@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Conversation = require("../models/Conversation");
+const DemoConversation = require("../models/DemoConversation");
 const UserQuestionProgress = require("../models/UserQuestionProgress");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
@@ -333,6 +334,158 @@ router.get("/analytics/user/:userId", async (req, res) => {
   } catch (error) {
     console.error("Error fetching analytics:", error);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ------- DEMO CONVERSATION ENDPOINTS (for anonymous users) -------
+
+// POST: Create a new demo conversation
+router.post("/demo", async (req, res) => {
+  try {
+    const { sessionId, problemId, initialMessage, metadata = {} } = req.body;
+    console.log("initialMessage", initialMessage);
+    console.log("metadata", metadata);
+    console.log("sessionId", sessionId);
+    console.log("problemId", problemId);
+
+    // Basic validation
+    if (!sessionId || !problemId || !initialMessage) {
+      return res.status(400).json({
+        error:
+          "Required fields missing: sessionId, problemId, or initialMessage",
+      });
+    }
+
+    // Optional: Enrich client info metadata
+    const clientInfo = {
+      userAgent: req.headers["user-agent"] || "",
+      ip: req.ip || req.headers["x-forwarded-for"] || "",
+      referrer: req.headers.referer || "",
+      device: req.headers["user-agent"]
+        ? req.headers["user-agent"].includes("Mobile")
+          ? "mobile"
+          : "desktop"
+        : "unknown",
+      timestamp: new Date(),
+    };
+
+    // Create new demo conversation
+    const newDemoConversation = new DemoConversation({
+      sessionId,
+      problemId: new ObjectId(problemId),
+      messages: [
+        {
+          role: initialMessage.role,
+          content: initialMessage.content,
+          messageType: initialMessage.messageType || "answer",
+          timestamp: new Date(),
+        },
+      ],
+      metadata: {
+        ...metadata,
+        clientInfo,
+        problemTitle: metadata.problemTitle || "",
+        problemDifficulty: metadata.problemDifficulty || "",
+        problemCategory: metadata.problemCategory || "",
+      },
+    });
+
+    await newDemoConversation.save();
+
+    res.status(201).json({
+      success: true,
+      demoConversationId: newDemoConversation._id,
+      message: "Demo conversation created successfully",
+    });
+  } catch (error) {
+    console.error("Error creating demo conversation:", error);
+    res.status(500).json({ error: "Server error creating demo conversation" });
+  }
+});
+
+// POST: Add a message to an existing demo conversation
+router.post("/demo/:id/messages", validateObjectId, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { message } = req.body;
+
+    if (!message || !message.role || !message.content) {
+      return res.status(400).json({ error: "Invalid message format" });
+    }
+
+    const demoConversation = await DemoConversation.findById(id);
+    if (!demoConversation) {
+      return res.status(404).json({ error: "Demo conversation not found" });
+    }
+
+    // Add the new message
+    const newMessage = {
+      role: message.role,
+      content: message.content,
+      messageType: message.messageType || "other",
+      timestamp: new Date(),
+    };
+
+    demoConversation.messages.push(newMessage);
+    await demoConversation.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Message added successfully",
+      demoConversation,
+    });
+  } catch (error) {
+    console.error("Error adding message to demo conversation:", error);
+    res.status(500).json({ error: "Server error adding message" });
+  }
+});
+
+// GET: Retrieve a specific demo conversation by ID
+router.get("/demo/:id", validateObjectId, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const demoConversation = await DemoConversation.findById(id);
+
+    if (!demoConversation) {
+      return res.status(404).json({ error: "Demo conversation not found" });
+    }
+
+    res.status(200).json({ demoConversation });
+  } catch (error) {
+    console.error("Error fetching demo conversation:", error);
+    res.status(500).json({ error: "Server error fetching demo conversation" });
+  }
+});
+
+// GET: Retrieve all demo conversations for a specific session
+router.get("/demo/session/:sessionId", async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+
+    const demoConversations = await DemoConversation.find({
+      sessionId,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({ demoConversations });
+  } catch (error) {
+    console.error("Error fetching demo conversations:", error);
+    res.status(500).json({ error: "Server error fetching demo conversations" });
+  }
+});
+
+// GET: Retrieve demo conversations for a specific problem
+router.get("/demo/problem/:problemId", validateObjectId, async (req, res) => {
+  try {
+    const { problemId } = req.params;
+
+    const demoConversations = await DemoConversation.find({
+      problemId: new ObjectId(problemId),
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({ demoConversations });
+  } catch (error) {
+    console.error("Error fetching demo conversations by problem:", error);
+    res.status(500).json({ error: "Server error fetching demo conversations" });
   }
 });
 

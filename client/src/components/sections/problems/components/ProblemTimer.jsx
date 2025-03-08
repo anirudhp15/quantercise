@@ -211,7 +211,7 @@ const ProblemTimer = ({
       <AnimatePresence>
         {state.isRunning && (
           <motion.div
-            className="px-3 py-1.5 mt-2 text-xs font-medium text-gray-300 bg-gray-800/80 rounded-lg shadow-md backdrop-blur-sm border border-gray-700"
+            className="px-3 py-1.5 mt-2 text-xs whitespace-nowrap font-medium text-gray-300 bg-gray-800/80 rounded-lg shadow-md backdrop-blur-sm border border-gray-700"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}

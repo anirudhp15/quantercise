@@ -19,7 +19,7 @@ import EditProfile from "./components/auth/profile/EditProfile";
 import PerformanceAnalytics from "./components/sections/analytics/PerformanceAnalytics";
 import ProgressTracker from "./components/sections/analytics/ProgressTracker";
 import LandingPage from "./components/landing/LandingPage";
-import Waitlist from "./components/parts/Waitlist";
+import NewsletterSignUp from "./components/parts/NewsletterSignUp";
 import Pricing from "./components/landing/pricing/Pricing";
 import StripeCheckout from "./components/landing/tba/StripeCheckout";
 import SuccessPage from "./components/auth/onboarding/SuccessPage";
@@ -35,7 +35,6 @@ import { path } from "animejs";
 import axios from "axios";
 import { UserProvider } from "./contexts/userContext";
 import ErrorBoundary from "./components/parts/common/ErrorBoundary";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 
 axios.defaults.baseURL =
   process.env.NODE_ENV === "production"
@@ -144,7 +143,7 @@ function RouteComponent() {
         </ProtectedRoute>
       ),
     },
-    { path: "/waitlist", element: <Waitlist /> },
+    { path: "/newsletter-sign-up", element: <NewsletterSignUp /> },
     { path: "/applications", element: <Applications /> },
     { path: "/pricing", element: <Pricing /> },
     { path: "/checkout", element: <StripeCheckout /> },
@@ -159,8 +158,8 @@ function RouteComponent() {
   // Wait for authentication to load
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-12 h-12 rounded-full border-t-2 border-b-2 border-green-500 animate-spin"></div>
       </div>
     );
   }
@@ -184,9 +183,7 @@ function RouteComponent() {
       {showHeader && !isPlanSelectionPage && !isOnboardingPage && <Header />}
       {!lowDetailMode && <AnimatedGrid />}
 
-      <div className="flex flex-col flex-grow w-full">
-        {routesElement} <SpeedInsights />
-      </div>
+      <div className="flex flex-col flex-grow w-full">{routesElement}</div>
       {showFooter && <Footer />}
     </div>
   );

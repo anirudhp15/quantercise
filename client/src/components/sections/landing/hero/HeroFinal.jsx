@@ -34,7 +34,7 @@ const Intro = React.memo(({ triggerBounce }) => {
 
   const handleJoinNewsletter = useCallback(() => {
     console.log("Join Newsletter button clicked.");
-    navigate("/waitlist");
+    navigate("/newsletter-sign-up");
   }, []);
 
   const handleSubmit = useCallback((e) => {
@@ -233,7 +233,8 @@ const Intro = React.memo(({ triggerBounce }) => {
                 transition={{ duration: 2.5, delay: 0.3 }}
                 className="flex relative justify-end w-full"
               >
-                <img alt="Content image"
+                <img
+                  alt="Content image"
                   src={backgroundImage}
                   alt="Quantercise MacBook Mockup"
                   className="w-[80%] relative z-20"

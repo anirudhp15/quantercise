@@ -1,12 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import { useConversationHistory } from "../useProblems/useConversationHistory";
+import { useConversationHistory } from "../useConversationHistory/useConversationHistory";
+import { useDemoConversationHistory } from "../useConversationHistory/useDemoConversationHistory";
 
 const BACKEND_DOMAIN =
   process.env.NODE_ENV === "production"
     ? "https://quantercise-api.vercel.app"
     : "http://localhost:4242";
 
-export const useFeedback = () => {
+export const useFeedback = (
+  isDemo = false,
+  problemId = null,
+  problemMetadata = {}
+) => {
   const chatContainerRef = useRef(null);
   const [feedback, setFeedback] = useState("");
   const [feedbackCategory, setFeedbackCategory] = useState({
@@ -23,7 +28,17 @@ export const useFeedback = () => {
   const [explanationCount, setExplanationCount] = useState(0);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
 
-  const { addMessage, conversationId } = useConversationHistory();
+  // Always call both hooks unconditionally (React Hook rules)
+  const regularConversation = useConversationHistory();
+  const demoConversation = useDemoConversationHistory(
+    problemId,
+    problemMetadata
+  );
+
+  // Then conditionally choose which one to use based on isDemo flag
+  const { addMessage, conversationId } = isDemo
+    ? demoConversation
+    : regularConversation;
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -96,6 +111,12 @@ export const useFeedback = () => {
   };
 
   const fetchFeedback = async (problemDescription, userSolution, isPro) => {
+    // Prevent multiple submissions while processing
+    if (loading || isStreaming) {
+      console.log("Ignoring duplicate feedback request - already processing");
+      return;
+    }
+
     setLoading(true);
     setFeedback(""); // Reset feedback
     setIsComplete(false);
@@ -116,12 +137,19 @@ export const useFeedback = () => {
 
       setConversationHistory([userMessage]);
 
-      // Save the user message to the database
-      await addMessage({
+      console.log("Adding user message to conversation:", userSolution);
+
+      // Save the user message to the appropriate database based on isDemo
+      const messageAdded = await addMessage({
         role: "user",
         content: userSolution,
         messageType: "answer",
       });
+
+      // If message couldn't be added (e.g., couldn't create conversation), don't proceed
+      if (isDemo && !messageAdded) {
+        throw new Error("Could not initialize conversation. Please try again.");
+      }
 
       const response = await fetch(
         `${BACKEND_DOMAIN}/api/feedback/solution-stream`,
@@ -134,6 +162,7 @@ export const useFeedback = () => {
             problemDescription,
             userSolution,
             isPro,
+            isDemo,
           }),
         }
       );
@@ -208,12 +237,23 @@ export const useFeedback = () => {
 
             setConversationHistory((prev) => [...prev, assistantMessage]);
 
-            // Save the AI response to the database
-            await addMessage({
+            console.log(
+              "Adding assistant feedback to same conversation:",
+              assistantMessage.content.substring(0, 50) + "..."
+            );
+
+            // Save the AI response to the database - IMPORTANT to use the same conversation
+            const assistantMessageAdded = await addMessage({
               role: "assistant",
               content: accumulatedFeedback,
               messageType: "feedback",
             });
+
+            if (isDemo && !assistantMessageAdded) {
+              console.warn(
+                "Failed to add assistant message to demo conversation"
+              );
+            }
 
             setTimeout(() => {
               setIsComplete(true);
@@ -523,6 +563,30 @@ export const useFeedback = () => {
     setIsComplete(false);
   };
 
+  const resetFeedback = () => {
+    console.log(
+      "Resetting feedback state - preparing for new conversation entry in database"
+    );
+    setFeedback("");
+    setFeedbackCategory({
+      heading: "NO FEEDBACK",
+      color: "text-gray-400",
+      bgColor: "bg-gray-800",
+      icon: "⚪️",
+      description: "Submit your answer to receive feedback",
+    });
+    setIsComplete(false);
+    setIsStreaming(false);
+    setConversationHistory([]);
+    setExplanationCount(0);
+
+    // If in demo mode, also reset the demo conversation state
+    // This will ensure a new database entry is created on next submission
+    if (isDemo && demoConversation.resetConversation) {
+      demoConversation.resetConversation();
+    }
+  };
+
   return {
     feedback,
     isStreaming,
@@ -537,8 +601,12 @@ export const useFeedback = () => {
     fetchFeedback,
     fetchFurtherExplanation,
     resetExplanation,
+    resetFeedback,
     scrollToBottom,
     conversationId,
     addMessage,
+    isDemo,
+    demoConversationId: isDemo ? demoConversation.demoConversationId : null,
+    sessionId: isDemo ? demoConversation.sessionId : null,
   };
 };

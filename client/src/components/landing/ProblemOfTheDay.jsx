@@ -89,7 +89,7 @@ const ProblemOfTheDay = () => {
         />
         <Link
           to="/problems"
-          className="block px-6 py-2 mx-auto my-8 w-min font-bold text-white whitespace-nowrap bg-green-500 rounded-lg xl:hidden group hover:bg-green-600"
+          className="block px-6 py-2 mx-auto my-8 w-min font-bold text-black whitespace-nowrap bg-green-500 rounded-lg xl:hidden group hover:bg-green-600"
         >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />
@@ -111,7 +111,7 @@ const ProblemOfTheDay = () => {
 
           <p className="flex text-base text-gray-300">
             <FaTrophy className="mt-1 mr-2 w-5 h-5 text-yellow-400" />
-            Simulate high-pressure challenges inspired by real quant interviews.
+            High-pressure challenges inspired by real quant interviews.
           </p>
 
           <p className="flex text-base text-gray-300">
@@ -122,7 +122,7 @@ const ProblemOfTheDay = () => {
 
         <Link
           to="/problems"
-          className="hidden px-6 py-2 my-8 w-min font-bold text-white whitespace-nowrap bg-green-500 rounded-lg xl:block group hover:bg-green-600"
+          className="hidden px-6 py-2 my-8 w-min font-bold text-black whitespace-nowrap bg-green-500 rounded-lg xl:block group hover:bg-green-600"
         >
           Explore More
           <RxDoubleArrowRight className="inline-block mb-[2px] ml-2 group-hover:translate-x-1 transition-all duration-100" />

@@ -16,7 +16,7 @@ import { Switch } from "@headlessui/react";
 import SquigglyPlaceholder from "../../parts/SquigglyPlaceholder";
 import { useFeedback } from "../../../hooks/useFetch/useFetchFeedback";
 import { useProblemState } from "../../../hooks/useProblemState/useProblemState";
-import { useConversationHistory } from "../../../hooks/useProblems/useConversationHistory";
+import { useConversationHistory } from "../../../hooks/useConversationHistory/useConversationHistory";
 import axios from "axios";
 
 import ProblemTimer from "./components/ProblemTimer";

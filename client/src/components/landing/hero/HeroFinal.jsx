@@ -4,12 +4,15 @@ import { TbUserEdit, TbNews } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import emailjs from "emailjs-com";
+import { useAuth } from "../../../contexts/authContext";
 import backgroundImage from "../../../assets/images/mac.png";
 import iphoneImage from "../../../assets/images/iphone.png";
 import "../../../index.css";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 // Memoized Intro Component
 const Intro = React.memo(({ triggerBounce }) => {
+  const { currentUser } = useAuth();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
@@ -31,7 +34,12 @@ const Intro = React.memo(({ triggerBounce }) => {
 
   const handleJoinNewsletter = useCallback(() => {
     console.log("Join Newsletter button clicked.");
-    navigate("/waitlist");
+    navigate("/newsletter-sign-up");
+  }, []);
+
+  const handleGoToHome = useCallback(() => {
+    console.log("Go to Home button clicked.");
+    navigate("/home");
   }, []);
 
   const handleSubmit = useCallback((e) => {
@@ -190,26 +198,52 @@ const Intro = React.memo(({ triggerBounce }) => {
                 interviews, all in one place
               </motion.p>
               <div className="hidden flex-row gap-4 justify-center mb-4 xl:flex xl:justify-normal">
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  onClick={handleCreateAccount}
-                  className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
-                >
-                  Create Account
-                  <TbUserEdit className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
-                </motion.button>
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  onClick={handleJoinNewsletter}
-                  className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
-                >
-                  Join Newsletter
-                  <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
-                </motion.button>
+                {currentUser ? (
+                  <>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleGoToHome}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg group lg:text-lg hover:bg-green-400 hover:text-black"
+                    >
+                      Your Dashboard
+                      <FaArrowRightLong className="inline-block ml-2 w-4 h-4 transition-transform duration-300 lg:w-4 lg:h-6 group-hover:-rotate-45" />
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleJoinNewsletter}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
+                    >
+                      Join Newsletter
+                      <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                  </>
+                ) : (
+                  <>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
+                    >
+                      Start for Free
+                      <TbUserEdit className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleJoinNewsletter}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
+                    >
+                      Join Newsletter
+                      <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                  </>
+                )}
               </div>
             </div>
             <motion.div
@@ -251,26 +285,52 @@ const Intro = React.memo(({ triggerBounce }) => {
                 </motion.div>
               </div>
               <div className="flex flex-row gap-4 justify-center mt-4 xl:hidden xl:justify-normal">
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  onClick={handleCreateAccount}
-                  className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
-                >
-                  Create Account
-                  <TbUserEdit className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
-                </motion.button>
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  onClick={handleJoinNewsletter}
-                  className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
-                >
-                  Join Newsletter
-                  <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
-                </motion.button>
+                {currentUser ? (
+                  <>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleGoToHome}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg group lg:text-lg hover:bg-green-400 hover:text-black"
+                    >
+                      Your Dashboard
+                      <FaArrowRightLong className="inline-block ml-2 w-4 h-4 transition-transform duration-300 lg:w-4 lg:h-6 group-hover:-rotate-45" />
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleJoinNewsletter}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
+                    >
+                      Join Newsletter
+                      <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                  </>
+                ) : (
+                  <>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
+                    >
+                      Start for Free
+                      <TbUserEdit className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 1 }}
+                      onClick={handleJoinNewsletter}
+                      className="px-4 py-2 mt-8 text-xs font-bold text-black whitespace-nowrap bg-green-400 rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-black hover:text-green-400"
+                    >
+                      Join Newsletter
+                      <TbNews className="inline-block ml-2 w-4 h-4 lg:w-4 lg:h-6" />
+                    </motion.button>
+                  </>
+                )}
               </div>
             </motion.div>
           </motion.div>
