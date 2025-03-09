@@ -20,6 +20,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [registrationStep, setRegistrationStep] = useState("auth");
+  const [userValid, setUserValid] = useState(false);
 
   // Ensure Firebase uses persistent auth
   useEffect(() => {
@@ -45,7 +46,7 @@ export function AuthProvider({ children }) {
         setCurrentUser(user);
         setRegistrationStep(data.registrationStep || "auth"); // Default to "auth" if not set
         setAuthError(null); // Clear any previous errors
-        console.log("User data fetched:", data);
+        setUserValid(true); // User exists in MongoDB
         return true;
       } catch (error) {
         console.error(
@@ -66,6 +67,7 @@ export function AuthProvider({ children }) {
             () => fetchUserData(user),
             retryCount * 2000
           );
+          setUserValid(false); // User not found in MongoDB during retry
           return false;
         } else {
           // Max retries reached, set error state
@@ -75,6 +77,7 @@ export function AuthProvider({ children }) {
           setCurrentUser(user); // Still set the user so they're not completely locked out
           setRegistrationStep("auth");
           setLoading(false);
+          setUserValid(false); // User not found in MongoDB after max retries
           return false;
         }
       }
@@ -92,6 +95,7 @@ export function AuthProvider({ children }) {
         setRegistrationStep("auth");
         setAuthError(null); // Clear any errors when signed out
         setLoading(false);
+        setUserValid(false); // No user logged in
       }
     });
 
@@ -110,7 +114,7 @@ export function AuthProvider({ children }) {
         displayName: firebaseUser.displayName,
         firebaseUid: firebaseUser.uid,
         profilePicture: firebaseUser.photoURL,
-        registrationStep: "mongo", // Move to the next step
+        registrationStep: "plan", // Set directly to plan selection step
         isPro: null, // Assign default free plan
         currentPlan: null, // Assign default free plan
       });
@@ -122,9 +126,12 @@ export function AuthProvider({ children }) {
       }));
       setIsPro(false); // Default to free user after registration
       setAuthError(null); // Clear any errors
+      setUserValid(true); // User now exists in MongoDB
+      setRegistrationStep("plan"); // Ensure registrationStep is updated in context
     } catch (error) {
       console.error("Error registering user in MongoDB:", error);
       setAuthError("Failed to complete registration. Please try again.");
+      setUserValid(false); // Registration failed
     }
   };
 
@@ -135,6 +142,7 @@ export function AuthProvider({ children }) {
       setIsPro(false); // Reset Pro status on logout
       setRegistrationStep("auth");
       setAuthError(null); // Clear any errors on successful logout
+      setUserValid(false); // No user logged in
     } catch (error) {
       console.error("Error signing out:", error);
       setAuthError("Failed to sign out. Please try again.");
@@ -157,6 +165,7 @@ export function AuthProvider({ children }) {
     authError,
     setAuthError,
     isLoading: loading,
+    userValid, // Expose userValid state
   };
 
   return (

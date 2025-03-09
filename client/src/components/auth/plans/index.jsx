@@ -7,6 +7,7 @@ import { useUser } from "../../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SiOpentofu } from "react-icons/si";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const PlanSelection = () => {
   const { currentUser } = useAuth(); // Current user details
@@ -22,9 +23,11 @@ const PlanSelection = () => {
   const { plans } = useFetchPlans(); // Fetch available plans
   const navigate = useNavigate();
 
+  const handleBackClick = () => {
+    navigate("/home");
+  };
+
   const onPlanSelect = async (plan) => {
-    console.log("Selected plan:", plan);
-    console.log("Current user:", currentUser);
     try {
       if (plan.price > 0) {
         // Redirect to Stripe checkout page for paid plans
@@ -64,6 +67,21 @@ const PlanSelection = () => {
 
   return (
     <div className="flex relative flex-col justify-center items-center py-24 min-h-screen text-white bg-gradient-to-b via-gray-800 from-gray-950 to-gray-950">
+      {/* Back Button */}
+      <motion.button
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+        onClick={handleBackClick}
+        className={`absolute top-8 left-8 flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-md hover:bg-gray-700 border border-gray-600 ${
+          isPro
+            ? "hover:border-blue-400 text-blue-400"
+            : "hover:border-green-400 text-green-400"
+        }`}
+      >
+        <FaArrowLeftLong className="mr-1" /> Back
+      </motion.button>
+
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}

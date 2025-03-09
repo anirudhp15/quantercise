@@ -16,7 +16,8 @@
     "deploy": "cd client && npm run build"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "sharp": "^0.33.5"
   },
   "description": "Quantercise - A platform for quant prep and interview training",
   "keywords": [
@@ -30,6 +31,9 @@
   "dependencies": {
     "@vercel/speed-insights": "^1.2.0",
     "date-fns": "^2.30.0",
-    "sqlite3": "^5.1.7"
+    "joi": "^17.13.3",
+    "react-helmet-async": "^2.0.5",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0"
   }
 }

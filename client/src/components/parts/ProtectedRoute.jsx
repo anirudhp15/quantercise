@@ -45,14 +45,17 @@ const ProtectedRoute = ({ children }) => {
 
   // If user is not authenticated, redirect to login page
   if (!currentUser) {
-    // If already on login or register page, don't create a redirect loop
-    if (location.pathname === "/login" || location.pathname === "/register") {
-      return children;
-    }
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} />;
   }
 
-  // User is authenticated, show the protected content
+  // If user is authenticated but registration is not complete, redirect to appropriate step
+  if (registrationStep === "plan") {
+    return <Navigate to="/plan-selection" />;
+  } else if (registrationStep === "mongo" || registrationStep === "auth") {
+    return <Navigate to="/register" />;
+  }
+
+  // Otherwise, render the protected component
   return children;
 };
 

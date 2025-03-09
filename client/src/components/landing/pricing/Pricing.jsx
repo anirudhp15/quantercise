@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-
+import SEO from "../../parts/SEO";
 import PriceCard from "./PriceCard"; // Import the PriceCard component
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
@@ -22,8 +22,51 @@ const Pricing = () => {
     navigate("/register");
   };
 
+  // Schema for pricing page
+  const pricingSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Quantercise Subscription",
+    description:
+      "Access to quantitative practice problems and learning resources",
+    url: "https://quantercise.com/pricing",
+    offers: [
+      {
+        "@type": "Offer",
+        price: "4.99",
+        priceCurrency: "USD",
+        priceValidUntil: "2025-12-31",
+        availability: "https://schema.org/InStock",
+        url: "https://quantercise.com/pricing",
+        seller: {
+          "@type": "Organization",
+          name: "Quantercise",
+        },
+      },
+      {
+        "@type": "Offer",
+        price: "49.99",
+        priceCurrency: "USD",
+        priceValidUntil: "2025-12-31",
+        availability: "https://schema.org/InStock",
+        url: "https://quantercise.com/pricing",
+        seller: {
+          "@type": "Organization",
+          name: "Quantercise",
+        },
+      },
+    ],
+  };
+
   return (
     <Elements stripe={stripePromise}>
+      <SEO
+        title="Quantercise Pricing | Affordable Plans for Quantitative Skills"
+        description="Choose a plan that fits your needs. Monthly and annual subscription options available with premium features to enhance your quantitative skills."
+        keywords="quantercise pricing, subscription plans, monthly plan, annual plan, quant practice plans"
+        canonicalUrl="https://quantercise.com/pricing"
+        schema={pricingSchema}
+      />
       <div
         id="pricing"
         className="flex relative z-10 justify-center items-center py-16 text-gray-300 bg-gray-900"
@@ -60,7 +103,8 @@ const Pricing = () => {
             >
               <div
                 className={`absolute top-0 left-0 w-8 h-8 bg-white rounded-full shadow transition-transform duration-300 ${
-                  isAnnual ? "transform translate-x-full" : ""}`}
+                  isAnnual ? "transform translate-x-full" : ""
+                }`}
               />
             </div>
             <span

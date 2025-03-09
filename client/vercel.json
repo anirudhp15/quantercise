@@ -1,7 +1,17 @@
 {
   "version": 2,
-  "buildCommand": "npm install --no-optional && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "build",
+  "cachePatterns": [
+    {
+      "source": "node_modules/**",
+      "destination": ".vercel/cache/node_modules"
+    },
+    {
+      "source": ".next/**",
+      "destination": ".vercel/cache/.next"
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -12,8 +22,7 @@
     "REACT_APP_API_URL": "https://quantercise-api.app.vercel.com",
     "REACT_APP_ENV": "production",
     "SKIP_PREFLIGHT_CHECK": "true",
-    "CI": "false",
-    "REACT_APP_STRIPE_PUBLISHABLE_KEY": "pk_test_51O5QbNHXnmNztRuxJ0ZlaCFdgIwp4UZHU5Mce5JqSLwQwBFxgWBJMXyLSdtGiS14cG3MCPQ43P4MCmvkMUNTXZvF00L4DUlhBm"
+    "CI": "false"
   },
   "headers": [
     {

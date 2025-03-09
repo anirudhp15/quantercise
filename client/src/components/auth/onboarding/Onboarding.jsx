@@ -18,8 +18,6 @@ const Onboarding = () => {
   ); // Editable name
   const navigate = useNavigate();
 
-  console.log("Subscription details:", subscriptionDetails);
-
   const handleDisplayNameChange = (e) => {
     setEditableDisplayName(e.target.value); // Update local state
   };
@@ -131,9 +129,9 @@ const Onboarding = () => {
               level.
             </p>
             <div className="mt-4 rounded-lg border-8 border-gray-700">
-              <img alt="Content image"
+              <img
+                alt="Content image"
                 src={backgroundImage}
-                alt="Problems Page Preview"
                 className="object-contain mx-auto max-w-full rounded-lg shadow-md"
               />
             </div>

@@ -28,7 +28,7 @@ router.post("/create-checkout-session", async (req, res) => {
           userId, // Attach userId for easier handling in the webhook or verification
         },
         success_url: `${process.env.FRONTEND_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
-        cancel_url: `${process.env.FRONTEND_DOMAIN}/landing`, // Use environment variable
+        cancel_url: `${process.env.FRONTEND_DOMAIN}/plan-selection`, // Use environment variable
       },
       {
         idempotencyKey, // Add idempotency key to prevent duplicate charges
@@ -125,41 +125,90 @@ router.post("/cancel-membership", async (req, res) => {
   const { userId } = req.body;
 
   try {
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        error: "User ID is required.",
+      });
+    }
+
     // Find the user in the database
     const user = await User.findOne({
-      $or: [{ firebaseUid: userId }, { googleId: userId }],
+      $or: [{ _id: userId }, { firebaseUid: userId }, { googleId: userId }],
     });
 
     if (!user) {
-      return res.status(404).json({ success: false, error: "User not found." });
+      return res.status(404).json({
+        success: false,
+        error: "User not found.",
+      });
     }
 
     // Check if the user has an active subscription
     if (!user.subscriptionId) {
-      return res
-        .status(400)
-        .json({ success: false, error: "No active subscription found." });
+      return res.status(400).json({
+        success: false,
+        error: "No active subscription found.",
+      });
     }
 
-    // Cancel the subscription in Stripe
-    const canceledSubscription = await stripe.subscriptions.del(
-      user.subscriptionId
+    // Generate idempotency key for cancellation
+    const cancelIdempotencyKey = `cancel_subscription_${user._id.toString()}_${Date.now()}`;
+
+    // Cancel the subscription at the end of the billing period
+    // This allows the user to retain access until the end of their paid time
+    const canceledSubscription = await stripe.subscriptions.update(
+      user.subscriptionId,
+      {
+        cancel_at_period_end: true,
+      },
+      {
+        idempotencyKey: cancelIdempotencyKey,
+      }
     );
 
     // Update the user's database record
-    user.isPro = false; // Downgrade the user
-    user.currentPlan = null; // Remove the current plan
-    user.subscriptionId = null; // Clear the subscriptionId
+    // Set status to canceling but don't remove plan access yet
+    user.subscriptionStatus = "canceling";
+
+    // Store the cancellation date for reference
+    user.cancellationDetails = {
+      canceledAt: new Date(),
+      effectiveAt: new Date(canceledSubscription.current_period_end * 1000),
+    };
+
     await user.save();
+
+    // Log the cancellation event
+    const subscriptionLog = {
+      userId: user._id,
+      eventType: "subscription_cancellation_scheduled",
+      subscriptionId: user.subscriptionId,
+      timestamp: new Date(),
+      metadata: {
+        effectiveDate: new Date(canceledSubscription.current_period_end * 1000),
+      },
+    };
+
+    try {
+      const SubscriptionLog = require("../../models/SubscriptionLog");
+      await new SubscriptionLog(subscriptionLog).save();
+    } catch (logError) {
+      console.error("Error logging subscription cancellation:", logError);
+      // Continue even if logging fails
+    }
 
     res.status(200).json({
       success: true,
-      message: "Membership canceled successfully.",
-      canceledSubscription,
+      message: "Membership cancellation scheduled successfully.",
+      effectiveDate: new Date(canceledSubscription.current_period_end * 1000),
     });
   } catch (error) {
     console.error("Error canceling subscription:", error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to cancel subscription.",
+    });
   }
 });
 

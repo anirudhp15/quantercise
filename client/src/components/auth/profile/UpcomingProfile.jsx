@@ -216,6 +216,56 @@ const Profile = () => {
     });
   };
 
+  const getCardBrandIcon = (brand) => {
+    switch (brand) {
+      case "Visa":
+        return <img src="/icons/visa.png" alt="Visa" className="w-8 h-8" />;
+      case "MasterCard":
+        return (
+          <img
+            src="/icons/mastercard.png"
+            alt="MasterCard"
+            className="w-8 h-8"
+          />
+        );
+      case "American Express":
+        return (
+          <img
+            src="/icons/amex.png"
+            alt="American Express"
+            className="w-8 h-8"
+          />
+        );
+      case "Discover":
+        return (
+          <img src="/icons/discover.png" alt="Discover" className="w-8 h-8" />
+        );
+      case "JCB":
+        return <img src="/icons/jcb.png" alt="JCB" className="w-8 h-8" />;
+      case "Diners Club":
+        return (
+          <img src="/icons/diners.png" alt="Diners Club" className="w-8 h-8" />
+        );
+      case "UnionPay":
+        return (
+          <img src="/icons/unionpay.png" alt="UnionPay" className="w-8 h-8" />
+        );
+      default:
+        return (
+          <img
+            src="/icons/credit-card.png"
+            alt="Credit Card"
+            className="w-8 h-8"
+          />
+        );
+    }
+  };
+
+  const formatCardExpiry = (expiry) => {
+    const [month, year] = expiry.split("/");
+    return `${month}/${year}`;
+  };
+
   return (
     <div className="flex relative justify-center w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-900 via-gray-950">
       {!lowDetailMode && <AnimatedGrid2 />}
@@ -394,29 +444,95 @@ const Profile = () => {
               </div>
 
               {isPro !== null && (
-                <div className="p-6 mt-8 bg-gray-700 rounded-xl shadow-md">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <FaCreditCard className="mr-3 text-xl text-gray-300" />
-                      <div>
-                        <div className="flex gap-3 items-center">
-                          <p className="text-base font-semibold text-white">
-                            Payment Method
-                          </p>
+                <div className="overflow-hidden mt-8 bg-gray-700 rounded-xl shadow-md">
+                  <div className="px-6 py-4 border-b border-gray-600 bg-gray-750">
+                    <h4 className="flex items-center text-lg font-semibold text-white">
+                      <FaCreditCard className="mr-2 text-green-400" />
+                      Payment Information
+                    </h4>
+                  </div>
+
+                  <div className="p-6">
+                    {currentUser?.paymentMethodBrand ? (
+                      <div className="flex flex-col space-y-6">
+                        {/* Payment Card Display */}
+                        <div className="relative p-5 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-600 shadow-lg">
+                          <div className="absolute top-0 right-0 p-3">
+                            {getCardBrandIcon(currentUser.paymentMethodBrand)}
+                          </div>
+
+                          <div className="flex flex-col justify-between h-40">
+                            <div className="flex items-center">
+                              <div className="w-12 h-8 bg-gradient-to-br from-yellow-500 to-yellow-400 rounded-md opacity-70"></div>
+                            </div>
+
+                            <div className="mt-6">
+                              <div className="font-mono text-sm text-gray-400">
+                                Card Number
+                              </div>
+                              <div className="mt-1 font-mono text-xl tracking-widest text-white">
+                                •••• •••• ••••{" "}
+                                {currentUser.paymentMethodLast4 || "****"}
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between items-end">
+                              <div>
+                                <div className="text-xs text-gray-400">
+                                  Card Holder
+                                </div>
+                                <div className="text-sm font-medium text-white">
+                                  {currentUser.displayName || "CARD HOLDER"}
+                                </div>
+                              </div>
+
+                              {currentUser.paymentMethodExpiry && (
+                                <div className="text-right">
+                                  <div className="text-xs text-gray-400">
+                                    Expires
+                                  </div>
+                                  <div className="text-sm font-medium text-white">
+                                    {formatCardExpiry(
+                                      currentUser.paymentMethodExpiry
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action Button */}
+                        <div className="flex justify-end">
                           <Link
                             to="/billing"
-                            className="px-3 py-1 text-sm text-white bg-gray-600 rounded-lg transition hover:bg-gray-500"
+                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg transition duration-200 hover:bg-green-700"
                           >
-                            Update
+                            <FaCreditCard className="mr-2" /> Update Payment
+                            Method
                           </Link>
                         </div>
-                        <p className="mt-1 text-sm text-gray-400">
-                          {currentUser?.paymentMethodBrand
-                            ? `${currentUser.paymentMethodBrand} •••• ${currentUser.paymentMethodLast4}`
-                            : "No payment method on file"}
-                        </p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex flex-col justify-center items-center p-6 text-center">
+                        <div className="p-3 mb-4 text-yellow-500 bg-yellow-100 bg-opacity-20 rounded-full">
+                          <FaCreditCard className="w-8 h-8" />
+                        </div>
+                        <h3 className="mb-2 text-lg font-medium text-white">
+                          No Payment Method on File
+                        </h3>
+                        <p className="mb-6 text-sm text-gray-400">
+                          Add a payment method to manage your subscription
+                          easily.
+                        </p>
+                        <Link
+                          to="/billing"
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg transition duration-200 hover:bg-green-700"
+                        >
+                          <FaCreditCard className="mr-2" /> Add Payment Method
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

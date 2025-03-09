@@ -27,6 +27,7 @@ import Onboarding from "./components/auth/onboarding/Onboarding";
 import { Analytics } from "@vercel/analytics/react";
 import AnimatedGrid from "./components/landing/animatedGrid/AnimatedGrid";
 import ResetPage from "./components/parts/ResetPage";
+import useFavicon from "./hooks/useFavicon";
 import "./index.css";
 import Applications from "./components/parts/common/Applications";
 import NotFoundPage from "./components/parts/404Page";
@@ -68,6 +69,18 @@ function SmartRedirect() {
 function DashboardRedirect() {
   return <Navigate to="/home" replace />;
 }
+
+// Add the AuthDebugger component
+const AuthDebugger = () => {
+  const { registrationStep, currentUser } = useAuth();
+
+  React.useEffect(() => {
+    console.log("AuthDebugger - Current registration step:", registrationStep);
+    console.log("AuthDebugger - User authenticated:", !!currentUser);
+  }, [registrationStep, currentUser]);
+
+  return null; // This component doesn't render anything
+};
 
 function RouteComponent() {
   const { lowDetailMode } = useLowDetail();
@@ -155,6 +168,9 @@ function RouteComponent() {
   // Move useRoutes up here, before any conditional rendering
   let routesElement = useRoutes(routesArray);
 
+  // Use our favicon hook to ensure favicon is properly loaded
+  useFavicon();
+
   // Wait for authentication to load
   if (isLoading) {
     return (
@@ -183,7 +199,10 @@ function RouteComponent() {
       {showHeader && !isPlanSelectionPage && !isOnboardingPage && <Header />}
       {!lowDetailMode && <AnimatedGrid />}
 
-      <div className="flex flex-col flex-grow w-full">{routesElement}</div>
+      <div className="flex flex-col flex-grow w-full">
+        <AuthDebugger />
+        {routesElement}
+      </div>
       {showFooter && <Footer />}
     </div>
   );

@@ -145,23 +145,58 @@ async function handleSubscriptionChange(subscription) {
 // Handle subscription cancellations
 async function handleSubscriptionCancelled(subscription) {
   try {
-    const user = await User.findOne({ subscriptionId: subscription.id });
-    if (!user) return;
+    console.log(
+      "Processing subscription cancellation webhook:",
+      subscription.id
+    );
 
-    // Update user record
+    // Find user by subscription ID
+    const user = await User.findOne({ subscriptionId: subscription.id });
+    if (!user) {
+      console.error(`No user found with subscription ID: ${subscription.id}`);
+      return;
+    }
+
+    console.log(
+      `Updating user ${user._id} to free tier due to subscription cancellation`
+    );
+
+    // Update user record to reflect cancellation
     user.subscriptionId = null;
     user.isPro = null; // Reset to free tier
     user.currentPlan = null;
     user.subscriptionStatus = "cancelled";
+
+    // Clear any cancellation details since it's now effective
+    user.cancellationDetails = {
+      canceledAt: user.cancellationDetails?.canceledAt || new Date(),
+      effectiveAt: new Date(),
+      completed: true,
+    };
+
     await user.save();
+    console.log(`User ${user._id} subscription canceled successfully`);
 
     // Log the cancellation
-    await new SubscriptionLog({
-      userId: user._id,
-      eventType: "subscription_cancelled",
-      subscriptionId: subscription.id,
-      timestamp: new Date(),
-    }).save();
+    try {
+      await new SubscriptionLog({
+        userId: user._id,
+        eventType: "subscription_cancelled",
+        subscriptionId: subscription.id,
+        timestamp: new Date(),
+        metadata: {
+          cancelReason: subscription.cancellation_details?.reason || "unknown",
+          canceledBy:
+            subscription.cancellation_details?.initiated_by || "unknown",
+        },
+      }).save();
+      console.log(`Subscription cancellation logged for user ${user._id}`);
+    } catch (logError) {
+      console.error("Error logging subscription cancellation:", logError);
+    }
+
+    // Optionally send an email to notify the user that their subscription has ended
+    // This would be implemented with your email service
   } catch (error) {
     console.error("Error processing subscription cancellation:", error);
   }

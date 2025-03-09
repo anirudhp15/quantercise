@@ -14,7 +14,6 @@ export const useFetchProgress = (mongoId) => {
 
   useEffect(() => {
     const fetchProblemsAndProgress = async () => {
-      console.log("Fetching problems and progress for mongoId:", mongoId);
       if (!mongoId) return;
 
       setLoading(true);

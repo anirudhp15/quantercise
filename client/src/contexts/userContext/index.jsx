@@ -28,12 +28,18 @@ export const UserProvider = ({ children }) => {
       // Fetch user profile from the API
       const userResponse = await axios.get(`/api/user/${currentUser.uid}`);
       const userData = userResponse.data;
-      console.log("User data:", userData);
       setProfileColor(userData.profileColor || "#6B7280");
       setIsPro(userData.isPro);
       setCurrentPlan(userData.currentPlan); // MongoDB ID of the user's plan
       setMongoId(userData._id);
       setRegistrationStep(userData.registrationStep);
+
+      // Update subscription details including cancellation status
+      setSubscriptionDetails({
+        ...subscriptionDetails,
+        status: userData.subscriptionStatus,
+        cancellationDetails: userData.cancellationDetails || null,
+      });
 
       // Update `isPro` based on the plan
       await updatePlanDetails(userData.currentPlan);
@@ -72,7 +78,6 @@ export const UserProvider = ({ children }) => {
   const handlePlanChange = async (planId) => {
     try {
       // Make API call to update the user's plan
-      console.log("Updating plan for user:", mongoId, planId);
 
       const response = await axios.post(`/api/payment/plans/subscribe`, {
         userId: mongoId,
@@ -83,8 +88,6 @@ export const UserProvider = ({ children }) => {
       setCurrentPlan(planId);
       setRegistrationStep("complete");
       await updatePlanDetails(planId);
-
-      console.log("Plan updated successfully:", response.data);
     } catch (error) {
       console.error("Error updating plan:", error);
     }

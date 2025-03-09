@@ -3,9 +3,7 @@ import { motion } from "framer-motion";
 import {
   FaTimes,
   FaClock,
-  FaInfinity,
-  FaTrash,
-  FaRobot,
+  FaCheck,
   FaLightbulb,
   FaQuestion,
   FaRedo,
@@ -154,7 +152,6 @@ const ProblemSolution = ({
           isCorrect,
           feedbackCat
         );
-        console.log("Attempt submitted to progress collection");
       } else {
         // Fallback - direct API call
         try {
@@ -169,7 +166,6 @@ const ProblemSolution = ({
               correct: isCorrect,
               feedbackCategory: feedbackCat,
             });
-            console.log("Attempt submitted directly via API");
           }
         } catch (error) {
           console.error("Error submitting attempt directly:", error);
@@ -359,7 +355,7 @@ const ProblemSolution = ({
     >
       <div className="backdrop-blur-sm" onClick={handleCloseModal} />
 
-      <div className="relative mx-4 my-16 w-full max-w-5xl">
+      <div className="relative mx-4 my-16 w-full max-w-5xl lg:max-w-none">
         {isOverlayVisible ? (
           // Enhanced welcome screen and problem start overlay
           <motion.div
@@ -466,7 +462,7 @@ const ProblemSolution = ({
                   duration: 1.5,
                 }}
               >
-                <SquigglyPlaceholder lines={6} />
+                <SquigglyPlaceholder lines={4} />
               </motion.div>
             </div>
 
@@ -532,21 +528,7 @@ const ProblemSolution = ({
               </div>
             </div>
 
-            <div className="p-4 my-4 w-full rounded-lg bg-gray-700/50">
-              <motion.div
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: 1 }}
-                transition={{
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  duration: 1.5,
-                }}
-              >
-                <SquigglyPlaceholder lines={6} />
-              </motion.div>
-            </div>
-
-            <div className="flex relative items-center">
+            <div className="flex relative items-center mt-4">
               {/* Model selector with tooltip */}
               <div
                 className={`flex absolute bottom-3 left-3 z-10 gap-2 items-center`}
@@ -562,53 +544,78 @@ const ProblemSolution = ({
                   </div>
 
                   {/* Tooltip content */}
-                  <div className="absolute left-0 bottom-full invisible p-4 mb-2 w-auto bg-gray-700 rounded-md shadow-2xl opacity-0 transition-all duration-50 group-hover:opacity-100 group-hover:visible">
-                    <div className="flex items-center mb-2">
-                      <div className="p-1 mr-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border border-white">
-                        <SiOpentofu className="w-4 h-4" />
+                  <div className="absolute left-0 bottom-full invisible mb-2 w-auto bg-gray-700 rounded-md shadow-2xl opacity-0 transition-all duration-50 group-hover:opacity-100 group-hover:visible">
+                    <div className="p-4 rounded-t-md border-t border-gray-900 hover:bg-gray-900 hover:cursor-pointer bg-gray-950">
+                      <div className="flex items-center">
+                        <div className="p-1 mr-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border border-white">
+                          <SiOpentofu className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex items-center">
+                            <kbd className="text-sm font-medium text-gray-300">
+                              Qube
+                            </kbd>
+                            <FaCheck className="ml-2 w-4 h-4 text-green-400" />
+                          </div>
+                          <div className="py-1 text-xs text-gray-300 whitespace-nowrap">
+                            GPT 4o-mini
+                          </div>
+                        </div>
                       </div>
-                      <kbd className="text-sm font-medium text-gray-300">
-                        Qube
-                      </kbd>
-                      <kbd className="px-2 whitespace-nowrap py-0.5 ml-2 text-xs text-gray-300 bg-gray-800 rounded-full">
-                        GPT 4o-mini
-                      </kbd>
+                      <p className="pt-1 text-xs text-gray-400">
+                        Great for solving problems and explaining concepts
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-400">
-                      Great for solving problems and explaining concepts.
-                    </p>
 
                     {/* Upcoming model */}
-                    <div className="pt-2 my-2 border-t border-gray-600">
-                      <div className="flex items-center mb-1 opacity-95">
+
+                    <div className="p-4 border-t border-gray-900 bg-gray-950">
+                      <div className="flex items-center">
                         <div className="p-1 mr-2 text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full border border-white">
                           <SiOpentofu className="w-4 h-4" />
                         </div>
-                        <kbd className="text-sm font-medium text-gray-300">
-                          Quarrel
-                        </kbd>
-                        <kbd className="px-2 whitespace-nowrap py-0.5 ml-2 text-xs text-gray-300 bg-gray-800 rounded-full">
-                          DeepSeek R1
-                        </kbd>
+                        <div className="flex flex-col">
+                          <div className="flex items-center">
+                            <kbd className="text-sm font-medium text-gray-300">
+                              Quarrel
+                            </kbd>
+                            <kbd className="px-2 py-0.5 ml-2 text-xs text-gray-300 bg-gray-800 rounded-full whitespace-nowrap">
+                              COMING SOON
+                            </kbd>
+                          </div>
+                          <div className="py-1 text-xs text-gray-300 whitespace-nowrap">
+                            DeepSeek R1
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-400">
-                        Advanced reasoning capabilities. COMING SOON.
+                      <p className="pt-1 text-xs text-gray-400">
+                        Most powerful reasoning model
                       </p>
                     </div>
-                    <div className="flex items-center pt-2 my-2 border-t border-gray-600 opacity-95">
-                      <div className="p-1 mr-2 text-white bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full border border-white">
-                        <SiOpentofu className="w-4 h-4" />
+
+                    <div className="p-4 rounded-b-md border-t border-gray-900 bg-gray-950">
+                      <div className="flex items-center">
+                        <div className="p-1 mr-2 text-white bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full border border-white">
+                          <SiOpentofu className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex items-center">
+                            <kbd className="text-sm font-medium text-gray-300">
+                              Quark
+                            </kbd>
+                            <kbd className="px-2 py-0.5 ml-2 text-xs text-gray-300 bg-gray-800 rounded-full whitespace-nowrap">
+                              COMING SOON
+                            </kbd>
+                          </div>
+                          <div className="py-1 text-xs text-gray-300 whitespace-nowrap">
+                            Claude 3.7 Sonnet
+                          </div>
+                        </div>
                       </div>
-                      <kbd className="text-sm font-medium text-gray-300">
-                        Quark
-                      </kbd>
-                      <kbd className="px-2 whitespace-nowrap py-0.5 ml-2 text-xs text-gray-300 bg-gray-800 rounded-full">
-                        Claude 3.7 Sonnet
-                      </kbd>
+                      <p className="pt-1 text-xs text-gray-400">
+                        Most meticulous programming model
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-400">
-                      The most advanced programming model. COMING SOON.
-                    </p>
                   </div>
                 </div>
 
@@ -657,7 +664,7 @@ const ProblemSolution = ({
                   maxHeight: "250px",
                 }}
                 disabled={true}
-                placeholder="Enter your solution here..."
+                placeholder="Start the problem to begin typing..."
               />
               <motion.button
                 disabled={true}

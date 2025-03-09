@@ -24,7 +24,6 @@ const Home = React.memo(() => {
   const [showOverlay, setShowOverlay] = useState(false);
   const { completedCount, startedCount, streakCount, lastActive } =
     useUserProgress(mongoId);
-  console.log("problemsCompleted dashboard", completedCount);
   const { isPro } = useUser();
   const { problem } = useFetchProblem();
 
@@ -41,9 +40,6 @@ const Home = React.memo(() => {
     addSuffix: true,
   });
   // Output: "in about 1 year"
-
-  console.log("Problems completed:", completedCount);
-  console.log("Is Pro:", isPro);
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");

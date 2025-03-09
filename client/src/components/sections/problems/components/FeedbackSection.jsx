@@ -136,8 +136,6 @@ const FeedbackSection = ({
       return;
     }
 
-    console.log(`Sending message of type: ${inputType}`);
-
     // Handle different types of messages based on inputType
     switch (inputType) {
       case "question":
@@ -231,22 +229,6 @@ const FeedbackSection = ({
       setShowClearConfirm(false);
     }
   };
-
-  // Add debug logging for conversation history
-  useEffect(() => {
-    if (conversationHistory.length > 0) {
-      console.log(
-        "Conversation history:",
-        conversationHistory.map((m) => ({
-          role: m.role,
-          type: m.type || m.messageType,
-          timestamp: m.timestamp,
-          contentPreview:
-            m.content.substring(0, 30) + (m.content.length > 30 ? "..." : ""),
-        }))
-      );
-    }
-  }, [conversationHistory]);
 
   return (
     <div className="p-2 pt-0 bg-gray-900 rounded-b-xl">

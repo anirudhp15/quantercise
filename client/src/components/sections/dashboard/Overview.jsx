@@ -118,7 +118,7 @@ const Overview = ({
                 <div
                   key={i}
                   className={`h-2 flex-1 rounded-full ${
-                    i < 3 ? "bg-red-400" : "bg-gray-700"
+                    i < 1 ? "bg-red-400" : "bg-gray-700"
                   }`}
                 ></div>
               ))}

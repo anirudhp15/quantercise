@@ -137,8 +137,6 @@ export const useFeedback = (
 
       setConversationHistory([userMessage]);
 
-      console.log("Adding user message to conversation:", userSolution);
-
       // Save the user message to the appropriate database based on isDemo
       const messageAdded = await addMessage({
         role: "user",
@@ -236,11 +234,6 @@ export const useFeedback = (
             };
 
             setConversationHistory((prev) => [...prev, assistantMessage]);
-
-            console.log(
-              "Adding assistant feedback to same conversation:",
-              assistantMessage.content.substring(0, 50) + "..."
-            );
 
             // Save the AI response to the database - IMPORTANT to use the same conversation
             const assistantMessageAdded = await addMessage({

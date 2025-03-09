@@ -22,7 +22,7 @@ const StripeCheckout = () => {
       mode: "subscription",
       lineItems: [{ price: priceId, quantity: 1 }],
       successUrl: `${window.location.origin}/success`,
-      cancelUrl: `${window.location.origin}/cancel`,
+      cancelUrl: `${window.location.origin}/plan-selection`,
     });
 
     if (error) {

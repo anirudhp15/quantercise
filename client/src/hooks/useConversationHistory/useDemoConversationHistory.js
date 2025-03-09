@@ -70,7 +70,6 @@ export const useDemoConversationHistory = (problemId, problemMetadata = {}) => {
 
       // If already have a conversation ID, just return it
       if (demoConversationId) {
-        console.log("Reusing existing conversation ID:", demoConversationId);
         return demoConversationId;
       }
 
@@ -107,7 +106,6 @@ export const useDemoConversationHistory = (problemId, problemMetadata = {}) => {
         );
 
         if (existingConversation) {
-          console.log("Found existing conversation:", existingConversation._id);
           setDemoConversationId(existingConversation._id);
           // If there are messages, load them
           if (
@@ -130,13 +128,6 @@ export const useDemoConversationHistory = (problemId, problemMetadata = {}) => {
       // Create a new promise and store it in the ref
       pendingConversationPromise.current = (async () => {
         try {
-          console.log("Creating new demo conversation with:", {
-            role: safeRole,
-            content: safeContent,
-            sessionId,
-            problemId,
-          });
-
           const response = await axios.post(
             `${BACKEND_DOMAIN}/api/conversations/demo`,
             {
@@ -156,10 +147,6 @@ export const useDemoConversationHistory = (problemId, problemMetadata = {}) => {
           );
 
           const newDemoConversationId = response.data.demoConversationId;
-          console.log(
-            "Created new conversation with ID:",
-            newDemoConversationId
-          );
 
           // Store the id in state for future use
           setDemoConversationId(newDemoConversationId);
@@ -251,8 +238,6 @@ export const useDemoConversationHistory = (problemId, problemMetadata = {}) => {
 
       setLoading(true);
       try {
-        console.log(`Adding message to conversation ${currentConversationId}`);
-
         // Use the current conversation ID (either from state or from the creation)
         await axios.post(
           `${BACKEND_DOMAIN}/api/conversations/demo/${currentConversationId}/messages`,

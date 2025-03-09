@@ -279,8 +279,6 @@ const InterviewTimeline = () => {
                           ? null
                           : interviewData.interview._id
                       );
-                      console.log("actionMenuOpen:", actionMenuOpen);
-                      console.log("interviewData:", interviewData);
                     }}
                     className="p-1.5 text-gray-400 rounded-full hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     aria-label="Interview options"
@@ -309,10 +307,6 @@ const InterviewTimeline = () => {
                               e.stopPropagation();
                               e.preventDefault();
                               setSelectedInterview(interviewData);
-                              console.log(
-                                "selectedInterview:",
-                                selectedInterview
-                              );
                               setShowInterviewForm(true);
                               setActionMenuOpen(null);
                             }}
@@ -367,12 +361,10 @@ const InterviewTimeline = () => {
           position={selectedInterview.position}
           interview={selectedInterview.interview}
           onClose={() => {
-            console.log("Closing interview form");
             setShowInterviewForm(false);
             setSelectedInterview(null);
           }}
           onSuccess={(updatedData) => {
-            console.log("Interview updated successfully", updatedData);
             handleInterviewUpdate(updatedData);
           }}
         />

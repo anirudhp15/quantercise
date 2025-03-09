@@ -3,7 +3,6 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 
 export const useUserProgress = (userId) => {
-  console.log("userId", userId);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [completedCount, setCompletedCount] = useState(0);
@@ -64,7 +63,6 @@ export const useUserProgress = (userId) => {
           feedbackCategory,
         });
 
-        console.log("Attempt submitted:", response.data);
         return response.data.progress;
       } catch (err) {
         console.error("Error submitting attempt:", err);
@@ -159,14 +157,11 @@ export const useUserProgress = (userId) => {
   useEffect(() => {
     const fetchProblemsCompleted = async () => {
       try {
-        console.log("userId", userId);
         const response = await axios.get(
           `/api/progress/user/${userId}/problems-completed`
         );
         setCompletedCount(response.data.completedCount);
         setStartedCount(response.data.startedCount);
-        console.log("Problems completed: lalala", response.data.completedCount);
-        console.log("Started count: lalala", response.data.startedCount);
       } catch (err) {
         console.error("Error fetching problems completed:", err);
         setError(err.message);

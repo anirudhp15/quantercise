@@ -15,13 +15,9 @@ const useFetchUserData = (currentUser) => {
       if (!currentUser) return;
 
       try {
-        console.log("Fetching user data for:", currentUser);
-
         const userDataResponse = await axios.get(
           `${BACKEND_DOMAIN}/api/user/${currentUser.uid}`
         );
-
-        console.log("User data response:", userDataResponse.data);
 
         setIsPro(userDataResponse.data.isPro);
 

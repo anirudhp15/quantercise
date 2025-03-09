@@ -94,7 +94,7 @@ async function createStripeCheckoutSession(priceId, userId) {
       ],
       metadata: { userId },
       success_url: `${FRONTEND_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_DOMAIN}/landing`,
+      cancel_url: `${FRONTEND_DOMAIN}/plan-selection`,
     },
     {
       idempotencyKey, // Add idempotency key to prevent duplicate charges

@@ -348,16 +348,6 @@ export const useConversationHistory = (questionId, questionMetadata = {}) => {
       }
 
       try {
-        console.log("Submitting attempt with data:", {
-          userId: mongoId,
-          questionId,
-          code, // This will be mapped to userAnswer in the backend
-          language,
-          timeSpent,
-          correct,
-          feedbackCategory,
-        });
-
         const response = await axios.post("/api/progress/submit-attempt", {
           userId: mongoId,
           questionId,

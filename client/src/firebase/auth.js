@@ -22,8 +22,6 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
   );
   const user = userCredential.user;
 
-  console.log("User created:", user.uid);
-
   return user;
 };
 
@@ -37,12 +35,8 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
     );
     const user = userCredential.user;
 
-    console.log("User signed in:", user);
-
     // Check if user has another credential (e.g., Google) linked to their account
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-
-    console.log("Sign-in methods:", signInMethods);
 
     if (signInMethods.includes(GoogleAuthProvider.PROVIDER_ID)) {
       // If the Google account exists, link it to email/password credentials
@@ -50,8 +44,6 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
       const googleCredential = await signInWithPopup(auth, googleProvider);
       await linkWithCredential(auth.currentUser, googleCredential.credential);
     }
-
-    console.log("User signed in with email and password:", user);
 
     // Capture additional user information
     const displayName = user.displayName || "";
@@ -69,8 +61,6 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
 
     // Update user's sign-in count in MongoDB
     await axios.put(`/api/users/${user.uid}/signin`);
-
-    console.log("User info sent to server:", user);
 
     return user;
   } catch (error) {

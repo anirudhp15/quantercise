@@ -12,7 +12,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 // Memoized Intro Component
 const Intro = React.memo(({ triggerBounce }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, userValid } = useAuth();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
@@ -198,7 +198,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 interviews, all in one place
               </motion.p>
               <div className="hidden flex-row gap-4 justify-center mb-4 xl:flex xl:justify-normal">
-                {currentUser ? (
+                {currentUser && userValid ? (
                   <>
                     <motion.button
                       initial={{ opacity: 0 }}
@@ -227,6 +227,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 1, delay: 1 }}
+                      onClick={handleCreateAccount}
                       className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
                     >
                       Start for Free
@@ -285,7 +286,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                 </motion.div>
               </div>
               <div className="flex flex-row gap-4 justify-center mt-4 xl:hidden xl:justify-normal">
-                {currentUser ? (
+                {currentUser && userValid ? (
                   <>
                     <motion.button
                       initial={{ opacity: 0 }}
@@ -314,6 +315,7 @@ const Intro = React.memo(({ triggerBounce }) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 1, delay: 1 }}
+                      onClick={handleCreateAccount}
                       className="px-4 py-2 mt-8 text-xs font-bold text-green-400 whitespace-nowrap bg-black rounded-lg border-2 border-green-400 shadow-lg lg:text-lg hover:bg-green-400 hover:text-black"
                     >
                       Start for Free

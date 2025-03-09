@@ -45,10 +45,7 @@ const PracticeProblems = React.memo(() => {
   const [showNotes, setShowNotes] = useState(false);
   const containerRef = useRef(null);
 
-  // useFetchMongoId(currentUser, setMongoId);
-
   const { problems } = useFetchProgress(mongoId);
-  console.log("Problem DATA", problems);
   const { startQuestion, submitAttempt, updateProgress } =
     useUserProgress(mongoId);
 

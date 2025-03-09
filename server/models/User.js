@@ -209,6 +209,21 @@ const userSchema = new mongoose.Schema({
     ],
     default: "active",
   },
+  cancellationDetails: {
+    canceledAt: {
+      type: Date,
+    },
+    effectiveAt: {
+      type: Date,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+    reason: {
+      type: String,
+    },
+  },
   subscriptionCurrentPeriodEnd: {
     type: Date,
   },

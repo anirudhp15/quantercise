@@ -175,11 +175,6 @@ const ProblemCard = ({
       return;
     }
 
-    // If not reached limit or user is logged in, proceed with reset
-    console.log(
-      "Resetting question and conversation state - new DB entry will be created on next submission"
-    );
-
     // Increment reset counter if user is not logged in
     if (!currentUser) {
       incrementResetCounter();
