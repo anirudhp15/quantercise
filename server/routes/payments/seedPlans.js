@@ -5,11 +5,7 @@ require("dotenv").config(); // Ensure access to environment variables
 const seedPlans = async () => {
   // Establish a connection to the MongoDB database
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected to the database.");
 
     // Define the plans to seed
@@ -17,7 +13,7 @@ const seedPlans = async () => {
       {
         name: "Sharpe",
         price: 4.99,
-        priceId: "price_1PfQac2LYK3gCcnX2jnYp8du",
+        priceId: "price_1R0dXw2LYK3gCcnXXMJs7ik2", // Live mode price ID
         features: [
           "Access to all 150+ industry-used questions",
           "Assistive hints for each question",
@@ -28,7 +24,7 @@ const seedPlans = async () => {
       {
         name: "Sharpe Yearly",
         price: 49.99,
-        priceId: "price_1PrL4B2LYK3gCcnXwaBSR3uB",
+        priceId: "price_1R0dXv2LYK3gCcnXak0WV9oZ", // Live mode price ID
         features: [
           "Access to all 150+ industry-used questions",
           "Assistive hints for each question",
@@ -41,7 +37,7 @@ const seedPlans = async () => {
       {
         name: "Pro",
         price: 9.99,
-        priceId: "price_1PyaJH2LYK3gCcnXQyg47GM7",
+        priceId: "price_1R0dXu2LYK3gCcnXWgNDJkXm", // Live mode price ID
         features: [
           "Access to all 150+ industry-used questions",
           "Assistive hints for each question",
@@ -55,7 +51,7 @@ const seedPlans = async () => {
       {
         name: "Pro Yearly",
         price: 99.99,
-        priceId: "price_1PyaL42LYK3gCcnX2coQGFMH",
+        priceId: "price_1R0dXr2LYK3gCcnXrdUslrSm", // Live mode price ID
         features: [
           "Access to all 150+ industry-used questions",
           "Assistive hints for each question",

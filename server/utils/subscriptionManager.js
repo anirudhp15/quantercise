@@ -30,14 +30,22 @@ async function createOrUpdateSubscription(
     // Create or get Stripe customer
     let stripeCustomerId = user.stripeCustomerId;
     if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.displayName || user.email,
-        metadata: {
-          userId: user._id.toString(),
-          firebaseUid: user.firebaseUid || "",
+      // Generate a unique idempotency key for customer creation
+      const customerIdempotencyKey = `customer_create_${user._id.toString()}_${Date.now()}`;
+
+      const customer = await stripe.customers.create(
+        {
+          email: user.email,
+          name: user.displayName || user.email,
+          metadata: {
+            userId: user._id.toString(),
+            firebaseUid: user.firebaseUid || "",
+          },
         },
-      });
+        {
+          idempotencyKey: customerIdempotencyKey,
+        }
+      );
       stripeCustomerId = customer.id;
       user.stripeCustomerId = stripeCustomerId;
       await user.save();
@@ -45,17 +53,35 @@ async function createOrUpdateSubscription(
 
     // Handle payment method if provided
     if (paymentMethodId) {
+      // Generate idempotency key for payment method attachment
+      const attachIdempotencyKey = `pm_attach_${user._id.toString()}_${paymentMethodId}_${Date.now()}`;
+
       // Attach payment method to customer
-      await stripe.paymentMethods.attach(paymentMethodId, {
-        customer: stripeCustomerId,
-      });
+      await stripe.paymentMethods.attach(
+        paymentMethodId,
+        {
+          customer: stripeCustomerId,
+        },
+        {
+          idempotencyKey: attachIdempotencyKey,
+        }
+      );
+
+      // Generate idempotency key for customer update
+      const updateIdempotencyKey = `customer_update_${user._id.toString()}_${paymentMethodId}_${Date.now()}`;
 
       // Set as default
-      await stripe.customers.update(stripeCustomerId, {
-        invoice_settings: {
-          default_payment_method: paymentMethodId,
+      await stripe.customers.update(
+        stripeCustomerId,
+        {
+          invoice_settings: {
+            default_payment_method: paymentMethodId,
+          },
         },
-      });
+        {
+          idempotencyKey: updateIdempotencyKey,
+        }
+      );
     }
 
     // If user already has a subscription, update it
@@ -78,15 +104,23 @@ async function createOrUpdateSubscription(
  */
 async function createNewSubscription(user, plan) {
   try {
-    const subscription = await stripe.subscriptions.create({
-      customer: user.stripeCustomerId,
-      items: [{ price: plan.priceId }],
-      expand: ["latest_invoice.payment_intent"],
-      metadata: {
-        userId: user._id.toString(),
-        planId: plan._id.toString(),
+    // Generate idempotency key for subscription creation
+    const subscriptionIdempotencyKey = `sub_create_${user._id.toString()}_${plan._id.toString()}_${Date.now()}`;
+
+    const subscription = await stripe.subscriptions.create(
+      {
+        customer: user.stripeCustomerId,
+        items: [{ price: plan.priceId }],
+        expand: ["latest_invoice.payment_intent"],
+        metadata: {
+          userId: user._id.toString(),
+          planId: plan._id.toString(),
+        },
       },
-    });
+      {
+        idempotencyKey: subscriptionIdempotencyKey,
+      }
+    );
 
     // Update user's subscription details
     user.subscriptionId = subscription.id;
@@ -134,6 +168,9 @@ async function updateSubscription(user, plan) {
       user.subscriptionId
     );
 
+    // Generate idempotency key for subscription update
+    const updateIdempotencyKey = `sub_update_${user._id.toString()}_${plan._id.toString()}_${Date.now()}`;
+
     // Update the subscription items
     const updatedSubscription = await stripe.subscriptions.update(
       user.subscriptionId,
@@ -148,6 +185,9 @@ async function updateSubscription(user, plan) {
           userId: user._id.toString(),
           planId: plan._id.toString(),
         },
+      },
+      {
+        idempotencyKey: updateIdempotencyKey,
       }
     );
 
@@ -231,10 +271,14 @@ async function cancelSubscription(userId) {
       return { success: false, message: "No active subscription to cancel" };
     }
 
+    // Generate idempotency key for subscription update (cancellation)
+    const cancelIdempotencyKey = `sub_cancel_${user._id.toString()}_${Date.now()}`;
+
     // Cancel at end of billing period
     const subscription = await stripe.subscriptions.update(
       user.subscriptionId,
-      { cancel_at_period_end: true }
+      { cancel_at_period_end: true },
+      { idempotencyKey: cancelIdempotencyKey }
     );
 
     // Update user record

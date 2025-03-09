@@ -45,7 +45,14 @@ async function handlePaymentRecovery(invoice, user) {
         subscription.status === "unpaid"
       ) {
         // Cancel at Stripe
-        await stripe.subscriptions.cancel(invoice.subscription);
+        // Generate idempotency key for subscription cancellation
+        const cancelIdempotencyKey = `sub_cancel_recovery_${user._id.toString()}_${
+          invoice.subscription
+        }_${Date.now()}`;
+
+        await stripe.subscriptions.cancel(invoice.subscription, {
+          idempotencyKey: cancelIdempotencyKey,
+        });
 
         // Update user record
         user.isPro = null;
@@ -89,17 +96,35 @@ async function updatePaymentMethod(userId, paymentMethodId) {
       throw new Error("User not found or no Stripe customer ID");
     }
 
+    // Generate idempotency key for payment method attachment
+    const attachIdempotencyKey = `pm_attach_recovery_${userId}_${paymentMethodId}_${Date.now()}`;
+
     // Attach payment method to customer
-    await stripe.paymentMethods.attach(paymentMethodId, {
-      customer: user.stripeCustomerId,
-    });
+    await stripe.paymentMethods.attach(
+      paymentMethodId,
+      {
+        customer: user.stripeCustomerId,
+      },
+      {
+        idempotencyKey: attachIdempotencyKey,
+      }
+    );
+
+    // Generate idempotency key for customer update
+    const updateIdempotencyKey = `customer_update_recovery_${userId}_${paymentMethodId}_${Date.now()}`;
 
     // Set as default payment method
-    await stripe.customers.update(user.stripeCustomerId, {
-      invoice_settings: {
-        default_payment_method: paymentMethodId,
+    await stripe.customers.update(
+      user.stripeCustomerId,
+      {
+        invoice_settings: {
+          default_payment_method: paymentMethodId,
+        },
       },
-    });
+      {
+        idempotencyKey: updateIdempotencyKey,
+      }
+    );
 
     // Get payment method details
     const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);

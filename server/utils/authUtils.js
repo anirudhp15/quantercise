@@ -67,19 +67,29 @@ const findOrMergeUser = async ({
 };
 
 async function createStripeCheckoutSession(priceId, userId) {
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    mode: "subscription",
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
-    metadata: { userId },
-    success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.DOMAIN}/pricing`,
-  });
+  // Generate a unique idempotency key using userId and timestamp
+  const idempotencyKey = `checkout_${
+    userId || "anonymous"
+  }_${priceId}_${Date.now()}`;
+
+  const session = await stripe.checkout.sessions.create(
+    {
+      payment_method_types: ["card"],
+      mode: "subscription",
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      metadata: { userId },
+      success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.DOMAIN}/pricing`,
+    },
+    {
+      idempotencyKey, // Add idempotency key to prevent duplicate charges
+    }
+  );
 
   return session.url;
 }

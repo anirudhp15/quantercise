@@ -11,21 +11,31 @@ router.post("/create-checkout-session", async (req, res) => {
   console.log("Frontend Domain:", process.env.DOMAIN);
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "subscription",
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
+    // Generate a unique idempotency key using userId and timestamp
+    const idempotencyKey = `checkout_${
+      userId || "anonymous"
+    }_${priceId}_${Date.now()}`;
+
+    const session = await stripe.checkout.sessions.create(
+      {
+        payment_method_types: ["card"],
+        mode: "subscription",
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          userId, // Attach userId for easier handling in the webhook or verification
         },
-      ],
-      metadata: {
-        userId, // Attach userId for easier handling in the webhook or verification
+        success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
+        cancel_url: `${process.env.DOMAIN}/register`, // Use environment variable
       },
-      success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
-      cancel_url: `${process.env.DOMAIN}/register`, // Use environment variable
-    });
+      {
+        idempotencyKey, // Add idempotency key to prevent duplicate charges
+      }
+    );
 
     res.json({ url: session.url });
   } catch (error) {

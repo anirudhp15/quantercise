@@ -241,12 +241,18 @@ router.post("/simulate-payment-failure", async (req, res) => {
     }
 
     // Create a payment method that will fail
-    const paymentMethod = await stripe.paymentMethods.create({
-      type: "card",
-      card: {
-        token: "tok_chargeDeclined", // Use Stripe's test token for declined charges
+    const paymentMethodIdempotencyKey = `pm_create_test_fail_${userId}_${Date.now()}`;
+    const paymentMethod = await stripe.paymentMethods.create(
+      {
+        type: "card",
+        card: {
+          token: "tok_chargeDeclined", // Use Stripe's test token for declined charges
+        },
       },
-    });
+      {
+        idempotencyKey: paymentMethodIdempotencyKey,
+      }
+    );
 
     if (!user.stripeCustomerId) {
       return res.status(400).json({ error: "User has no Stripe customer ID" });
@@ -254,16 +260,34 @@ router.post("/simulate-payment-failure", async (req, res) => {
 
     try {
       // Attach payment method to customer
-      await stripe.paymentMethods.attach(paymentMethod.id, {
-        customer: user.stripeCustomerId,
-      });
+      const attachIdempotencyKey = `pm_attach_test_fail_${userId}_${
+        paymentMethod.id
+      }_${Date.now()}`;
+      await stripe.paymentMethods.attach(
+        paymentMethod.id,
+        {
+          customer: user.stripeCustomerId,
+        },
+        {
+          idempotencyKey: attachIdempotencyKey,
+        }
+      );
 
       // Set as default payment method
-      await stripe.customers.update(user.stripeCustomerId, {
-        invoice_settings: {
-          default_payment_method: paymentMethod.id,
+      const updateIdempotencyKey = `customer_update_test_fail_${userId}_${
+        paymentMethod.id
+      }_${Date.now()}`;
+      await stripe.customers.update(
+        user.stripeCustomerId,
+        {
+          invoice_settings: {
+            default_payment_method: paymentMethod.id,
+          },
         },
-      });
+        {
+          idempotencyKey: updateIdempotencyKey,
+        }
+      );
     } catch (error) {
       console.log("Expected error attaching failing card:", error.message);
     }
@@ -307,14 +331,20 @@ router.post("/create-test-customer", async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // Create a Stripe customer
-    const customer = await stripe.customers.create({
-      email: user.email || `test-${Date.now()}@example.com`,
-      name: user.displayName || `Test User ${Date.now()}`,
-      metadata: {
-        userId: user._id.toString(),
-        firebaseUid: user.firebaseUid,
+    const customerIdempotencyKey = `customer_create_test_${userId}_${Date.now()}`;
+    const customer = await stripe.customers.create(
+      {
+        email: user.email || `test-${Date.now()}@example.com`,
+        name: user.displayName || `Test User ${Date.now()}`,
+        metadata: {
+          userId: user._id.toString(),
+          firebaseUid: user.firebaseUid,
+        },
       },
-    });
+      {
+        idempotencyKey: customerIdempotencyKey,
+      }
+    );
 
     // Save customer ID to user
     user.stripeCustomerId = customer.id;
@@ -325,24 +355,48 @@ router.post("/create-test-customer", async (req, res) => {
     // Add a test payment method if requested
     if (withPaymentMethod) {
       // Create a payment method using a test token
-      paymentMethod = await stripe.paymentMethods.create({
-        type: "card",
-        card: {
-          token: "tok_visa", // Use Stripe's test token instead of raw card number
+      const pmIdempotencyKey = `pm_create_test_${userId}_${Date.now()}`;
+      paymentMethod = await stripe.paymentMethods.create(
+        {
+          type: "card",
+          card: {
+            token: "tok_visa", // Use Stripe's test token instead of raw card number
+          },
         },
-      });
+        {
+          idempotencyKey: pmIdempotencyKey,
+        }
+      );
 
       // Attach payment method to customer
-      await stripe.paymentMethods.attach(paymentMethod.id, {
-        customer: customer.id,
-      });
+      const attachIdempotencyKey = `pm_attach_test_${userId}_${
+        paymentMethod.id
+      }_${Date.now()}`;
+      await stripe.paymentMethods.attach(
+        paymentMethod.id,
+        {
+          customer: customer.id,
+        },
+        {
+          idempotencyKey: attachIdempotencyKey,
+        }
+      );
 
       // Set as default payment method
-      await stripe.customers.update(customer.id, {
-        invoice_settings: {
-          default_payment_method: paymentMethod.id,
+      const updateIdempotencyKey = `customer_update_test_${userId}_${
+        paymentMethod.id
+      }_${Date.now()}`;
+      await stripe.customers.update(
+        customer.id,
+        {
+          invoice_settings: {
+            default_payment_method: paymentMethod.id,
+          },
         },
-      });
+        {
+          idempotencyKey: updateIdempotencyKey,
+        }
+      );
     }
 
     res.json({
@@ -374,14 +428,20 @@ router.post("/subscription-lifecycle", async (req, res) => {
 
     // Create a test customer if not exists
     if (!user.stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: user.email || `test-${Date.now()}@example.com`,
-        name: user.displayName || `Test User ${Date.now()}`,
-        metadata: {
-          userId: user._id.toString(),
-          firebaseUid: user.firebaseUid,
+      const customerIdempotencyKey = `customer_create_lifecycle_${userId}_${Date.now()}`;
+      const customer = await stripe.customers.create(
+        {
+          email: user.email || `test-${Date.now()}@example.com`,
+          name: user.displayName || `Test User ${Date.now()}`,
+          metadata: {
+            userId: user._id.toString(),
+            firebaseUid: user.firebaseUid,
+          },
         },
-      });
+        {
+          idempotencyKey: customerIdempotencyKey,
+        }
+      );
       user.stripeCustomerId = customer.id;
       await user.save();
 
@@ -395,24 +455,48 @@ router.post("/subscription-lifecycle", async (req, res) => {
     }
 
     // Create a payment method using a test token
-    const paymentMethod = await stripe.paymentMethods.create({
-      type: "card",
-      card: {
-        token: "tok_visa",
+    const pmIdempotencyKey = `pm_create_lifecycle_${userId}_${Date.now()}`;
+    const paymentMethod = await stripe.paymentMethods.create(
+      {
+        type: "card",
+        card: {
+          token: "tok_visa",
+        },
       },
-    });
+      {
+        idempotencyKey: pmIdempotencyKey,
+      }
+    );
 
     // Attach payment method to customer
-    await stripe.paymentMethods.attach(paymentMethod.id, {
-      customer: user.stripeCustomerId,
-    });
+    const attachIdempotencyKey = `pm_attach_lifecycle_${userId}_${
+      paymentMethod.id
+    }_${Date.now()}`;
+    await stripe.paymentMethods.attach(
+      paymentMethod.id,
+      {
+        customer: user.stripeCustomerId,
+      },
+      {
+        idempotencyKey: attachIdempotencyKey,
+      }
+    );
 
     // Set as default payment method
-    await stripe.customers.update(user.stripeCustomerId, {
-      invoice_settings: {
-        default_payment_method: paymentMethod.id,
+    const updateIdempotencyKey = `customer_update_lifecycle_${userId}_${
+      paymentMethod.id
+    }_${Date.now()}`;
+    await stripe.customers.update(
+      user.stripeCustomerId,
+      {
+        invoice_settings: {
+          default_payment_method: paymentMethod.id,
+        },
       },
-    });
+      {
+        idempotencyKey: updateIdempotencyKey,
+      }
+    );
 
     // Log customer update with payment method
     await new SubscriptionLog({
@@ -427,13 +511,21 @@ router.post("/subscription-lifecycle", async (req, res) => {
     }).save();
 
     // 1. Create actual Stripe subscription
-    const subscription = await stripe.subscriptions.create({
-      customer: user.stripeCustomerId,
-      items: [{ price: plan.priceId }],
-      payment_behavior: "default_incomplete",
-      payment_settings: { save_default_payment_method: "on_subscription" },
-      expand: ["latest_invoice.payment_intent"],
-    });
+    const subCreateIdempotencyKey = `sub_create_lifecycle_${userId}_${
+      plan._id
+    }_${Date.now()}`;
+    const subscription = await stripe.subscriptions.create(
+      {
+        customer: user.stripeCustomerId,
+        items: [{ price: plan.priceId }],
+        payment_behavior: "default_incomplete",
+        payment_settings: { save_default_payment_method: "on_subscription" },
+        expand: ["latest_invoice.payment_intent"],
+      },
+      {
+        idempotencyKey: subCreateIdempotencyKey,
+      }
+    );
 
     // Update user with real subscription data
     user.subscriptionId = subscription.id;
@@ -478,8 +570,12 @@ router.post("/subscription-lifecycle", async (req, res) => {
     }).save();
 
     // 4. Cancel the actual Stripe subscription
-    const cancelledSubscription = await stripe.subscriptions.cancel(
+    const cancelIdempotencyKey = `sub_cancel_lifecycle_${
       subscription.id
+    }_${Date.now()}`;
+    const cancelledSubscription = await stripe.subscriptions.cancel(
+      subscription.id,
+      { idempotencyKey: cancelIdempotencyKey }
     );
 
     // 5. Update final status
