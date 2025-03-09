@@ -343,10 +343,6 @@ router.get("/analytics/user/:userId", async (req, res) => {
 router.post("/demo", async (req, res) => {
   try {
     const { sessionId, problemId, initialMessage, metadata = {} } = req.body;
-    console.log("initialMessage", initialMessage);
-    console.log("metadata", metadata);
-    console.log("sessionId", sessionId);
-    console.log("problemId", problemId);
 
     // Basic validation
     if (!sessionId || !problemId || !initialMessage) {

@@ -37,8 +37,6 @@ router.get("/plans/:planId", async (req, res) => {
 router.post("/plans/subscribe", async (req, res) => {
   const { userId, planId } = req.body;
 
-  console.log("Subscribing user to plan:", userId, planId);
-
   try {
     // If planId is "free-plan-price-id", subscribe to the free plan
     if (planId === "free-plan-id") {
@@ -69,8 +67,6 @@ router.post("/plans/subscribe", async (req, res) => {
 router.post("/plans/select", async (req, res) => {
   const { userId, planId } = req.body;
 
-  console.log("Selecting plan for user:", userId, planId);
-
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -89,7 +85,6 @@ router.post("/plans/select", async (req, res) => {
       // Update user with selected paid plan
       user.currentPlan = plan._id;
       user.isPro = plan.name.toLowerCase().includes("pro");
-      console.log("User is upgrading to Pro:", user.isPro);
       user.registrationStep = "complete";
     } else {
       // Free plan: clear currentPlan and set isPro to false

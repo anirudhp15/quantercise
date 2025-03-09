@@ -127,9 +127,6 @@ router.post("/register", async (req, res) => {
     user = new User(newUser);
     await user.save();
 
-    // log user's mongoid to console
-    console.log("User's mongoId: ", user._id);
-
     // Generate JWT for the user
     const token = generateToken(user._id);
 

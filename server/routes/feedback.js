@@ -87,7 +87,6 @@ router.post("/solution-stream", async (req, res) => {
 
       // Write this chunk out to the client immediately
       res.write(`data: ${content}\n\n`);
-      console.log(content);
 
       if (fullContent.length % 10 <= 2 && fullContent.length > 0) {
         res.write(

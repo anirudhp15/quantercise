@@ -9,8 +9,6 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("Fetching user with ID:", id);
-
     const user = await User.findOne({
       $or: [{ firebaseUid: id }, { googleId: id }],
     });

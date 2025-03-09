@@ -7,8 +7,6 @@ const Plan = require("../../models/Plans");
 // Route to create a checkout session
 router.post("/create-checkout-session", async (req, res) => {
   const { priceId, userId } = req.body; // Receive the userId and priceId
-  console.log("Backend Domain:", process.env.BACKEND_DOMAIN);
-  console.log("Frontend Domain:", process.env.DOMAIN);
 
   try {
     // Generate a unique idempotency key using userId and timestamp
@@ -30,7 +28,7 @@ router.post("/create-checkout-session", async (req, res) => {
           userId, // Attach userId for easier handling in the webhook or verification
         },
         success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
-        cancel_url: `${process.env.DOMAIN}/register`, // Use environment variable
+        cancel_url: `${process.env.DOMAIN}/landing`, // Use environment variable
       },
       {
         idempotencyKey, // Add idempotency key to prevent duplicate charges
@@ -54,13 +52,6 @@ router.post("/verify-checkout-session", async (req, res) => {
     });
 
     if (session.payment_status === "paid") {
-      console.log("Session:", session);
-      console.log(
-        "Session line items:",
-        session.line_items.data[0].price.recurring
-      );
-      console.log("User ID from API:", userId);
-
       const subscriptionRecurringDetails =
         session.line_items.data[0].price.recurring;
 
@@ -106,8 +97,6 @@ router.post("/verify-checkout-session", async (req, res) => {
           day: "numeric",
         });
       }
-
-      console.log("Next billing date:", nextBillingDate);
 
       // Update user's subscription details
       user.isPro = true;

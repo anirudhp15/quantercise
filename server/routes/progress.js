@@ -159,8 +159,6 @@ router.get("/user/:userId/streak", validateObjectId, async (req, res) => {
 
     streakCount = Math.max(streakCount, currentStreak);
 
-    console.log("Streak count:", streakCount);
-
     res.status(200).json({ streakCount, lastActive: lastActive.lastActiveAt });
   } catch (error) {
     console.error("Error fetching streak count:", error);

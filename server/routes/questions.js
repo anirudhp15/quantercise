@@ -115,7 +115,7 @@ router.get("/tags", async (req, res) => {
   }
 });
 
-// // Fetch a random question
+// // Fetch a random question (commented out because it's not used yet)
 // router.get("/random", async (req, res) => {
 //   try {
 //     const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
