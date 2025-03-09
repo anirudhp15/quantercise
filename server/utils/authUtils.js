@@ -10,6 +10,11 @@ const BACKEND_DOMAIN =
     ? "https://quantercise-api.vercel.app"
     : "http://localhost:4242";
 
+const FRONTEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise.com"
+    : "http://localhost:3000";
+
 // JWT token generation
 const generateToken = (userId, expiresIn = "1h") => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn });
@@ -88,8 +93,8 @@ async function createStripeCheckoutSession(priceId, userId) {
         },
       ],
       metadata: { userId },
-      success_url: `${DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${DOMAIN}/landing`,
+      success_url: `${FRONTEND_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${FRONTEND_DOMAIN}/landing`,
     },
     {
       idempotencyKey, // Add idempotency key to prevent duplicate charges
