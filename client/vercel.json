@@ -2,16 +2,6 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "cachePatterns": [
-    {
-      "source": "node_modules/**",
-      "destination": ".vercel/cache/node_modules"
-    },
-    {
-      "source": ".next/**",
-      "destination": ".vercel/cache/.next"
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
