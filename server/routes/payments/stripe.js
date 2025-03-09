@@ -27,8 +27,8 @@ router.post("/create-checkout-session", async (req, res) => {
         metadata: {
           userId, // Attach userId for easier handling in the webhook or verification
         },
-        success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
-        cancel_url: `${process.env.DOMAIN}/landing`, // Use environment variable
+        success_url: `${process.env.FRONTEND_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`, // Use environment variable
+        cancel_url: `${process.env.FRONTEND_DOMAIN}/landing`, // Use environment variable
       },
       {
         idempotencyKey, // Add idempotency key to prevent duplicate charges

@@ -5,6 +5,11 @@ const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
+const BACKEND_DOMAIN =
+  process.env.NODE_ENV === "production"
+    ? "https://quantercise-api.vercel.app"
+    : "http://localhost:4242";
+
 // JWT token generation
 const generateToken = (userId, expiresIn = "1h") => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn });
@@ -21,7 +26,7 @@ const sendResetEmail = async (email, token) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Password Reset",
-    text: `Click the link to reset your password: ${process.env.DOMAIN}/reset-password?token=${token}`,
+    text: `Click the link to reset your password: ${BACKEND_DOMAIN}/reset-password?token=${token}`,
   };
 
   await transporter.sendMail(mailOptions);
@@ -83,8 +88,8 @@ async function createStripeCheckoutSession(priceId, userId) {
         },
       ],
       metadata: { userId },
-      success_url: `${process.env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.DOMAIN}/landing`,
+      success_url: `${DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${DOMAIN}/landing`,
     },
     {
       idempotencyKey, // Add idempotency key to prevent duplicate charges
