@@ -1,0 +1,44 @@
+{
+  "homepage": "https://quantercise.com",
+  "name": "quantercise",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "build": "cd client && npm run build",
+    "test": "cd client && npm test",
+    "deploy": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "sharp": "^0.33.5"
+  },
+  "description": "Quantercise - A platform for quant prep and interview training",
+  "keywords": [
+    "quant",
+    "finance",
+    "interview prep",
+    "mern stack"
+  ],
+  "author": "Ani Pottammal",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@vercel/speed-insights": "^1.2.0",
+    "date-fns": "^2.30.0",
+    "joi": "^17.13.3",
+    "react-helmet-async": "^2.0.5",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0"
+  },
+  "resolutions": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}
